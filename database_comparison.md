@@ -1,4 +1,4 @@
-# Comparison of SQL vs NoSQL Databases for a Friend-Making App
+# Comparison of SQL vs NoSQL Databases for Qaabl
 
 ## Overview
 
