@@ -45,6 +45,7 @@ class AuthenticationService {
       }
       return true;
     } catch (e) {
+      print("Error in Google Sign-In $e");
       return false;
     }
   }
