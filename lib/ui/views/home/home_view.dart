@@ -9,6 +9,12 @@ class HomeView extends StackedView<HomeViewModel> {
   const HomeView({Key? key}) : super(key: key);
 
   @override
+  void onModelReady(HomeViewModel viewModel) {
+    super.onViewModelReady(viewModel);
+    viewModel.getUsers;
+  }
+
+  @override
   Widget builder(
     BuildContext context,
     HomeViewModel viewModel,
