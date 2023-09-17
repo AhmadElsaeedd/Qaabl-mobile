@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "503928826320",
+    "project_id": "qaabl-mobile-dev",
+    "storage_bucket": "qaabl-mobile-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503928826320:android:b034a7b0a15c3689a0f1d5",
+        "android_client_info": {
+          "package_name": "com.example.flutterapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjI2wtZ4cEbA29SYutMRZteLMYoo02gVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503928826320:android:e49ea7601089f600a0f1d5",
+        "android_client_info": {
+          "package_name": "com.example.stacked_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjI2wtZ4cEbA29SYutMRZteLMYoo02gVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503928826320:android:401cbe216b4c0665a0f1d5",
+        "android_client_info": {
+          "package_name": "com.example.test_run"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjI2wtZ4cEbA29SYutMRZteLMYoo02gVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
