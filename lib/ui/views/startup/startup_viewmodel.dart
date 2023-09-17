@@ -20,7 +20,7 @@ class StartupViewModel extends BaseViewModel {
       //if user is not logged in, go to login page
       _navigationService.replaceWithLoginView();
     }
-
+    //Ahmad committing
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
   }
