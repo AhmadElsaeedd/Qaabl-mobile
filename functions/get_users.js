@@ -11,12 +11,16 @@ const corsOptions = {
 //ToDo: make the function only available to my app
 const GetUsers = onRequest((req, res) => {
     cors(corsOptions)(req, res, () => {
+      user_uid = req.body.uid;
       
-        
       //if success
-          res.status(200).send(users);
-          //if failed
-          res.status(500).send("Error fetching users: ", error);
+      if(user_uid){
+        res.status(200).send();
+      }
+      else{
+        //if failed
+        res.status(500).send("Error");
+      }
     });
   });
 

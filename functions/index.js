@@ -16,8 +16,8 @@ admin.initializeApp();
 // https://firebase.google.com/docs/functions/get-started
 
 
-const {CreateUserRecord} = require("./create_user_document");
-const {GetUsers} = require("./get_users");
+const CreateUserRecord = require("./create_user_document");
+const GetUsers = require("./get_users");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;

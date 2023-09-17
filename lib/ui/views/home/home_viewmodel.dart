@@ -7,6 +7,7 @@ import 'package:stacked_app/ui/common/app_strings.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
@@ -69,15 +70,25 @@ class HomeViewModel extends BaseViewModel {
         _navigationService.replaceWithLoginView();
       }
       else{
-        print("user is logged in:"+ uid);
+        print("user is logged in: "+ uid);
       }
-      //get the likes array of the user
-
-      //get the dislikes array of the user
-
-      //call the cloud function that gets 5 users, pass the likes, dislikes, uid to it
+      //call the cloud function that gets 5 users, pass the uid to it
+      final response = await http.post(
+        //add the url of the function here
+        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/us-central1/GetUsers'),
+        body: jsonEncode({
+          'uid': uid,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
 
       //response of the function should contain 5 users with their UIDs and interests
+      if(response.statusCode==200){
+        print("successfully went and came back");
+      }
+      else{
+        print("failed to go to cloud");
+      }
 
     }
     catch (e){
