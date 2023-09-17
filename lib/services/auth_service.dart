@@ -5,6 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 @lazySingleton
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  // AuthenticationService() {
+  //   _firebaseAuth.useAuthEmulator('localhost', 9099);
+  // }
+
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   User? get currentUser => _firebaseAuth.currentUser;
@@ -19,8 +24,7 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> createUserWithEmailAndPassword(
-      String email, String password) async {
+  Future<bool> createUserWithEmailAndPassword(String email, String password) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -45,7 +49,6 @@ class AuthenticationService {
       }
       return true;
     } catch (e) {
-      print("Error in Google Sign-In $e");
       return false;
     }
   }
