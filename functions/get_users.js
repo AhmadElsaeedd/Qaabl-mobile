@@ -1,90 +1,119 @@
-const { onRequest } = require("firebase-functions/v2/https");
-const cors = require('cors');
+// const onRequest = require("firebase-functions/v2/https");
+const functions = require("firebase-functions");
+const cors = require("cors");
 const admin = require("firebase-admin");
 
 const db = admin.firestore();
 
 const corsOptions = {
-    origin: true,
-  };
+  origin: true,
+};
 
-async function get_user_likes_dislikes(uid){
-    // get the user document
-    const user_doc = await (db.collection("Users").doc(uid)).get();
-    
-    // get the data of the user
-    let user_data;
-    user_data = user_doc.data();
+// function that gets likes, dislikes, and matches of user
+async function get_user_likes_dislikes_matches(uid) {
+  let user_doc;
+  // get the user document
+  while (true) {
+    user_doc = await (db.collection("Users").doc(uid)).get();
 
-    // get likes and dislikes arrays
-    let likes = [];
-    let dislikes = [];
-    likes = user_data.likes;
-    dislikes = user_data.dislikes;
+    if (user_doc.exists) {
+      // If the document exists, break out of the loop
+      break;
+    } else {
+      // If the document doesn't exist, wait for 0.5 seconds before checking again
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+  }
 
-    return {likes, dislikes};
+
+  // get the data of the user
+  const user_data = user_doc.data();
+
+  // get likes and dislikes and matches_users arrays
+  const likes = user_data.likes;
+  const dislikes = user_data.dislikes;
+  const matches = user_data.matches_users;
+
+  return {likes, dislikes, matches};
 }
 
-async function get_other_users(uid, likes, dislikes){
-    let filter_out_those = [...new Set([...likes, ...dislikes, uid])];
+// function that gets filtered users
+async function get_other_users(uid, likes, dislikes, matches) {
+  let filter_out_those = [];
+  filter_out_those = [...new Set([...likes, ...dislikes, ...matches, uid])];
 
-    let users_snapshot = await db.collection("Users")
-    .where('id','not-in', filter_out_those)
-    .limit(3)
-    .get();
+  // there is a problem here, when this array has more than 10 values, the query stops supporting that
+  let users_snapshot;
+  const users = [];
+  try {
+    users_snapshot = await db.collection("Users")
+        .where("id", "not-in", filter_out_those)
+        .limit(3)
+        .get();
+    users_snapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+  } catch (e) {
+    console.log("More than 10 in likes, dislikes array, going for alternate solution");
+    console.log("length of things to be filtered:", filter_out_those.length);
+    users_snapshot = await db.collection("Users")
+        .limit(filter_out_those.length+3)
+        .get();
+    users_snapshot.forEach((doc) => {
+      const userData = doc.data();
+      if (!filter_out_those.includes(userData.id)) {
+        users.push(userData);
+      }
+    });
+  }
 
-    let users = [];
-    users_snapshot.forEach(doc => {
-        users.push(doc.data());
-      });
-
-    return users;
+  return users.slice(0, 3);
 }
 
-async function structure_users(user_uid, users){
-    console.log("user is:", user_uid);
-
-    console.log("users are: ", users);
-
-    let ready_users = users.map(user => {
-    let { id, interests } = user;
+async function structure_users(user_uid, users) {
+  const ready_users = users.map((user) => {
+    const {id, interests} = user;
 
     // check if the user is a potential match
-    let potential_match = (user.likes || []).includes(user_uid);
+    const potential_match = (user.likes || []).includes(user_uid);
 
-        // return the transformed user object
-        return {
-            id,
-            interests,
-            potential_match
-        };
-    });
+    // return the transformed user object
+    return {
+      id,
+      interests,
+      potential_match,
+    };
+  });
 
-    return ready_users;
+  return ready_users;
 }
 
-const GetUsers = onRequest(async (req, res) => {
-    cors(corsOptions)(req, res, async () => {
-    user_uid = req.body.uid;
+const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res) => {
+  cors(corsOptions)(req, res, async () => {
+    const user_uid = req.body.uid;
 
     // get likes dislikes
-    let { likes, dislikes } = await get_user_likes_dislikes(user_uid);
+    const {likes, dislikes, matches} = await get_user_likes_dislikes_matches(user_uid);
 
     // query to return 3 users
-    let filtered_users = await get_other_users(user_uid,likes,dislikes);
+    const filtered_users = await get_other_users(user_uid, likes, dislikes, matches);
+
+    if (filtered_users.length === 0) {
+      // No more users to send
+      return res.status(204).send("No more users");
+    }
 
     // structure the user with their interests and whether they're a potential match or not
-    let ready_to_send_back_users = await structure_users(user_uid, filtered_users);
+    const ready_to_send_back_users = await structure_users(user_uid, filtered_users);
 
-    //if success
-    if(user_uid && likes && dislikes && filtered_users && ready_to_send_back_users){
-    res.status(200).json(ready_to_send_back_users);
+    // if success
+    if (user_uid && likes && dislikes && filtered_users && ready_to_send_back_users) {
+      res.status(200).json(ready_to_send_back_users);
+    } else {
+    // if failed
+      res.status(500).send("Error");
     }
-    else{
-    //if failed
-    res.status(500).send("Error");
-    }
-    });
   });
+});
 
 module.exports = GetUsers;
