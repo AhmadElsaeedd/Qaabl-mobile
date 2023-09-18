@@ -43,31 +43,47 @@ async function get_other_users(uid, likes, dislikes, matches) {
   filter_out_those = [...new Set([...likes, ...dislikes, ...matches, uid])];
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
-  let users_snapshot;
+  // let users_snapshot;
   const users = [];
-  try {
-    users_snapshot = await db.collection("Users")
+  if (filter_out_those.length <= 10) {
+    // If 10 or fewer items to filter out, use 'not-in'
+    const users_snapshot = await db.collection("Users")
         .where("id", "not-in", filter_out_those)
         .limit(3)
         .get();
+
     users_snapshot.forEach((doc) => {
       users.push(doc.data());
     });
-  } catch (e) {
-    console.log("More than 10 in likes, dislikes array, going for alternate solution");
-    console.log("length of things to be filtered:", filter_out_those.length);
-    users_snapshot = await db.collection("Users")
-        .limit(filter_out_those.length+3)
-        .get();
-    users_snapshot.forEach((doc) => {
-      const userData = doc.data();
-      if (!filter_out_those.includes(userData.id)) {
-        users.push(userData);
+  } else {
+    // If more than 10 items to filter out, use alternate approach
+    // split filter_out_those into chunks of 10
+    const chunks = [];
+    for (let i = 0; i < filter_out_those.length; i += 10) {
+      chunks.push(filter_out_those.slice(i, i + 10));
+    }
+    for (const chunk of chunks) {
+      const users_snapshot = await db.collection("Users")
+          .where("id", "not-in", chunk)
+          .limit(3)
+          .get();
+
+      // filter out those in users_snapshot that are in the other chunks
+      users_snapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (!filter_out_those.includes(userData.id)) {
+          users.push(userData);
+        }
+      });
+
+      // when length of the users left is 1 or more, break out of the loop
+      if (users.length >= 1) {
+        break;
       }
-    });
+    }
   }
 
-  return users.slice(0, 3);
+  return users;
 }
 
 async function structure_users(user_uid, users) {
