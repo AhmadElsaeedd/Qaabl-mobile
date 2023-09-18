@@ -85,6 +85,7 @@ class HomeViewModel extends BaseViewModel {
       //response of the function should contain 5 users with their UIDs and interests
       if(response.statusCode==200){
         print("successfully went and came back");
+        print(response.body);
       }
       else{
         print("failed to go to cloud");
