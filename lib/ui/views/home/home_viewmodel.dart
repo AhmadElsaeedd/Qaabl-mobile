@@ -163,4 +163,26 @@ class HomeViewModel extends BaseViewModel {
   }
 
   //ToDo: function that dislikes a user, server-side
+  Future<void> dislike_user(String disliked_user_uid) async{
+    //call the cloud function that likes a user
+    final response = await http.post(
+      //add the url of the function here
+      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
+      body: jsonEncode({
+        'user_uid': uid,
+        'disliked_user_uid': disliked_user_uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    //response of the function should contain true, that's it
+    if(response.statusCode == 200){
+      //remove user from queue (already removed from the other queue when displaying)
+      user_Ids_in_queue.remove(disliked_user_uid);
+    }
+    else print("failed to go to cloud");
+
+    //rebuild ui, meaning next user will be fetched
+    rebuildUi();
+  }
 }

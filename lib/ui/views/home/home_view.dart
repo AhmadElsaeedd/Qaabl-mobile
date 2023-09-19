@@ -138,7 +138,7 @@ class HomeView extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () {
                                   // TODO: Implement dislike functionality
-                                  // viewModel.dislike_user(nextUser['id']);
+                                  viewModel.dislike_user(nextUser['id']);
                                 },
                                 style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                                 child: const Text("Dislike", style:TextStyle(color: Colors.black)),
