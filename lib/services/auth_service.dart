@@ -24,7 +24,8 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> createUserWithEmailAndPassword(String email, String password) async {
+  Future<bool> createUserWithEmailAndPassword(
+      String email, String password) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);

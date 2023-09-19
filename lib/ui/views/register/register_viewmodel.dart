@@ -22,7 +22,7 @@ class RegisterViewModel extends BaseViewModel {
     }
   }
 
-  Future createUserWithEmailAndPassword(String email, String password) async{
+  Future createUserWithEmailAndPassword(String email, String password) async {
     //call the function
     final success = await _authenticationService.createUserWithEmailAndPassword(
         email, password);
@@ -39,7 +39,7 @@ class RegisterViewModel extends BaseViewModel {
     }
   }
 
-  void navigateToLogin(){
+  void navigateToLogin() {
     _navigationService.replaceWithLoginView();
   }
 }

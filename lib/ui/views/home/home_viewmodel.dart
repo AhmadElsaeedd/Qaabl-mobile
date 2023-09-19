@@ -25,25 +25,24 @@ class HomeViewModel extends BaseViewModel {
   HomeViewModel() {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
-    if (uid == null){
+    if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
   }
 
   // option to sign out (for testing purposes, will be removed from production)
-  Future signOut() async{
+  Future signOut() async {
     final success = await _authenticationService.signOut();
-    if(success){
+    if (success) {
       _navigationService.replaceWithLoginView();
       _dialogService.showConfirmationDialog(
-        title:"Logout successful", 
-        description:"Successfully logged out of Qaabl.",
+        title: "Logout successful",
+        description: "Successfully logged out of Qaabl.",
       );
-    }
-    else{
+    } else {
       _dialogService.showConfirmationDialog(
-        title:"Logout unsuccessful", 
-        description:"Couldn't log out of Qaabl.",
+        title: "Logout unsuccessful",
+        description: "Couldn't log out of Qaabl.",
       );
     }
   }
@@ -60,28 +59,29 @@ class HomeViewModel extends BaseViewModel {
   //A function that sends an HTTP request to a cloud function getUsers()
   //The function returns 3 users that are not in the likes, dislikes, matches arrays of the user AND not the user
   //We just need to pass the user_uid to the cloud function and the filtering will be done server-side
-  Future<void> getUsers() async{
-    try{
+  Future<void> getUsers() async {
+    try {
       //call the cloud function that gets 3 users, pass the uid to it
-      if(users_queue.isEmpty){
+      if (users_queue.isEmpty) {
         // queue will never be empty as long as there are users left
         first_load = true;
       }
 
       final response = await http.post(
-      //production url
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
-      //testing url
-      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetUsers'),
-      body: jsonEncode({
-        'uid': uid,
-      }),
-      headers: {'Content-Type': 'application/json'},
+        //production url
+        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
+        //testing url
+        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetUsers'),
+        body: jsonEncode({
+          'uid': uid,
+        }),
+        headers: {'Content-Type': 'application/json'},
       );
 
       //response of the function should contain 3 users with their UIDs and interests
-      if(!(response.statusCode==200 || response.statusCode==204)) print("failed to go to cloud");
-      else if(response.statusCode == 204){
+      if (!(response.statusCode == 200 || response.statusCode == 204))
+        print("failed to go to cloud");
+      else if (response.statusCode == 204) {
         //tell the ui that there are no more users
         no_more_users = true;
         rebuildUi();
@@ -94,27 +94,26 @@ class HomeViewModel extends BaseViewModel {
         // if user already exists in queue, skip them
         String user_Id = user['id'];
         if (user_Ids_in_queue.contains(user_Id)) {
-        continue;
+          continue;
         }
         // add user to queue
         users_queue.add(user);
         user_Ids_in_queue.add(user_Id);
       }
 
-      print("length of users_queue "+users_queue.length.toString());
-      print("users queue:"+ users_queue.toString());
+      print("length of users_queue " + users_queue.length.toString());
+      print("users queue:" + users_queue.toString());
 
       // Rebuild UI in first load only, because with first load the data is not there yet
-      if(first_load == true) {
+      if (first_load == true) {
         rebuildUi();
         print("first load");
-      }
-      else print("not first load");
+      } else
+        print("not first load");
 
       // Stop it from reloading infinitely
       first_load = false;
-    }
-    catch (e){
+    } catch (e) {
       // Handle exception
       _dialogService.showConfirmationDialog(
         title: "Exception",
@@ -124,14 +123,14 @@ class HomeViewModel extends BaseViewModel {
   }
 
   // function to get next user
-  Map<String,dynamic>? get_next_user(){
+  Map<String, dynamic>? get_next_user() {
     //refill the queue when needed, we want to maintain having users in the queue
-    if(users_queue.length < 3 && first_load == false){
+    if (users_queue.length < 3 && first_load == false) {
       getUsers();
     }
 
     //when queue has users, show the first user and banish them from existence
-    if(users_queue.isNotEmpty){
+    if (users_queue.isNotEmpty) {
       return users_queue.removeFirst();
     }
 
@@ -139,35 +138,64 @@ class HomeViewModel extends BaseViewModel {
   }
 
   //function that likes a user, server-side
-  Future<void> like_user(String liked_user_uid) async{
-    //call the cloud function that likes a user
-    final response = await http.post(
-      //add the url of the function here
-      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
-      body: jsonEncode({
-        'user_uid': uid,
-        'liked_user_uid': liked_user_uid,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
+  Future<void> like_user(String liked_user_uid, bool potential_match) async {
+    if(potential_match == true){
+      //call the cloud function that creates a match between 2 users
+      final response = await http.post(
+        //add the url of the function here
+        //production URL
+        //Uri.parse(''),
+        //testing URL
+        Uri.parse(''),
+        body: jsonEncode({
+          'user1_uid': uid,
+          'user2_uid': liked_user_uid,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    //response of the function should contain true, that's it
-    if(response.statusCode == 200){
-      //remove user from queue (already removed from the other queue when displaying)
-      user_Ids_in_queue.remove(liked_user_uid);
+      //response of the function should contain true, that's it
+      if (response.statusCode == 200) {
+        //remove user from queue (already removed from the other queue when displaying)
+        user_Ids_in_queue.remove(liked_user_uid);
+      } else print("failed to go to cloud");
+    } else {
+      //call the cloud function that likes a user
+      final response = await http.post(
+        //add the url of the function here
+        //production URL
+        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+        //testing URL
+        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
+        body: jsonEncode({
+          'user_uid': uid,
+          'liked_user_uid': liked_user_uid,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      //response of the function should contain true, that's it
+      if (response.statusCode == 200) {
+        //remove user from queue (already removed from the other queue when displaying)
+        user_Ids_in_queue.remove(liked_user_uid);
+      } else print("failed to go to cloud");
+
     }
-    else print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
   }
 
   //ToDo: function that dislikes a user, server-side
-  Future<void> dislike_user(String disliked_user_uid) async{
+  Future<void> dislike_user(String disliked_user_uid) async {
     //call the cloud function that likes a user
     final response = await http.post(
       //add the url of the function here
-      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
+      //production URL
+      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
+      //testing URL
+      Uri.parse(
+          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'disliked_user_uid': disliked_user_uid,
@@ -176,13 +204,22 @@ class HomeViewModel extends BaseViewModel {
     );
 
     //response of the function should contain true, that's it
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(disliked_user_uid);
-    }
-    else print("failed to go to cloud");
+    } else
+      print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
+  }
+
+  //function to display it's a match to the current user
+  //ToDo: take in the avatar as a parameter to show the its-a-match page
+  Future<void> both_like_each_other(){
+    //show the its-a-match screen instantly, fast response
+    _navigationService.navigateToItsAMatchView();
+    //ToDo: call a function that creates a match between the 2 users, server-side
+    
   }
 }

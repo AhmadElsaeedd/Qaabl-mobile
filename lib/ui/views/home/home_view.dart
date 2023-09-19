@@ -121,34 +121,43 @@ class HomeView extends StatelessWidget {
                           ),
                         ),
                         verticalSpaceMedium,
-                        if (nextUser != null && nextUser['interests'].isNotEmpty)
+                        if (nextUser != null &&
+                            nextUser['interests'].isNotEmpty)
                           Column(
                             children: [
-                              Text("Interest: ${nextUser['interests'][0]['name']}"), // Assuming interests is a list
-                              Text("Interest: ${nextUser['interests'][0]['description']}"),
+                              Text(
+                                  "Interest: ${nextUser['interests'][0]['name']}"), // Assuming interests is a list
+                              Text(
+                                  "Interest: ${nextUser['interests'][0]['description']}"),
                               // Add buttons or gestures to like or dislike
                               ElevatedButton(
                                 onPressed: () {
-                                  // TODO: Implement like functionality
-                                  viewModel.like_user(nextUser['id']);
+                                  //call like functionality
+                                  //ToDo: pass the image/avatar of the user to the function to display, if they're potential matches
+                                  //ToDo: pass the potential_match variable to check whether they're potential matches
+                                  viewModel.like_user(nextUser['id'], nextUser['potential_match']);
                                 },
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                                child: const Text("Like", style:TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
+                                child: const Text("Like",
+                                    style: TextStyle(color: Colors.black)),
                               ),
                               ElevatedButton(
                                 onPressed: () {
                                   // TODO: Implement dislike functionality
                                   viewModel.dislike_user(nextUser['id']);
                                 },
-                                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                                child: const Text("Dislike", style:TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
+                                child: const Text("Dislike",
+                                    style: TextStyle(color: Colors.black)),
                               ),
                             ],
                           )
                         else if (viewModel.no_more_users)
                           Text("No more users to display.")
                         else
-                          Text("Loading..."),                          
+                          Text("Loading..."),
                       ],
                     ),
                     Row(
@@ -158,9 +167,9 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                     MaterialButton(
-                      color: Colors.white,
-                      onPressed: viewModel.signOut,
-                      child: Text('Sign out'))
+                        color: Colors.white,
+                        onPressed: viewModel.signOut,
+                        child: Text('Sign out'))
                   ],
                 ),
               ),
@@ -171,4 +180,3 @@ class HomeView extends StatelessWidget {
     );
   }
 }
-

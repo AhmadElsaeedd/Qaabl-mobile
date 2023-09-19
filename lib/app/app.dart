@@ -8,6 +8,7 @@ import 'package:stacked_app/ui/views/counter/counter_view.dart';
 import 'package:stacked_app/ui/views/login/login_view.dart';
 import 'package:stacked_app/services/auth_service.dart';
 import 'package:stacked_app/ui/views/register/register_view.dart';
+import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -17,6 +18,7 @@ import 'package:stacked_app/ui/views/register/register_view.dart';
     MaterialRoute(page: CounterView),
     MaterialRoute(page: LoginView),
     MaterialRoute(page: RegisterView),
+    MaterialRoute(page: ItsAMatchView),
 // @stacked-route
   ],
   dependencies: [

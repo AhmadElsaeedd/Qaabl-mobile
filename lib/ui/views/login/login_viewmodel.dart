@@ -39,7 +39,7 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  void navigateToRegister(){
+  void navigateToRegister() {
     _navigationService.replaceWithRegisterView();
   }
 }
