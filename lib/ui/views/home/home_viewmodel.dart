@@ -139,48 +139,25 @@ class HomeViewModel extends BaseViewModel {
 
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match) async {
+    print("liked user:"+ liked_user_uid);
+    print("potential match" +potential_match.toString());
+    dynamic response;
     if(potential_match == true){
-      //call the cloud function that creates a match between 2 users
-      final response = await http.post(
-        //add the url of the function here
-        //production URL
-        //Uri.parse(''),
-        //testing URL
-        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
-        body: jsonEncode({
-          'user1_uid': uid,
-          'user2_uid': liked_user_uid,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      //response of the function should contain true, that's it
-      if (response.statusCode == 200) {
-        //remove user from queue (already removed from the other queue when displaying)
-        user_Ids_in_queue.remove(liked_user_uid);
-      } else print("failed to go to cloud");
+      print("I am in the true place");
+      //call the cloud function that 
+      //creates a match between 2 users
+      response = await both_like_each_other(liked_user_uid);
     } else {
+      print("I am in the false place");
       //call the cloud function that likes a user
-      final response = await http.post(
-        //add the url of the function here
-        //production URL
-        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
-        //testing URL
-        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
-        body: jsonEncode({
-          'user_uid': uid,
-          'liked_user_uid': liked_user_uid,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      //response of the function should contain true, that's it
-      if (response.statusCode == 200) {
-        //remove user from queue (already removed from the other queue when displaying)
-        user_Ids_in_queue.remove(liked_user_uid);
-      } else print("failed to go to cloud");
-
+      response = await like_user_in_cloud(liked_user_uid);
     }
+
+    //response of the function should contain true, that's it
+    if (response.statusCode == 200) {
+      //remove user from queue (already removed from the other queue when displaying)
+      user_Ids_in_queue.remove(liked_user_uid);
+    } else print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
@@ -216,10 +193,39 @@ class HomeViewModel extends BaseViewModel {
 
   //function to display it's a match to the current user
   //ToDo: take in the avatar as a parameter to show the its-a-match page
-  Future<void> both_like_each_other(){
+  Future<http.Response> both_like_each_other(liked_user_uid) async{
     //show the its-a-match screen instantly, fast response
     _navigationService.navigateToItsAMatchView();
     //ToDo: call a function that creates a match between the 2 users, server-side
-    
+    final response = await http.post(
+          //add the url of the function here
+          //production URL
+          //Uri.parse(''),
+          //testing URL
+          Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
+          body: jsonEncode({
+            'user1_uid': uid,
+            'user2_uid': liked_user_uid,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
+    return response;
+  }
+
+  Future<http.Response> like_user_in_cloud(liked_user_uid) async{
+    //ToDo: call a function that creates a match between the 2 users, server-side
+    final response = await http.post(
+        //add the url of the function here
+        //production URL
+        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+        //testing URL
+        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
+        body: jsonEncode({
+          'user_uid': uid,
+          'liked_user_uid': liked_user_uid,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
+    return response;
   }
 }
