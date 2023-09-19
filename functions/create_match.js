@@ -18,6 +18,18 @@ async function get_users(user1_uid, user2_uid) {
   return {user1_data, user2_data};
 }
 
+async function update_matches(user1_matches, user2_matches, user1_uid, user2_uid) {
+  user1_matches.push(user2_uid);
+  user2_matches.push(user1_uid);
+
+  await db.collection("Users").doc(user1_uid).update({
+    matches: user1_matches,
+  });
+
+  await db.collection("Users").doc(user2_uid).update({
+    matches: user2_matches,
+  });
+}
 
 // What do we need to do here?
 // Add the uid of user1 to user2's matches
@@ -33,6 +45,11 @@ const CreateMatch = functions.region("asia-east2").https.onRequest(async (req, r
     console.log("user 2 is: ", user2_uid);
 
     const {user1_data, user2_data} = await get_users(user1_uid, user2_uid);
+
+    // add users to the matches array of each other
+    await update_matches(user1_data.matches, user2_data.matches, user1_uid, user2_uid);
+
+    await create_match(user1_uid, user2_uid);
 
 
     res.status(200).send("User liked successfully");

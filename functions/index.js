@@ -20,8 +20,10 @@ const CreateUserRecord = require("./create_user_document");
 const GetUsers = require("./get_users");
 const LikeUser = require("./like_user");
 const DislikeUser = require("./dislike_user");
+const CreateMatch = require("./create_match");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
 exports.LikeUser = LikeUser;
 exports.DislikeUser = DislikeUser;
+exports.CreateMatch = CreateMatch;
