@@ -9,6 +9,9 @@ import 'package:stacked_app/ui/views/login/login_view.dart';
 import 'package:stacked_app/services/auth_service.dart';
 import 'package:stacked_app/ui/views/register/register_view.dart';
 import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart';
+import 'package:stacked_app/ui/views/profile/profile_view.dart';
+import 'package:stacked_app/ui/views/settings/settings_view.dart';
+import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -19,6 +22,9 @@ import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart';
     MaterialRoute(page: LoginView),
     MaterialRoute(page: RegisterView),
     MaterialRoute(page: ItsAMatchView),
+    MaterialRoute(page: ProfileView),
+    MaterialRoute(page: SettingsView),
+    MaterialRoute(page: EditProfileView),
 // @stacked-route
   ],
   dependencies: [

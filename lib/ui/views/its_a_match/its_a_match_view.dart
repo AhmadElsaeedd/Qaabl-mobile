@@ -18,7 +18,8 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
         padding: const EdgeInsets.only(left: 25.0, right: 25.0),
         child: Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Center the buttons
+            mainAxisAlignment:
+                MainAxisAlignment.spaceEvenly, // Center the buttons
             children: [
               ElevatedButton(
                 onPressed: () {

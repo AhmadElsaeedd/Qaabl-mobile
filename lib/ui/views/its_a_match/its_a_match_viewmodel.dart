@@ -12,10 +12,9 @@ class ItsAMatchViewModel extends BaseViewModel {
     _navigationService.replaceWithHomeView();
   }
 
-  void go_to_swiping(){
+  void go_to_swiping() {
     //trying this method of navigation
     //should go back to previous route in the navigation stack (which is supposedly the home page)
     _navigationService.back();
   }
-
 }

@@ -47,6 +47,10 @@ class HomeViewModel extends BaseViewModel {
     }
   }
 
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
   // a data structure that will hold the users, should be fast in insertion/deletion
   Queue<Map<String, dynamic>> users_queue = Queue();
   // keeping list of users id's for easy access
@@ -140,9 +144,9 @@ class HomeViewModel extends BaseViewModel {
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match) async {
     dynamic response;
-    if(potential_match == true){
+    if (potential_match == true) {
       print("I am in the true place");
-      //call the cloud function that 
+      //call the cloud function that
       //creates a match between 2 users
       response = await both_like_each_other(liked_user_uid);
     } else {
@@ -155,7 +159,8 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(liked_user_uid);
-    } else print("failed to go to cloud");
+    } else
+      print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
@@ -191,40 +196,41 @@ class HomeViewModel extends BaseViewModel {
 
   //function to display it's a match to the current user
   //ToDo: take in the avatar as a parameter to show the its-a-match page
-  Future<http.Response> both_like_each_other(liked_user_uid) async{
+  Future<http.Response> both_like_each_other(liked_user_uid) async {
     //show the its-a-match screen instantly, fast response
     //ToDo: pass the avatars of both users to the view so we can construct the UI of the page
     _navigationService.navigateToItsAMatchView();
     //ToDo: call a function that creates a match between the 2 users, server-side
     final response = await http.post(
-          //add the url of the function here
-          //production URL
-          //Uri.parse(''),
-          //testing URL
-          Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
-          body: jsonEncode({
-            'user1_uid': uid,
-            'user2_uid': liked_user_uid,
-          }),
-          headers: {'Content-Type': 'application/json'},
-        );
+      //add the url of the function here
+      //production URL
+      //Uri.parse(''),
+      //testing URL
+      Uri.parse(
+          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
+      body: jsonEncode({
+        'user1_uid': uid,
+        'user2_uid': liked_user_uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
     return response;
   }
 
-  Future<http.Response> like_user_in_cloud(liked_user_uid) async{
+  Future<http.Response> like_user_in_cloud(liked_user_uid) async {
     //ToDo: call a function that likes the other user
     final response = await http.post(
-        //add the url of the function here
-        //production URL
-        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
-        //testing URL
-        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
-        body: jsonEncode({
-          'user_uid': uid,
-          'liked_user_uid': liked_user_uid,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
+      //add the url of the function here
+      //production URL
+      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+      //testing URL
+      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
+      body: jsonEncode({
+        'user_uid': uid,
+        'liked_user_uid': liked_user_uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
     return response;
   }
 }

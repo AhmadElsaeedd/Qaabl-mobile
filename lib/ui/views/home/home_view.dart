@@ -135,7 +135,8 @@ class HomeView extends StatelessWidget {
                                   //call like functionality
                                   //ToDo: pass the image/avatar of the user to the function to display, if they're potential matches
                                   //ToDo: pass the potential_match variable to check whether they're potential matches
-                                  viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                                  viewModel.like_user(nextUser['id'],
+                                      nextUser['potential_match']);
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white),
@@ -169,7 +170,12 @@ class HomeView extends StatelessWidget {
                     MaterialButton(
                         color: Colors.white,
                         onPressed: viewModel.signOut,
-                        child: Text('Sign out'))
+                        child: Text('Sign out')),
+                    MaterialButton(
+                      color: Colors.white,
+                      onPressed: viewModel.go_to_profile,
+                      child: Text('Profile'),
+                    ),
                   ],
                 ),
               ),
