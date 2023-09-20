@@ -32,9 +32,44 @@ class EditProfileViewModel extends BaseViewModel {
   }
 
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
-  // Future<http.Response> save_and_back(){
+  Future<http.Response> save_and_back(String name, List<Map <String, String>> interests) async{
+    //get the values from the input fields and go update the values in the cloud
+    //call the function
+    final response = await http.post(
+      //production url
+      //Uri.parse(''),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+      body: jsonEncode({
+        'uid': uid,
+        'name': name,
+        'interests': interests,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
 
-  // }
+    back_to_profile(response);
+
+    return response;
+  }
+
+  void back_to_profile(response) async{
+    if (response.statusCode == 200) {
+    // Show a green check mark or something that shows success of updating
+    await _dialogService.showDialog(
+      title: 'Success',
+      description: 'Profile updated successfully.',
+    );
+    _navigationService.back();
+  } else {
+    // Handle error
+    await _dialogService.showDialog(
+      title: 'Error',
+      description: 'Failed to update profile.',
+    );
+  }
+  }
 
   Future<void> load_data() async {
     try {

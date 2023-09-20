@@ -23,6 +23,7 @@ const DislikeUser = require("./dislike_user");
 const CreateMatch = require("./create_match");
 const GetProfilePercentage = require("./get_profile_percentage");
 const GetProfileData = require("./get_profile_data");
+const UpdateProfileData = require("./update_profile");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -31,3 +32,4 @@ exports.DislikeUser = DislikeUser;
 exports.CreateMatch = CreateMatch;
 exports.GetProfilePercentage = GetProfilePercentage;
 exports.GetProfileData = GetProfileData;
+exports.UpdateProfileData = UpdateProfileData;

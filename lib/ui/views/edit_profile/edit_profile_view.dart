@@ -76,8 +76,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // ToDo: Implement save and back logic
+                      String name = nameController.text;
+                      List<Map<String, String>> interests = List.generate(
+                        interestControllers.length,
+                        (index) => {
+                          'name': model.user_data['interests'][index]['name'], // Assuming the name is not editable
+                          'description': interestControllers[index].text,
+                        },
+                      );
+
+                      await model.save_and_back(name,interests);
                     },
                     child: Text('Save and Back'),
                   ),
