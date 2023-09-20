@@ -139,8 +139,6 @@ class HomeViewModel extends BaseViewModel {
 
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match) async {
-    print("liked user:"+ liked_user_uid);
-    print("potential match" +potential_match.toString());
     dynamic response;
     if(potential_match == true){
       print("I am in the true place");
@@ -195,6 +193,7 @@ class HomeViewModel extends BaseViewModel {
   //ToDo: take in the avatar as a parameter to show the its-a-match page
   Future<http.Response> both_like_each_other(liked_user_uid) async{
     //show the its-a-match screen instantly, fast response
+    //ToDo: pass the avatars of both users to the view so we can construct the UI of the page
     _navigationService.navigateToItsAMatchView();
     //ToDo: call a function that creates a match between the 2 users, server-side
     final response = await http.post(
@@ -213,7 +212,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<http.Response> like_user_in_cloud(liked_user_uid) async{
-    //ToDo: call a function that creates a match between the 2 users, server-side
+    //ToDo: call a function that likes the other user
     final response = await http.post(
         //add the url of the function here
         //production URL

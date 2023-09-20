@@ -9,7 +9,6 @@ const corsOptions = {
 };
 
 async function get_user_likes(uid) {
-  console.log("user id is:", uid);
   const user_doc = await (db.collection("Users").doc(uid)).get();
 
   const user_data = user_doc.data();
@@ -20,14 +19,12 @@ async function get_user_likes(uid) {
 }
 
 function add_liked_user(liked_user_uid, user_likes) {
-  console.log("user likes:", user_likes);
   user_likes.push(liked_user_uid);
 
   return user_likes;
 }
 
 async function update_user(uid, user_likes_updated) {
-  console.log("user likes updated:", user_likes_updated);
   // Question: Should we get the user document again? Isn't that too many reads? How can we streamline this process?
   await db.collection("Users").doc(uid).update({
     likes: user_likes_updated,
