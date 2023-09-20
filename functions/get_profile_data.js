@@ -24,9 +24,21 @@ const GetProfileData = functions.region("asia-east2").https.onRequest(async (req
     // get the user's data first
     const user_data = await get_user_data(user_uid);
 
+    // interests
+    const user_interests = user_data.interests;
+
+    // name
+    const user_name = user_data.name;
+
+    // ToDo: put them in an object together and send them back as JSON to the client
+    const response_data = {
+      name: user_name,
+      interests: user_interests,
+    };
+
     // if success
     if (user_uid) {
-      res.status(200).send("Success");
+      res.status(200).json(response_data);
     } else {
       // if failed
       res.status(500).send("Error");

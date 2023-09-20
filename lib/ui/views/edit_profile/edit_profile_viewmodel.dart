@@ -17,6 +17,9 @@ class EditProfileViewModel extends BaseViewModel {
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
+  //late because it will be initialized later in the code
+  Map<String,dynamic> user_data = {};
+
   EditProfileViewModel() {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
@@ -25,7 +28,7 @@ class EditProfileViewModel extends BaseViewModel {
     }
 
     //this data is the data that will populate all fields
-    //load_data();
+    load_data();
   }
 
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
@@ -33,8 +36,18 @@ class EditProfileViewModel extends BaseViewModel {
 
   // }
 
+  Future<void> load_data() async {
+    try {
+      user_data = await get_needed_data();
+      //ToDo: function that gets the profile picture
+      notifyListeners();
+    } catch (e) {
+      print("couldn't fetch the percentage");
+    }
+  }
+
   //function that gets the necessary fields to populate a user's profile
-  Map<String, dynamic> get_needed_data() async{
+  Future<Map<String,dynamic>> get_needed_data() async{
     //the needed data is: name, interests
     //we will also bring avatar/profile picture later
 
@@ -44,7 +57,7 @@ class EditProfileViewModel extends BaseViewModel {
       //Uri.parse(''),
       //testing url
       Uri.parse(
-          ''),
+          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -54,6 +67,7 @@ class EditProfileViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse;
     } else {
       // If the server returns an error, throw an exception
       throw Exception('Failed to get percentage');
