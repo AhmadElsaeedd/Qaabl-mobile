@@ -53,7 +53,8 @@ async function get_other_users(uid, likes, dislikes, matched_users) {
         .get();
 
     users_snapshot.forEach((doc) => {
-      users.push(doc.data());
+      // avoid users who don't have interests yet
+      if (doc.data().interests.length > 0) users.push(doc.data());
     });
   } else {
     // If more than 10 items to filter out, use alternate approach
@@ -72,7 +73,8 @@ async function get_other_users(uid, likes, dislikes, matched_users) {
       users_snapshot.forEach((doc) => {
         const userData = doc.data();
         if (!filter_out_those.includes(userData.id)) {
-          users.push(userData);
+          // avoid the users who have no interests yet
+          if (userData.interests.length > 0 ) users.push(userData);
         }
       });
 
