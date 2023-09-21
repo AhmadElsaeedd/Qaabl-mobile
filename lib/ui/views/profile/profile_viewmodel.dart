@@ -44,10 +44,11 @@ class ProfileViewModel extends BaseViewModel {
   Future<void> load_data() async {
     try {
       percentage = await get_percentage();
+      print("Percentage is: " + percentage.toString());
       //ToDo: function that gets the profile picture
       notifyListeners();
     } catch (e) {
-      print("couldn't fetch the percentage");
+      print("couldn't fetch the percentage: "+ e.toString());
     }
   }
 

@@ -61,7 +61,8 @@ class EditProfileViewModel extends BaseViewModel {
       title: 'Success',
       description: 'Profile updated successfully.',
     );
-    _navigationService.back();
+    //_navigationService.back();
+    _navigationService.replaceWithProfileView();
   } else {
     // Handle error
     await _dialogService.showDialog(

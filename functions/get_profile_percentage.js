@@ -71,10 +71,12 @@ const GetProfilePercentage = functions.region("asia-east2").https.onRequest(asyn
     console.log("Percentage is: ", percentage);
 
     // if success
-    if (user_uid && percentage) {
+    if (user_uid) {
+      console.log("I succeeded");
       res.status(200).json({percentage: percentage});
     } else {
       // if failed
+      console.log("I failed");
       res.status(500).send("Error");
     }
   });

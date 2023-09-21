@@ -65,7 +65,7 @@ async function get_other_users(uid, likes, dislikes, matches) {
     for (const chunk of chunks) {
       const users_snapshot = await db.collection("Users")
           .where("id", "not-in", chunk)
-          .limit(3)
+          .limit(10)
           .get();
 
       // filter out those in users_snapshot that are in the other chunks
@@ -82,7 +82,6 @@ async function get_other_users(uid, likes, dislikes, matches) {
       }
     }
   }
-
   return users;
 }
 
