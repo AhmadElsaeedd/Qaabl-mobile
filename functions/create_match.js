@@ -20,9 +20,16 @@ async function get_users(user1_uid, user2_uid) {
   return {user1_data, user2_data};
 }
 
-function update_matches(user1_matches, user2_matches, user1_uid, user2_uid) {
-  user1_matches.push(user2_uid);
-  user2_matches.push(user1_uid);
+function update_matched_users(user1_matched_users, user2_matched_users, user1_uid, user2_uid) {
+  user1_matched_users.push(user2_uid);
+  user2_matched_users.push(user1_uid);
+
+  return {user1_matched_users, user2_matched_users};
+}
+
+function update_matches(user1_matches, user2_matches, match_id) {
+  user1_matches.push(match_id);
+  user2_matches.push(match_id);
 
   return {user1_matches, user2_matches};
 }
@@ -40,11 +47,12 @@ async function create_match(user1_uid, user2_uid) {
     isNew,
   };
 
-  await db.collection("Matches").add(matchData);
+  const match_reference = await db.collection("Matches").add(matchData);
 
   console.log("New match created.");
 
-  return true;
+  // ToDo: return the new match id
+  return match_reference.id;
 }
 
 function remove_user_from_likes(user1_likes, user2_likes, user1_uid, user2_uid) {
@@ -66,13 +74,15 @@ function remove_user_from_likes(user1_likes, user2_likes, user1_uid, user2_uid) 
 }
 
 
-async function update_users(user1_likes, user2_likes, user1_matches, user2_matches, user1_uid, user2_uid) {
+async function update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches, user1_uid, user2_uid) {
   const user1UpdatePromise = db.collection("Users").doc(user1_uid).update({
+    matched_users: user1_matched_users,
     matches: user1_matches,
     likes: user1_likes,
   });
 
   const user2UpdatePromise = db.collection("Users").doc(user2_uid).update({
+    matched_users: user2_matched_users,
     matches: user2_matches,
     likes: user2_likes,
   });
@@ -87,24 +97,24 @@ const CreateMatch = functions.region("asia-east2").https.onRequest(async (req, r
     const user1_uid = req.body.user1_uid;
     const user2_uid = req.body.user2_uid;
 
-    console.log("user 1 is: ", user1_uid);
-    console.log("user 2 is: ", user2_uid);
-
     const {user1_data, user2_data} = await get_users(user1_uid, user2_uid);
 
     // add users to the matches array of each other
-    const {user1_matches, user2_matches} = await update_matches(user1_data.matches, user2_data.matches, user1_uid, user2_uid);
+    const {user1_matched_users, user2_matched_users} = update_matched_users(user1_data.matched_users, user2_data.matched_users, user1_uid, user2_uid);
 
     // remove them from each other's likes, if they exist
-    const {user1_likes, user2_likes} = await remove_user_from_likes(user1_data.likes, user2_data.likes, user1_uid, user2_uid);
-
-    // update both with new arrays
-    const done1 = await update_users(user1_likes, user2_likes, user1_matches, user2_matches, user1_uid, user2_uid);
+    const {user1_likes, user2_likes} = remove_user_from_likes(user1_data.likes, user2_data.likes, user1_uid, user2_uid);
 
     // create match
-    const done2 = await create_match(user1_uid, user2_uid);
+    const match_id = await create_match(user1_uid, user2_uid);
 
-    if (done1 && done2) {
+    // add match id to both users
+    const {user1_matches, user2_matches} = update_matches(user1_data.matches, user2_data.matches, match_id);
+
+    // update both with new arrays
+    const done = await update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches, user1_uid, user2_uid);
+
+    if (done) {
       res.status(200).send("Match created");
     }
   });
