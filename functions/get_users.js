@@ -32,15 +32,15 @@ async function get_user_likes_dislikes_matches(uid) {
   // get likes and dislikes and matches_users arrays
   const likes = user_data.likes;
   const dislikes = user_data.dislikes;
-  const matches = user_data.matches_users;
+  const matched_users = user_data.matched_users;
 
-  return {likes, dislikes, matches};
+  return {likes, dislikes, matched_users};
 }
 
 // function that gets filtered users
-async function get_other_users(uid, likes, dislikes, matches) {
+async function get_other_users(uid, likes, dislikes, matched_users) {
   let filter_out_those = [];
-  filter_out_those = [...new Set([...likes, ...dislikes, ...matches, uid])];
+  filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
   // let users_snapshot;
@@ -82,6 +82,7 @@ async function get_other_users(uid, likes, dislikes, matches) {
       }
     }
   }
+  users.length;
   return users;
 }
 
@@ -108,10 +109,10 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
     const user_uid = req.body.uid;
 
     // get likes dislikes
-    const {likes, dislikes, matches} = await get_user_likes_dislikes_matches(user_uid);
+    const {likes, dislikes, matched_users} = await get_user_likes_dislikes_matches(user_uid);
 
     // query to return 3 users
-    const filtered_users = await get_other_users(user_uid, likes, dislikes, matches);
+    const filtered_users = await get_other_users(user_uid, likes, dislikes, matched_users);
 
     if (filtered_users.length === 0) {
       // No more users to send

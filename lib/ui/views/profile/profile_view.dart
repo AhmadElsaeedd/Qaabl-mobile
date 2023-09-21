@@ -38,7 +38,8 @@ class ProfileView extends StackedView<ProfileViewModel> {
                           value: viewModel.percentage! / 100,
                           minHeight: 20,
                           backgroundColor: Colors.grey[300],
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.green),
                         ),
                         Positioned.fill(
                           child: Align(

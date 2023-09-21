@@ -5,9 +5,11 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i11;
+import 'package:flutter/material.dart' as _i12;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
+import 'package:stacked_app/ui/views/add_interests/add_interests_view.dart'
+    as _i11;
 import 'package:stacked_app/ui/views/counter/counter_view.dart' as _i4;
 import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart'
     as _i10;
@@ -18,7 +20,7 @@ import 'package:stacked_app/ui/views/profile/profile_view.dart' as _i8;
 import 'package:stacked_app/ui/views/register/register_view.dart' as _i6;
 import 'package:stacked_app/ui/views/settings/settings_view.dart' as _i9;
 import 'package:stacked_app/ui/views/startup/startup_view.dart' as _i3;
-import 'package:stacked_services/stacked_services.dart' as _i12;
+import 'package:stacked_services/stacked_services.dart' as _i13;
 
 class Routes {
   static const homeView = '/home-view';
@@ -39,6 +41,8 @@ class Routes {
 
   static const editProfileView = '/edit-profile-view';
 
+  static const addInterestsView = '/add-interests-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -49,6 +53,7 @@ class Routes {
     profileView,
     settingsView,
     editProfileView,
+    addInterestsView,
   };
 }
 
@@ -90,60 +95,76 @@ class StackedRouter extends _i1.RouterBase {
       Routes.editProfileView,
       page: _i10.EditProfileView,
     ),
+    _i1.RouteDef(
+      Routes.addInterestsView,
+      page: _i11.AddInterestsView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.CounterView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.CounterView(),
         settings: data,
       );
     },
     _i5.LoginView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LoginView(),
         settings: data,
       );
     },
     _i6.RegisterView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.RegisterView(),
         settings: data,
       );
     },
     _i7.ItsAMatchView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.ItsAMatchView(),
         settings: data,
       );
     },
     _i8.ProfileView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.ProfileView(),
         settings: data,
       );
     },
     _i9.SettingsView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.SettingsView(),
         settings: data,
       );
     },
     _i10.EditProfileView: (data) {
-      return _i11.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i10.EditProfileView(),
+      final args = data.getArgs<EditProfileViewArguments>(
+        orElse: () => const EditProfileViewArguments(),
+      );
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => _i10.EditProfileView(
+            key: args.key, selected_interests: args.selectedinterests),
+        settings: data,
+      );
+    },
+    _i11.AddInterestsView: (data) {
+      final args = data.getArgs<AddInterestsViewArguments>(nullOk: false);
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => _i11.AddInterestsView(
+            key: args.key, interests_names: args.interestsnames),
         settings: data,
       );
     },
@@ -155,7 +176,61 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i12.NavigationService {
+class EditProfileViewArguments {
+  const EditProfileViewArguments({
+    this.key,
+    this.selectedinterests,
+  });
+
+  final _i12.Key? key;
+
+  final dynamic selectedinterests;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "selectedinterests": "$selectedinterests"}';
+  }
+
+  @override
+  bool operator ==(covariant EditProfileViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.selectedinterests == selectedinterests;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ selectedinterests.hashCode;
+  }
+}
+
+class AddInterestsViewArguments {
+  const AddInterestsViewArguments({
+    this.key,
+    required this.interestsnames,
+  });
+
+  final _i12.Key? key;
+
+  final List<dynamic> interestsnames;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "interestsnames": "$interestsnames"}';
+  }
+
+  @override
+  bool operator ==(covariant AddInterestsViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.interestsnames == interestsnames;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ interestsnames.hashCode;
+  }
+}
+
+extension NavigatorStateExtension on _i13.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -268,14 +343,36 @@ extension NavigatorStateExtension on _i12.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToEditProfileView([
+  Future<dynamic> navigateToEditProfileView({
+    _i12.Key? key,
+    dynamic selectedinterests,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.editProfileView,
+        arguments: EditProfileViewArguments(
+            key: key, selectedinterests: selectedinterests),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToAddInterestsView({
+    _i12.Key? key,
+    required List<dynamic> interestsnames,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.addInterestsView,
+        arguments:
+            AddInterestsViewArguments(key: key, interestsnames: interestsnames),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -394,14 +491,36 @@ extension NavigatorStateExtension on _i12.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithEditProfileView([
+  Future<dynamic> replaceWithEditProfileView({
+    _i12.Key? key,
+    dynamic selectedinterests,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.editProfileView,
+        arguments: EditProfileViewArguments(
+            key: key, selectedinterests: selectedinterests),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithAddInterestsView({
+    _i12.Key? key,
+    required List<dynamic> interestsnames,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.addInterestsView,
+        arguments:
+            AddInterestsViewArguments(key: key, interestsnames: interestsnames),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

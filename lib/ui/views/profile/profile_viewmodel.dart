@@ -31,14 +31,14 @@ class ProfileViewModel extends BaseViewModel {
     load_data();
   }
 
-  void go_to_settings(){
+  void go_to_settings() {
     //navigate to because it adds it on top in the navigation stack
     //then from the settings page, we can go back to this page by using the back method
     _navigationService.navigateToSettingsView();
   }
 
-  void go_to_edit_profile(){
-   _navigationService.navigateToEditProfileView();
+  void go_to_edit_profile() {
+    _navigationService.navigateToEditProfileView();
   }
 
   Future<void> load_data() async {
@@ -48,7 +48,7 @@ class ProfileViewModel extends BaseViewModel {
       //ToDo: function that gets the profile picture
       notifyListeners();
     } catch (e) {
-      print("couldn't fetch the percentage: "+ e.toString());
+      print("couldn't fetch the percentage: " + e.toString());
     }
   }
 
