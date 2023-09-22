@@ -153,6 +153,25 @@ class HomeView extends StatelessWidget {
                                 child: const Text("Dislike",
                                     style: TextStyle(color: Colors.black)),
                               ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.of(context).pop(), // Dismiss when background is tapped
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.5,
+                                        child: UserProfileView(
+                                          interests: List<Map<String, dynamic>>.from(nextUser['interests']),
+                                        ),
+                                      ),
+                                    ),
+                                    isScrollControlled: true,
+                                  );
+                                },
+                                child: Text("View Profile"),
+                              ),
                             ],
                           )
                         else if (viewModel.no_more_users)
@@ -183,6 +202,70 @@ class HomeView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class UserInterestsWidget extends StatefulWidget {
+  final List<Map<String, dynamic>> interests;
+
+  const UserInterestsWidget({Key? key, required this.interests})
+      : super(key: key);
+
+  @override
+  _UserInterestsWidgetState createState() => _UserInterestsWidgetState();
+}
+
+class _UserInterestsWidgetState extends State<UserInterestsWidget> {
+  String? selectedInterestDescription;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListView.builder(
+          shrinkWrap: true, // to give the ListView a height
+          itemCount: widget.interests.length,
+          itemBuilder: (context, index) {
+            final interest = widget.interests[index];
+            return ListTile(
+              title: Text(interest['name']),
+              onTap: () {
+                setState(() {
+                  selectedInterestDescription = interest['description'];
+                });
+              },
+            );
+          },
+        ),
+        if (selectedInterestDescription != null)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(selectedInterestDescription!),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class UserProfileView extends StatelessWidget {
+  final List<Map<String, dynamic>> interests;
+
+  const UserProfileView({Key? key, required this.interests}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('User Profile'),
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: UserInterestsWidget(interests: interests),
     );
   }
 }

@@ -175,7 +175,7 @@ class HomeViewModel extends BaseViewModel {
       //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
       //testing URL
       Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
+           'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'disliked_user_uid': disliked_user_uid,
@@ -207,7 +207,7 @@ class HomeViewModel extends BaseViewModel {
       //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
       //testing URL
       Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
+           'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
         'user1_uid': uid,
         'user2_uid': liked_user_uid,
