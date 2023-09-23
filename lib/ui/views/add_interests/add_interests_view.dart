@@ -6,7 +6,8 @@ import 'add_interests_viewmodel.dart';
 class AddInterestsView extends StackedView<AddInterestsViewModel> {
   final List interests_names;
   // ignore: non_constant_identifier_names
-  const AddInterestsView({Key? key, required this.interests_names}) : super(key: key);
+  const AddInterestsView({Key? key, required this.interests_names})
+      : super(key: key);
 
   @override
   Widget builder(
@@ -29,14 +30,17 @@ class AddInterestsView extends StackedView<AddInterestsViewModel> {
                     viewModel.selected_interests.contains(interest);
                 return ListTile(
                   title: Text(interest),
-                  tileColor:
-                      isSelected ? Colors.blue : Colors.transparent, // Change the color to your preference
+                  tileColor: isSelected
+                      ? Colors.blue
+                      : Colors
+                          .transparent, // Change the color to your preference
                   onTap: () => viewModel.toggleInterestSelection(interest),
                 );
               },
             ),
             ElevatedButton(
-              onPressed: () => viewModel.save_and_back(viewModel.selected_interests),
+              onPressed: () =>
+                  viewModel.save_and_back(viewModel.selected_interests),
               child: Text('Save and Go Back'),
             ),
           ],

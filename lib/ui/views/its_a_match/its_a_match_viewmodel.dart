@@ -9,7 +9,7 @@ class ItsAMatchViewModel extends BaseViewModel {
   void go_to_chats() {
     //go directly to chats, replace the its-a-match page with the chats page
     //supposed to be replaceWithChatsView though
-    _navigationService.replaceWithHomeView();
+    _navigationService.replaceWithChatsView();
   }
 
   void go_to_swiping() {

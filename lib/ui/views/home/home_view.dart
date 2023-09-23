@@ -105,98 +105,125 @@ class HomeView extends StatelessWidget {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    verticalSpaceLarge,
-                    Column(
-                      children: [
-                        const Text(
-                          'Hello, in Qaabl!',
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        verticalSpaceMedium,
-                        if (nextUser != null &&
-                            nextUser['interests'].isNotEmpty)
-                          Column(
-                            children: [
-                              Text(
-                                  "Interest: ${nextUser['interests'][0]['name']}"), // Assuming interests is a list
-                              Text(
-                                  "Interest: ${nextUser['interests'][0]['description']}"),
-                              // Add buttons or gestures to like or dislike
-                              ElevatedButton(
-                                onPressed: () {
-                                  //call like functionality
-                                  //ToDo: pass the image/avatar of the user to the function to display, if they're potential matches
-                                  //ToDo: pass the potential_match variable to check whether they're potential matches
-                                  viewModel.like_user(nextUser['id'],
-                                      nextUser['potential_match']);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white),
-                                child: const Text("Like",
-                                    style: TextStyle(color: Colors.black)),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // TODO: Implement dislike functionality
-                                  viewModel.dislike_user(nextUser['id']);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white),
-                                child: const Text("Dislike",
-                                    style: TextStyle(color: Colors.black)),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => GestureDetector(
-                                      onTap: () => Navigator.of(context).pop(), // Dismiss when background is tapped
-                                      behavior: HitTestBehavior.opaque,
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height * 0.5,
-                                        child: UserProfileView(
-                                          interests: List<Map<String, dynamic>>.from(nextUser['interests']),
-                                        ),
-                                      ),
-                                    ),
-                                    isScrollControlled: true,
-                                  );
-                                },
-                                child: Text("View Profile"),
-                              ),
-                            ],
-                          )
-                        else if (viewModel.no_more_users)
-                          Text("No more users to display.")
-                        else
-                          Text("Loading..."),
-                      ],
-                    ),
-                    Row(
+              child: Stack(
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // ... your existing buttons
+                        verticalSpaceLarge,
+                        Column(
+                          children: [
+                            const Text(
+                              'Hello, in Qaabl!',
+                              style: TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            verticalSpaceMedium,
+                            if (nextUser != null &&
+                                nextUser['interests'].isNotEmpty)
+                              Column(
+                                children: [
+                                  Text(
+                                      "Interest: ${nextUser['interests'][0]['name']}"),
+                                  Text(
+                                      "Interest: ${nextUser['interests'][0]['description']}"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      viewModel.like_user(nextUser['id'],
+                                          nextUser['potential_match']);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white),
+                                    child: const Text("Like",
+                                        style: TextStyle(color: Colors.black)),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      viewModel.dislike_user(nextUser['id']);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white),
+                                    child: const Text("Dislike",
+                                        style: TextStyle(color: Colors.black)),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => GestureDetector(
+                                          onTap: () =>
+                                              Navigator.of(context).pop(),
+                                          behavior: HitTestBehavior.opaque,
+                                          child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.5,
+                                            child: UserProfileView(
+                                              interests: List<
+                                                      Map<String,
+                                                          dynamic>>.from(
+                                                  nextUser['interests']),
+                                            ),
+                                          ),
+                                        ),
+                                        isScrollControlled: true,
+                                      );
+                                    },
+                                    child: Text("View Profile"),
+                                  ),
+                                ],
+                              )
+                            else if (viewModel.no_more_users)
+                              Text("No more users to display.")
+                            else
+                              Text("Loading..."),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // ... your existing buttons
+                          ],
+                        ),
+                        MaterialButton(
+                          color: Colors.white,
+                          onPressed: viewModel.signOut,
+                          child: Text('Sign out'),
+                        ),
+                        MaterialButton(
+                          color: Colors.white,
+                          onPressed: viewModel.go_to_profile,
+                          child: Text('Profile'),
+                        ),
+                        MaterialButton(
+                          color: Colors.white,
+                          onPressed: viewModel.go_to_chats,
+                          child: Text('Chats'),
+                        ),
                       ],
                     ),
-                    MaterialButton(
-                        color: Colors.white,
-                        onPressed: viewModel.signOut,
-                        child: Text('Sign out')),
-                    MaterialButton(
-                      color: Colors.white,
-                      onPressed: viewModel.go_to_profile,
-                      child: Text('Profile'),
-                    ),
-                  ],
-                ),
+                  ),
+                  // Positioned(
+                  //   left: 0,
+                  //   right: 0,
+                  //   bottom: 0,
+                  //   child: Container(
+                  //     width: 390,
+                  //     height: 96,
+                  //     decoration: ShapeDecoration(
+                  //       color: Color(0xFFEAEAEA),
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(20),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
               ),
             ),
           ),

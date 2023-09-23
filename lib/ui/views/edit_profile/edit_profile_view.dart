@@ -42,9 +42,10 @@ class _EditProfileViewState extends State<EditProfileView> {
   late List<TextEditingController> interestNameControllers;
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
-      viewModelBuilder: () => EditProfileViewModel(widget.selected_interests ?? []),
+      viewModelBuilder: () =>
+          EditProfileViewModel(widget.selected_interests ?? []),
       //onViewModelReady: (model) => model.load_data(),
       builder: (context, model, child) {
         Map<String, dynamic>? userData = model.user_data;
@@ -52,33 +53,40 @@ class _EditProfileViewState extends State<EditProfileView> {
         if (userData.isNotEmpty) {
           nameController = TextEditingController(text: userData['name'] ?? '');
           interestNameControllers = List.generate(
-            (widget.selected_interests != null && widget.selected_interests!.isNotEmpty)
-              ? widget.selected_interests!.length
-              : (userData['interests']?.length ?? 0),
+            (widget.selected_interests != null &&
+                    widget.selected_interests!.isNotEmpty)
+                ? widget.selected_interests!.length
+                : (userData['interests']?.length ?? 0),
             (index) {
-              String interestName = (widget.selected_interests != null && widget.selected_interests!.isNotEmpty)
-                ? widget.selected_interests![index]
-                : userData['interests'][index]['name'] ?? '';
+              String interestName = (widget.selected_interests != null &&
+                      widget.selected_interests!.isNotEmpty)
+                  ? widget.selected_interests![index]
+                  : userData['interests'][index]['name'] ?? '';
               return TextEditingController(text: interestName);
             },
           );
           interestControllers = List.generate(
             //if selected_interests has length 0 or is null, take the length of the interests array from the userData object to be the length of the list
-            (widget.selected_interests != null && widget.selected_interests!.isNotEmpty)
-              ? widget.selected_interests!.length
-              : (userData['interests']?.length ?? 0),
+            (widget.selected_interests != null &&
+                    widget.selected_interests!.isNotEmpty)
+                ? widget.selected_interests!.length
+                : (userData['interests']?.length ?? 0),
             (index) {
-                String interestName = (widget.selected_interests != null && widget.selected_interests!.isNotEmpty)
+              String interestName = (widget.selected_interests != null &&
+                      widget.selected_interests!.isNotEmpty)
                   ? widget.selected_interests![index]
                   : userData['interests'][index]['name'] ?? '';
-                return TextEditingController(
-                  text: userData['interests'].any((interest) => interest['name'] == interestName)
-                    ? userData['interests'].firstWhere((interest) => interest['name'] == interestName)['description'] ?? ''
-                    : ''
-                );
-              },
+              return TextEditingController(
+                  text: userData['interests']
+                          .any((interest) => interest['name'] == interestName)
+                      ? userData['interests'].firstWhere((interest) =>
+                              interest['name'] ==
+                              interestName)['description'] ??
+                          ''
+                      : '');
+            },
           );
-          
+
           return Scaffold(
             backgroundColor: Theme.of(context).colorScheme.background,
             body: Container(
@@ -95,9 +103,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                       controller: interestControllers[index],
                       decoration: InputDecoration(
                         //condition if the length of selected_interests is 0, use the data fetched from network.
-                        labelText: (widget.selected_interests != null && widget.selected_interests!.isNotEmpty)
-                          ? widget.selected_interests![index]
-                          : userData['interests'][index]['name'] ?? 'Interest ${index + 1}',
+                        labelText: (widget.selected_interests != null &&
+                                widget.selected_interests!.isNotEmpty)
+                            ? widget.selected_interests![index]
+                            : userData['interests'][index]['name'] ??
+                                'Interest ${index + 1}',
                       ),
                     ),
                   ),
@@ -108,7 +118,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                       List<Map<String, String>> interests = List.generate(
                         interestControllers.length,
                         (index) => {
-                          'name': interestNameControllers[index].text, // Using the text from the name controller
+                          'name': interestNameControllers[index]
+                              .text, // Using the text from the name controller
                           'description': interestControllers[index].text,
                         },
                       );

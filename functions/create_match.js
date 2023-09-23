@@ -2,6 +2,8 @@ const functions = require("firebase-functions");
 const cors = require("cors");
 const admin = require("firebase-admin");
 
+const uuidv4 = require("uuid");
+
 const db = admin.firestore();
 
 const corsOptions = {
@@ -35,24 +37,26 @@ function update_matches(user1_matches, user2_matches, match_id) {
 }
 
 async function create_match(user1_uid, user2_uid) {
-  // ToDo: create the match according to the schema in my room
-  // In the "Matches" collection, with fields user1 (user1_uid), user2 (user2_uid), timestamp_newchat (current timestamp), isNew (true)
-  // ToDo: put the timestamp: const timestamp_newchat = admin.firestore.Timestamp.now();
+  const timestamp_newchat = new Date();
   const isNew = true;
 
+  const matchId = uuidv4();
+
   const matchData = {
+    // ToDo: add the uid of the match to the match object. How do I do that?
+    matchId: matchId,
     user1: user1_uid,
     user2: user2_uid,
-    // timestamp_newchat,
+    timestamp_newchat: timestamp_newchat.toISOString(),
     isNew,
   };
 
-  const match_reference = await db.collection("Matches").add(matchData);
+  await db.collection("Matches").doc(matchId).set(matchData);
 
-  console.log("New match created.");
+  console.log("New match created with ID: ", matchId);
 
   // ToDo: return the new match id
-  return match_reference.id;
+  return matchId;
 }
 
 function remove_user_from_likes(user1_likes, user2_likes, user1_uid, user2_uid) {

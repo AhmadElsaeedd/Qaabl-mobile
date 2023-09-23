@@ -20,7 +20,6 @@ class EditProfileViewModel extends BaseViewModel {
   //initialized empty because it will be initialized later in the code
   Map<String, dynamic> user_data = {};
 
-  
   final List<String> selected_interests;
 
   EditProfileViewModel(this.selected_interests) {
@@ -29,20 +28,19 @@ class EditProfileViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
-    print("Selected interests are: (in constructor)"+ selected_interests.toString());
-    print("Length of selected interests is: " + selected_interests.length.toString());
-
     //this data is the data that will populate all fields
     load_data();
   }
 
-  void go_to_add_interests(){
+  void go_to_add_interests() {
     //get a list of interests names from the user's data
     List<String> interests_names = user_data['interests']
-      ?.map<String>((interest) => interest['name'] as String)
-      .toList() ?? [];
+            ?.map<String>((interest) => interest['name'] as String)
+            .toList() ??
+        [];
 
-    _navigationService.replaceWithAddInterestsView(interestsnames: interests_names);
+    _navigationService.replaceWithAddInterestsView(
+        interestsnames: interests_names);
   }
 
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page

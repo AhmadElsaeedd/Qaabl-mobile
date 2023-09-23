@@ -13,6 +13,7 @@ import 'package:stacked_app/ui/views/profile/profile_view.dart';
 import 'package:stacked_app/ui/views/settings/settings_view.dart';
 import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:stacked_app/ui/views/add_interests/add_interests_view.dart';
+import 'package:stacked_app/ui/views/chats/chats_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -27,6 +28,7 @@ import 'package:stacked_app/ui/views/add_interests/add_interests_view.dart';
     MaterialRoute(page: SettingsView),
     MaterialRoute(page: EditProfileView),
     MaterialRoute(page: AddInterestsView),
+    MaterialRoute(page: ChatsView),
 // @stacked-route
   ],
   dependencies: [

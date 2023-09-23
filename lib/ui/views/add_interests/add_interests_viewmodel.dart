@@ -37,7 +37,8 @@ class AddInterestsViewModel extends BaseViewModel {
     'Diving',
   ];
 
-  AddInterestsViewModel(this.interests_names) : selected_interests = List<String>.from(interests_names) {
+  AddInterestsViewModel(this.interests_names)
+      : selected_interests = List<String>.from(interests_names) {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
     if (uid == null) {
@@ -56,9 +57,8 @@ class AddInterestsViewModel extends BaseViewModel {
 
   Future<void> save_and_back(selected_interests) async {
     //get the values from the input fields and pass them back to the page
-    print("Selected interests are: "+ selected_interests.toString());
-    _navigationService.replaceWithEditProfileView(selectedinterests: selected_interests); 
+    print("Selected interests are: " + selected_interests.toString());
+    _navigationService.replaceWithEditProfileView(
+        selectedinterests: selected_interests);
   }
-
 }
-
