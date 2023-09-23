@@ -37,25 +37,23 @@ function update_matches(user1_matches, user2_matches, match_id) {
 }
 
 async function create_match(user1_uid, user2_uid) {
-  const timestamp_newchat = new Date();
-  const isNew = true;
+  // const timestamp = new Date();
+  const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
   const matchId = uuidv4();
 
   const matchData = {
-    // ToDo: add the uid of the match to the match object. How do I do that?
     matchId: matchId,
-    user1: user1_uid,
-    user2: user2_uid,
-    timestamp_newchat: timestamp_newchat.toISOString(),
-    isNew,
+    users: [user1_uid, user2_uid],
+    timestamp: timestamp,
+    // timestamp: timestamp.toISOString(),
+    last_message: {},
   };
 
   await db.collection("Matches").doc(matchId).set(matchData);
 
   console.log("New match created with ID: ", matchId);
 
-  // ToDo: return the new match id
   return matchId;
 }
 
