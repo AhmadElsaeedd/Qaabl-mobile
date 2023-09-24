@@ -7,6 +7,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:collection';
+import 'package:stacked_app/models/match_model.dart';
 
 
 class ChatsViewModel extends MultipleStreamViewModel {
@@ -17,8 +18,24 @@ class ChatsViewModel extends MultipleStreamViewModel {
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
+  List<ChatMatch> new_matches = [];
+  List<ChatMatch> old_matches = [];
+
   @override
-  Map<String, Stream<List<Match>>> get streams {
+  void onData(String key, data) {
+    switch (key) {
+      case 'new_chats':
+        new_matches = data;
+        break;
+      case 'old_chats':
+        old_matches = data;
+        break;
+    }
+    rebuildUi();
+  }
+
+  @override
+  Map<String, StreamData<List<ChatMatch>>> get streamsMap {
     final uid = _authenticationService.currentUser?.uid;
     if (uid == null) {
       _navigationService.replaceWithLoginView();
@@ -26,9 +43,8 @@ class ChatsViewModel extends MultipleStreamViewModel {
     }
 
     return {
-      'new_chats': _firestoreService.get_new_matches(uid),
-      'old_chats': _firestoreService.get_old_matches(uid),
+      'new_chats': StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
+      'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
-
 }
