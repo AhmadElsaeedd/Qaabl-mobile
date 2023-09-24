@@ -37,17 +37,16 @@ function update_matches(user1_matches, user2_matches, match_id) {
 }
 
 async function create_match(user1_uid, user2_uid) {
-  // const timestamp = new Date();
   const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
   const matchId = uuidv4();
 
   const matchData = {
-    matchId: matchId,
+    match_id: matchId,
     users: [user1_uid, user2_uid],
     timestamp: timestamp,
-    // timestamp: timestamp.toISOString(),
     last_message: {},
+    has_message: false,
   };
 
   await db.collection("Matches").doc(matchId).set(matchData);

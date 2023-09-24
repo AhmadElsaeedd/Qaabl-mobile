@@ -11,8 +11,8 @@ class FirestoreService{
       //query to get the 5 most recent chats where last_message != null and where uid is in the array users
       return _firestore.collection('Matches')
         .where('users', arrayContains:  uid)
-        .where('last_message', isNull: false)
-        .orderBy("timestamp", descending: true)
+        .where('has_message', isEqualTo: true)
+        .orderBy('timestamp', descending: true)
         .limit(5)
         .snapshots()
         //define the fromDocument function
@@ -27,8 +27,8 @@ class FirestoreService{
       //query to get the 5 most recent chats where last_messages == null and where uid is in the array users
       return _firestore.collection('Matches')
         .where('users', arrayContains:  uid)
-        .where('last_message', isNull: true)
-        .orderBy("timestamp", descending: true)
+        .where('has_message', isEqualTo: false)
+        .orderBy('timestamp', descending: true)
         .limit(5)
         .snapshots()
         //define the fromDocument function
