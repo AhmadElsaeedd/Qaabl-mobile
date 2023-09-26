@@ -87,4 +87,10 @@ class FirestoreService{
       return 'No Name';
     }
   }
+
+  //function to add a message to the chat
+  Future<void> send_message(String chat_id, String content, String uid){
+    
+  }
+
 }
