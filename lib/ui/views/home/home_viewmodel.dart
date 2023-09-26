@@ -77,14 +77,15 @@ class HomeViewModel extends BaseViewModel {
 
       final response = await http.post(
         //production url
-        //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
+        Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
         //testing url
-        Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetUsers'),
+        //Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
           'uid': uid,
         }),
         headers: {'Content-Type': 'application/json'},
       );
+      print("Sent request");
 
       //response of the function should contain 3 users with their UIDs and interests
       if (!(response.statusCode == 200 || response.statusCode == 204))
@@ -176,10 +177,10 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
       //testing URL
-      Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
+      // Uri.parse(
+      //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'disliked_user_uid': disliked_user_uid,
@@ -208,10 +209,10 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
       //testing URL
-      Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
+      // Uri.parse(
+      //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
         'user1_uid': uid,
         'user2_uid': liked_user_uid,
@@ -226,9 +227,9 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
       //testing URL
-      Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
+      // Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'liked_user_uid': liked_user_uid,

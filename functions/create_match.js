@@ -2,7 +2,11 @@ const functions = require("firebase-functions");
 const cors = require("cors");
 const admin = require("firebase-admin");
 
-const uuidv4 = require("uuid");
+const {v4: uuidv4} = require("uuid");
+
+if (admin.apps.length === 0) {
+  admin.initializeApp();
+}
 
 const db = admin.firestore();
 
@@ -37,7 +41,8 @@ function update_matches(user1_matches, user2_matches, match_id) {
 }
 
 async function create_match(user1_uid, user2_uid) {
-  const timestamp = admin.firestore.FieldValue.serverTimestamp();
+  // const timestamp = admin.firestore.FieldValue.serverTimestamp();
+  const timestamp = new Date();
 
   const matchId = uuidv4();
 

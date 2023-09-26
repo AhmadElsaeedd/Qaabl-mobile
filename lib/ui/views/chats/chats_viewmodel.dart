@@ -41,6 +41,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
       _navigationService.replaceWithLoginView();
       return {};
     }
+    print("User making the request is: " + uid.toString());
 
     return {
       'new_chats': StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),

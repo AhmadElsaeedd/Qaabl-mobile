@@ -50,10 +50,10 @@ class EditProfileViewModel extends BaseViewModel {
     //call the function
     final response = await http.post(
       //production url
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
       //testing url
-      Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+      // Uri.parse(
+      //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
       body: jsonEncode({
         'uid': uid,
         'name': name,
@@ -105,10 +105,10 @@ class EditProfileViewModel extends BaseViewModel {
     //call the function from the cloud
     final response = await http.post(
       //production url
-      //Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
       //testing url
-      Uri.parse(
-          'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetProfileData'),
+      // Uri.parse(
+      //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),

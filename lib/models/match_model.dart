@@ -16,12 +16,20 @@ class ChatMatch {
   });
 
   factory ChatMatch.fromDocument(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return ChatMatch(
-      match_id: doc.id,
-      users: List<String>.from(data['users'] ?? []),
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
-      last_message: data['last_message'] != null ? Message.fromMap(data['last_message']) : null, // Here, converting it to Message object
-    );
+  final data = doc.data() as Map<String, dynamic>;
+  final Map<String, dynamic>? lastMessageMap = data['last_message'] as Map<String, dynamic>?;
+  Message? lastMessage;
+  if (lastMessageMap != null && 
+      lastMessageMap.containsKey('content') && 
+      lastMessageMap.containsKey('timestamp') && 
+      lastMessageMap.containsKey('sent_by')) {
+    lastMessage = Message.fromMap(lastMessageMap);
   }
+  return ChatMatch(
+    match_id: doc.id,
+    users: List<String>.from(data['users'] ?? []),
+    timestamp: (data['timestamp'] as Timestamp).toDate(),
+    last_message: lastMessage,
+  );
+}
 }

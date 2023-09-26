@@ -19,10 +19,13 @@ class ChatsView extends StackedView<ChatsViewModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // New Chats Label
-            Text(
-              'New Chats',
-              style: Theme.of(context).textTheme.titleLarge,
+            Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: // New Chats Label
+                Text(
+                  'New Chats',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
             ),
             // Horizontal List for New Chats
             Container(

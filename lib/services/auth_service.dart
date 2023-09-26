@@ -6,9 +6,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  AuthenticationService() {
-    _firebaseAuth.useAuthEmulator('localhost', 9102);
-  }
+  // AuthenticationService() {
+  //   _firebaseAuth.useAuthEmulator('localhost', 9102);
+
+  //   print("Auth settings: ${_firebaseAuth.app.options} ");
+  // }
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
