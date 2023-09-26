@@ -57,7 +57,8 @@ class ProfileViewModel extends BaseViewModel {
     //call function that gets how full the profile is
     final response = await http.post(
       //production url
-      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
       //testing url
       // Uri.parse(
       //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),

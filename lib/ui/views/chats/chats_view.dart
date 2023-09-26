@@ -22,10 +22,10 @@ class ChatsView extends StackedView<ChatsViewModel> {
             Padding(
               padding: const EdgeInsets.only(top: 80),
               child: // New Chats Label
-                Text(
-                  'New Chats',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                  Text(
+                'New Chats',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
             // Horizontal List for New Chats
             Container(
@@ -39,7 +39,8 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     width: 80, // Adjust the width as needed
                     child: Card(
                       child: Center(
-                        child: Text(match.other_user_name), // Display the other user's name
+                        child: Text(match
+                            .other_user_name), // Display the other user's name
                       ),
                     ),
                   );
@@ -58,8 +59,10 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
                   return ListTile(
-                    title: Text(match.other_user_name), // Display the other user's name
-                    subtitle: Text(match.last_message?.content ?? ''), // Replace with actual data
+                    title: Text(
+                        match.other_user_name), // Display the other user's name
+                    subtitle: Text(match.last_message?.content ??
+                        ''), // Replace with actual data
                   );
                 },
               ),

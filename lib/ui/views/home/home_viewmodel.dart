@@ -77,7 +77,8 @@ class HomeViewModel extends BaseViewModel {
 
       final response = await http.post(
         //production url
-        Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
+        Uri.parse(
+            'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
         //testing url
         //Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
@@ -177,7 +178,8 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
       //testing URL
       // Uri.parse(
       //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/DislikeUser'),
@@ -209,7 +211,8 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
       //testing URL
       // Uri.parse(
       //     'http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/CreateMatch'),
@@ -227,7 +230,8 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
       //testing URL
       // Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({

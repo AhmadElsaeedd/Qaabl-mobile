@@ -5,7 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_app/ui/views/add_interests/add_interests_view.dart'
@@ -15,13 +15,14 @@ import 'package:stacked_app/ui/views/counter/counter_view.dart' as _i4;
 import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart'
     as _i10;
 import 'package:stacked_app/ui/views/home/home_view.dart' as _i2;
+import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart' as _i13;
 import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart' as _i7;
 import 'package:stacked_app/ui/views/login/login_view.dart' as _i5;
 import 'package:stacked_app/ui/views/profile/profile_view.dart' as _i8;
 import 'package:stacked_app/ui/views/register/register_view.dart' as _i6;
 import 'package:stacked_app/ui/views/settings/settings_view.dart' as _i9;
 import 'package:stacked_app/ui/views/startup/startup_view.dart' as _i3;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 
 class Routes {
   static const homeView = '/home-view';
@@ -46,6 +47,8 @@ class Routes {
 
   static const chatsView = '/chats-view';
 
+  static const inChatView = '/in-chat-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -58,6 +61,7 @@ class Routes {
     editProfileView,
     addInterestsView,
     chatsView,
+    inChatView,
   };
 }
 
@@ -107,53 +111,57 @@ class StackedRouter extends _i1.RouterBase {
       Routes.chatsView,
       page: _i12.ChatsView,
     ),
+    _i1.RouteDef(
+      Routes.inChatView,
+      page: _i13.InChatView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.CounterView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.CounterView(),
         settings: data,
       );
     },
     _i5.LoginView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LoginView(),
         settings: data,
       );
     },
     _i6.RegisterView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.RegisterView(),
         settings: data,
       );
     },
     _i7.ItsAMatchView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.ItsAMatchView(),
         settings: data,
       );
     },
     _i8.ProfileView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.ProfileView(),
         settings: data,
       );
     },
     _i9.SettingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.SettingsView(),
         settings: data,
       );
@@ -162,7 +170,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<EditProfileViewArguments>(
         orElse: () => const EditProfileViewArguments(),
       );
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => _i10.EditProfileView(
             key: args.key, selected_interests: args.selectedinterests),
         settings: data,
@@ -170,15 +178,21 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i11.AddInterestsView: (data) {
       final args = data.getArgs<AddInterestsViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => _i11.AddInterestsView(
             key: args.key, interests_names: args.interestsnames),
         settings: data,
       );
     },
     _i12.ChatsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i12.ChatsView(),
+        settings: data,
+      );
+    },
+    _i13.InChatView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i13.InChatView(),
         settings: data,
       );
     },
@@ -196,7 +210,7 @@ class EditProfileViewArguments {
     this.selectedinterests,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final List<String>? selectedinterests;
 
@@ -223,7 +237,7 @@ class AddInterestsViewArguments {
     required this.interestsnames,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final List<dynamic> interestsnames;
 
@@ -244,7 +258,7 @@ class AddInterestsViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -358,7 +372,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToEditProfileView({
-    _i13.Key? key,
+    _i14.Key? key,
     List<String>? selectedinterests,
     int? routerId,
     bool preventDuplicates = true,
@@ -376,7 +390,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToAddInterestsView({
-    _i13.Key? key,
+    _i14.Key? key,
     required List<dynamic> interestsnames,
     int? routerId,
     bool preventDuplicates = true,
@@ -401,6 +415,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.chatsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToInChatView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.inChatView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -520,7 +548,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithEditProfileView({
-    _i13.Key? key,
+    _i14.Key? key,
     List<String>? selectedinterests,
     int? routerId,
     bool preventDuplicates = true,
@@ -538,7 +566,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithAddInterestsView({
-    _i13.Key? key,
+    _i14.Key? key,
     required List<dynamic> interestsnames,
     int? routerId,
     bool preventDuplicates = true,
@@ -563,6 +591,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.chatsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithInChatView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.inChatView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

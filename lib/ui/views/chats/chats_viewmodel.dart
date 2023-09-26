@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'dart:collection';
 import 'package:stacked_app/models/match_model.dart';
 
-
 class ChatsViewModel extends MultipleStreamViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
@@ -36,7 +35,8 @@ class ChatsViewModel extends MultipleStreamViewModel {
           print("Users: ${chat.users}");
           print("Other User: ${chat.other_user_name}");
           print("Timestamp: ${chat.timestamp}");
-          print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
+          print(
+              "Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
         }
         break;
       case 'old_chats':
@@ -47,7 +47,8 @@ class ChatsViewModel extends MultipleStreamViewModel {
           print("Users: ${chat.users}");
           print("Other User: ${chat.other_user_name}");
           print("Timestamp: ${chat.timestamp}");
-          print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
+          print(
+              "Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
         }
         break;
     }
@@ -64,8 +65,10 @@ class ChatsViewModel extends MultipleStreamViewModel {
     print("User making the request is: " + uid.toString());
 
     return {
-      'new_chats': StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
-      'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
+      'new_chats':
+          StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
+      'old_chats':
+          StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
 }
