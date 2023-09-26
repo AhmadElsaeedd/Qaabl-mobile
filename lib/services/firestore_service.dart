@@ -17,67 +17,74 @@ class FirestoreService{
 
   // ignore: non_constant_identifier_names
   Stream<List<ChatMatch>> get_old_matches(String uid){
-      print("User UID: " + uid.toString());
-
       //query to get the 5 most recent chats where last_message != null and where uid is in the array users
       return _firestore.collection('Matches')
-        .where('users', arrayContains:  uid)
+        .where('users', arrayContains: uid)
         .where('has_message', isEqualTo: true)
         .orderBy('timestamp', descending: true)
         .limit(5)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-          print("Document Data: ${doc.data()}");
-          return ChatMatch.fromDocument(doc);
-        }).toList())
+        .asyncMap((snapshot) async {
+          //getting the name of the other user
+          //using futures to fetch in parallel
+          final futures = <Future<ChatMatch>>[];
+          for (final doc in snapshot.docs) {
+            final match = ChatMatch.fromDocument(doc, uid);
+            final otherUserId = match.other_user_id;
+            final future = get_user_name(otherUserId).then((userName) {
+              match.other_user_name = userName;
+              return match;
+            });
+            futures.add(future);
+          }
+          final matches = await Future.wait(futures);
+          return matches;
+        })
         .handleError((error) {
           print("Error fetching old matches: $error");
         });
   }
-  // ignore: non_constant_identifier_names
-  // Stream<List<ChatMatch>> get_old_matches(String uid) {
-  //   print("User UID: " + uid.toString());
-
-  //   // Simplified query to get the first document in the 'Matches' collection
-  //   return _firestore.collection('Matches')
-  //     .limit(1)
-  //     .snapshots()
-  //     .map<List<ChatMatch>>((snapshot) { // Explicitly cast the mapped Stream
-  //       print('Received snapshot: $snapshot');
-  //       try {
-  //         return snapshot.docs.map((doc) {
-  //           print('Transforming doc: $doc');
-  //           return ChatMatch.fromDocument(doc);
-  //         }).toList();
-  //       } catch (e, stackTrace) {
-  //         print('Error transforming document: $e');
-  //         print('StackTrace: $stackTrace');
-  //         return [];
-  //       }
-  //     })
-  //     .handleError((error) {
-  //       print('Error fetching simplified query: $error');
-  //     });
-  // }
-
-
 
   // ignore: non_constant_identifier_names
-  Stream<List<ChatMatch>> get_new_matches(String uid){
-      print("User UID: " + uid.toString());
-      //query to get the 5 most recent chats where last_messages == null and where uid is in the array users
-      return _firestore.collection('Matches')
-        .where('users', arrayContains:  uid)
+  Stream<List<ChatMatch>> get_new_matches(String uid) {
+    //query to return the new chats
+    return _firestore.collection('Matches')
+        .where('users', arrayContains: uid)
         .where('has_message', isEqualTo: false)
         .orderBy('timestamp', descending: true)
         .limit(5)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-          print("Document Data: ${doc.data()}");
-          return ChatMatch.fromDocument(doc);
-        }).toList())
+        .asyncMap((snapshot) async {
+          //getting the name of the other user
+          //using futures to fetch in parallel
+          final futures = <Future<ChatMatch>>[];
+          for (final doc in snapshot.docs) {
+            final match = ChatMatch.fromDocument(doc, uid);
+            final otherUserId = match.other_user_id; // Ensure this is the correct property name
+            final future = get_user_name(otherUserId).then((userName) {
+              match.other_user_name = userName; // Ensure this is a mutable property
+              return match;
+            });
+            futures.add(future);
+          }
+          final matches = await Future.wait(futures);
+          return matches;
+        })
         .handleError((error) {
           print("Error fetching new matches: $error");
         });
+  }
+
+
+  // ignore: non_constant_identifier_names
+  Future<String> get_user_name(String uid) async{
+    try {
+      final doc = await _firestore.collection('Users').doc(uid).get();
+      final data = doc.data() as Map<String, dynamic>;
+      return data['name'] ?? 'No Name';
+    } catch (e) {
+      print('Error fetching user name: $e');
+      return 'No Name';
+    }
   }
 }

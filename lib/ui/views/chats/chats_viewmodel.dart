@@ -21,14 +21,34 @@ class ChatsViewModel extends MultipleStreamViewModel {
   List<ChatMatch> new_matches = [];
   List<ChatMatch> old_matches = [];
 
+  int counter = 0;
+
   @override
   void onData(String key, data) {
+    counter++;
+    print("counter: " + counter.toString());
     switch (key) {
       case 'new_chats':
         new_matches = data;
+        print("New Chats:");
+        for (var chat in new_matches) {
+          print("Match ID: ${chat.match_id}");
+          print("Users: ${chat.users}");
+          print("Other User: ${chat.other_user}");
+          print("Timestamp: ${chat.timestamp}");
+          print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
+        }
         break;
       case 'old_chats':
         old_matches = data;
+        print("Old Chats:");
+        for (var chat in old_matches) {
+          print("Match ID: ${chat.match_id}");
+          print("Users: ${chat.users}");
+          print("Other User: ${chat.other_user}");
+          print("Timestamp: ${chat.timestamp}");
+          print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
+        }
         break;
     }
     rebuildUi();
@@ -48,4 +68,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
       'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
+
+  //ToDo: function that gets the name of the other user in the chat
+  //Logic of this function:
 }
