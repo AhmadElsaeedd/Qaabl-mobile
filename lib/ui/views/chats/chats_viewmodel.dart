@@ -34,7 +34,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
         for (var chat in new_matches) {
           print("Match ID: ${chat.match_id}");
           print("Users: ${chat.users}");
-          print("Other User: ${chat.other_user}");
+          print("Other User: ${chat.other_user_name}");
           print("Timestamp: ${chat.timestamp}");
           print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
         }
@@ -45,7 +45,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
         for (var chat in old_matches) {
           print("Match ID: ${chat.match_id}");
           print("Users: ${chat.users}");
-          print("Other User: ${chat.other_user}");
+          print("Other User: ${chat.other_user_name}");
           print("Timestamp: ${chat.timestamp}");
           print("Last Message: ${chat.last_message?.content ?? 'No Last Message'}");
         }
@@ -68,7 +68,4 @@ class ChatsViewModel extends MultipleStreamViewModel {
       'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
-
-  //ToDo: function that gets the name of the other user in the chat
-  //Logic of this function:
 }

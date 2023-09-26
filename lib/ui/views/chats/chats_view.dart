@@ -39,7 +39,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     width: 80, // Adjust the width as needed
                     child: Card(
                       child: Center(
-                        child: Text(match.match_id), // Replace with actual data
+                        child: Text(match.other_user_name), // Display the other user's name
                       ),
                     ),
                   );
@@ -58,7 +58,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
                   return ListTile(
-                    title: Text(match.match_id), // Replace with actual data
+                    title: Text(match.other_user_name), // Display the other user's name
                     subtitle: Text(match.last_message?.content ?? ''), // Replace with actual data
                   );
                 },
