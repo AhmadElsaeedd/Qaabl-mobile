@@ -53,6 +53,4 @@ class ChatsViewModel extends MultipleStreamViewModel {
   void go_to_chat(String match_id, String user_name) {
     _navigationService.navigateToInChatView(matchid: match_id, username: user_name);
   }
-
-  //We need to empty the input box of the chat after the chat is sent.
 }

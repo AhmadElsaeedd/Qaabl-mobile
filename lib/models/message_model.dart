@@ -12,10 +12,21 @@ class Message {
   });
 
   factory Message.fromMap(Map<String, dynamic> data) {
-    return Message(
-      content: data['content'] as String,
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
-      sent_by: data['sent_by'] as String,
-    );
+    try{
+        print("Message: "+ data.toString());
+        return Message(
+          content: data['content'] as String,
+          timestamp: (data['timestamp'] as Timestamp).toDate(),
+          sent_by: data['sent_by'] as String,
+        );
+    }
+    catch (error){
+      print('Error mapping data: $error');
+      return Message(
+        content: 'Error loading message',
+        timestamp: DateTime.now(),
+        sent_by: 'System',
+      );
+    }
   }
 }

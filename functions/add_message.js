@@ -16,7 +16,7 @@ async function add_message_to_chat(chat_id, uid, content) {
   let done = false;
   const timestamp = new Date();
   await db.collection("Matches").doc(chat_id).collection("Messages").add({
-    sentBy: uid,
+    sent_by: uid,
     content: content,
     timestamp: timestamp,
   });

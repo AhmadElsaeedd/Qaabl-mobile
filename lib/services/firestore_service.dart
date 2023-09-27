@@ -110,15 +110,15 @@ class FirestoreService {
   }
 
   Stream<List<Message>> load_messages(String match_id){
-    //get the last 10 messages of the chat
-    return _firestore.collection('Matches').doc(match_id).collection('messages')
+    print("Match Id: "+ match_id.toString());
+    return _firestore.collection('Matches').doc(match_id).collection('Messages')
           .orderBy('timestamp', descending: true)
           .limit(10)
           .snapshots()
-          .map((snapshot) => 
-            snapshot.docs.map((doc) => 
-              Message.fromMap(doc.data())
-            ).toList()
-          );
+          .map((snapshot) {
+            print('Received snapshot: $snapshot');
+            return snapshot.docs.map((doc) => Message.fromMap(doc.data())).toList();
+          })
+          .handleError((error) => print('Error loading messages: $error'));
   }
 }

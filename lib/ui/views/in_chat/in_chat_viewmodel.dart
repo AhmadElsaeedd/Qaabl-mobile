@@ -26,12 +26,17 @@ class InChatViewModel extends StreamViewModel {
   //ToDo: implement the stream getter, that listens to messages in the chat
   @override
   Stream<List<Message>> get stream {
+    print('Subscribing to stream');
     uid = _authenticationService.currentUser?.uid;
     if (uid == null) {
       _navigationService.replaceWithLoginView();
       return Stream.value([]);
     }
-    return _firestoreService.load_messages(match_id);
+    return _firestoreService.load_messages(match_id)
+        .map((list) {
+          print('Received messages: $list');
+          return list;
+        });
   }
 
   //ToDo: implement function that adds a message to the chat
