@@ -12,25 +12,6 @@ const corsOptions = {
   origin: true,
 };
 
-exports.addMessage = functions.region("asia-east2").https.onCall((data, context) => {
-  // Check for user authentication
-  if (!context.auth) {
-    throw new functions.https.HttpsError("unauthenticated", "The function must be called while authenticated.");
-  }
-
-  const {chatId, text} = data;
-  if (!chatId || !text) {
-    throw new functions.https.HttpsError("invalid-argument", "The function must be called with valid arguments.");
-  }
-
-  // Add the message to Firestore
-  return admin.firestore().collection("chats").doc(chatId).collection("messages").add({
-    senderId: context.auth.uid,
-    text: text,
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
-  });
-});
-
 async function add_message_to_chat(chat_id, uid, content) {
   let done = false;
   const timestamp = new Date();

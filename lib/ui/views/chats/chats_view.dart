@@ -35,15 +35,17 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemCount: viewModel.new_matches.length,
                 itemBuilder: (context, index) {
                   final match = viewModel.new_matches[index];
-                  return Container(
-                    width: 80, // Adjust the width as needed
-                    child: Card(
-                      child: Center(
-                        child: Text(match
-                            .other_user_name), // Display the other user's name
-                      ),
-                    ),
-                  );
+                  return InkWell(
+                      onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name),
+                      child: Container(
+                        width: 80, // Adjust the width as needed
+                        child: Card(
+                          child: Center(
+                            child: Text(match
+                                .other_user_name), // Display the other user's name
+                          ),
+                        ),
+                      ));
                 },
               ),
             ),
@@ -58,12 +60,14 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemCount: viewModel.old_matches.length,
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
-                  return ListTile(
-                    title: Text(
-                        match.other_user_name), // Display the other user's name
-                    subtitle: Text(match.last_message?.content ??
-                        ''), // Replace with actual data
-                  );
+                  return InkWell(
+                      onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name),
+                      child: ListTile(
+                        title: Text(match
+                            .other_user_name), // Display the other user's name
+                        subtitle: Text(match.last_message?.content ??
+                            ''), // Replace with actual data
+                      ));
                 },
               ),
             ),

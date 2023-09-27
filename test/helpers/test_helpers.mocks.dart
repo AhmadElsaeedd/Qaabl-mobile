@@ -9,7 +9,9 @@ import 'dart:ui' as _i6;
 import 'package:flutter/material.dart' as _i4;
 import 'package:google_sign_in/google_sign_in.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:stacked_app/models/match_model.dart' as _i9;
 import 'package:stacked_app/services/auth_service.dart' as _i7;
+import 'package:stacked_app/services/firestore_service.dart' as _i8;
 import 'package:stacked_services/stacked_services.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -707,4 +709,57 @@ class MockAuthenticationService extends _i1.Mock
         returnValue: _i5.Future<bool>.value(false),
         returnValueForMissingStub: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+}
+
+/// A class which mocks [FirestoreService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirestoreService extends _i1.Mock implements _i8.FirestoreService {
+  @override
+  _i5.Stream<List<_i9.ChatMatch>> get_old_matches(String? uid) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #get_old_matches,
+          [uid],
+        ),
+        returnValue: _i5.Stream<List<_i9.ChatMatch>>.empty(),
+        returnValueForMissingStub: _i5.Stream<List<_i9.ChatMatch>>.empty(),
+      ) as _i5.Stream<List<_i9.ChatMatch>>);
+  @override
+  _i5.Stream<List<_i9.ChatMatch>> get_new_matches(String? uid) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #get_new_matches,
+          [uid],
+        ),
+        returnValue: _i5.Stream<List<_i9.ChatMatch>>.empty(),
+        returnValueForMissingStub: _i5.Stream<List<_i9.ChatMatch>>.empty(),
+      ) as _i5.Stream<List<_i9.ChatMatch>>);
+  @override
+  _i5.Future<String> get_user_name(String? uid) => (super.noSuchMethod(
+        Invocation.method(
+          #get_user_name,
+          [uid],
+        ),
+        returnValue: _i5.Future<String>.value(''),
+        returnValueForMissingStub: _i5.Future<String>.value(''),
+      ) as _i5.Future<String>);
+  @override
+  _i5.Future<void> send_message(
+    String? chat_id,
+    String? content,
+    String? uid,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #send_message,
+          [
+            chat_id,
+            content,
+            uid,
+          ],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

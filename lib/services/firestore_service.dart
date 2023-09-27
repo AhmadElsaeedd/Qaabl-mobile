@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:stacked_app/models/match_model.dart';
+import 'package:stacked_app/models/message_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -92,16 +93,32 @@ class FirestoreService {
 
   //function to add a message to the chat
   Future<void> send_message(String chat_id, String content, String uid) async {
-    final response = await http.post(
+    //final response = 
+    await http.post(
       //production url
-      Uri.parse(''),
+      Uri.parse('https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
       //testing url
       //Uri.parse('http://127.0.0.1:5002/qaabl-mobile-dev/asia-east2/AddMessage'),
       body: jsonEncode({
         'uid': uid,
+        'chat_id': chat_id,
+        'content': content,
       }),
       headers: {'Content-Type': 'application/json'},
     );
     //Do something with response, Idk what yet
+  }
+
+  Stream<List<Message>> load_messages(String match_id){
+    //get the last 10 messages of the chat
+    return _firestore.collection('Matches').doc(match_id).collection('messages')
+          .orderBy('timestamp', descending: true)
+          .limit(10)
+          .snapshots()
+          .map((snapshot) => 
+            snapshot.docs.map((doc) => 
+              Message.fromMap(doc.data())
+            ).toList()
+          );
   }
 }

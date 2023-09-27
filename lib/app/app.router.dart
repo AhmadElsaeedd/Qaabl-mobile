@@ -191,8 +191,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i13.InChatView: (data) {
+      final args = data.getArgs<InChatViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i13.InChatView(),
+        builder: (context) => _i13.InChatView(
+            key: args.key, match_id: args.matchid, user_name: args.username),
         settings: data,
       );
     },
@@ -255,6 +257,38 @@ class AddInterestsViewArguments {
   @override
   int get hashCode {
     return key.hashCode ^ interestsnames.hashCode;
+  }
+}
+
+class InChatViewArguments {
+  const InChatViewArguments({
+    this.key,
+    required this.matchid,
+    required this.username,
+  });
+
+  final _i14.Key? key;
+
+  final String matchid;
+
+  final String username;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "matchid": "$matchid", "username": "$username"}';
+  }
+
+  @override
+  bool operator ==(covariant InChatViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.matchid == matchid &&
+        other.username == username;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ matchid.hashCode ^ username.hashCode;
   }
 }
 
@@ -421,14 +455,19 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToInChatView([
+  Future<dynamic> navigateToInChatView({
+    _i14.Key? key,
+    required String matchid,
+    required String username,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.inChatView,
+        arguments:
+            InChatViewArguments(key: key, matchid: matchid, username: username),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -597,14 +636,19 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithInChatView([
+  Future<dynamic> replaceWithInChatView({
+    _i14.Key? key,
+    required String matchid,
+    required String username,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.inChatView,
+        arguments:
+            InChatViewArguments(key: key, matchid: matchid, username: username),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
