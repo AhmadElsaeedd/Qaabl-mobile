@@ -22,7 +22,7 @@ class _InChatViewState extends State<InChatView> {
     return ViewModelBuilder<InChatViewModel>.reactive(
       viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name),
       builder: (context, viewModel, child) {
-        print('Rebuilding UI with messages: ${viewModel.data}');
+        print('Rebuilding UI with messages: ${viewModel.displayed_messages}');
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
@@ -51,9 +51,11 @@ class _InChatViewState extends State<InChatView> {
                   child: ListView.builder(
                     controller: _scrollController,
                     reverse: true,
-                    itemCount: viewModel.data?.length ?? 0,
+                    //itemCount: viewModel.data?.length ?? 0,
+                    itemCount: viewModel.displayed_messages.length,
                     itemBuilder: (context, index) {
-                      final message = viewModel.data![index];
+                      //final message = viewModel.data![index];
+                      final message = viewModel.displayed_messages[index];
                       final isCurrentUser = message.sent_by == viewModel.uid;
 
                       return Padding(
@@ -107,13 +109,13 @@ class _InChatViewState extends State<InChatView> {
                     SizedBox(width: 8.0),
                     ElevatedButton(
                       onPressed: () {
-                          viewModel.send_message(_messageController.text);
-                          _messageController.clear();
-                          _scrollController.animateTo(
-                            _scrollController.position.maxScrollExtent,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                          );
+                        viewModel.send_message(_messageController.text);
+                        _messageController.clear();
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
                         },
                       child: Text('Send'),
                     ),
@@ -127,26 +129,3 @@ class _InChatViewState extends State<InChatView> {
     );
   }
 }
-
-// class InChatView extends StackedView<InChatViewModel> {
-//   final String match_id;
-//   final String user_name;
-//   const InChatView({Key? key, required this.match_id, required this.user_name}) : super(key: key);
-
-//   final TextEditingController _messageController = TextEditingController();
-
-//   @override
-//   Widget builder(
-//     BuildContext context,
-//     InChatViewModel viewModel,
-//     Widget? child,
-//   ) {
-    
-//   }
-
-//   @override
-//   InChatViewModel viewModelBuilder(
-//     BuildContext context,
-//   ) =>
-//       InChatViewModel(match_id, user_name);
-// }
