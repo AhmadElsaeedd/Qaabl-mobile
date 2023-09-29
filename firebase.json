@@ -19,13 +19,13 @@
       "port": 9102
     },
     "functions": {
-      "port": 5002
+      "port": 5003
     },
     "firestore": {
-      "port": 8081
+      "port": 8083
     },
     "database": {
-      "port": 9001
+      "port": 9002
     },
     "ui": {
       "enabled": true

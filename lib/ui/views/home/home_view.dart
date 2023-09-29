@@ -5,90 +5,6 @@ import 'package:stacked_app/ui/common/ui_helpers.dart';
 
 import 'home_viewmodel.dart';
 
-/*class HomeView extends StackedView<HomeViewModel> {
-  const HomeView({Key? key}) : super(key: key);
-
-  @override
-  Widget builder(
-    BuildContext context,
-    HomeViewModel viewModel,
-    Widget? child,
-  ) {
-    return Scaffold(
-      backgroundColor: Colors.indigo,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                verticalSpaceLarge,
-                Column(
-                  children: [
-                    const Text(
-                      'Hello, in Qaabl!',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    verticalSpaceMedium,
-                    MaterialButton(
-                      color: Colors.black,
-                      onPressed: viewModel.getUsers,
-                      child: Text(
-                        viewModel.counterLabel,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MaterialButton(
-                      color: kcDarkGreyColor,
-                      onPressed: viewModel.showDialog,
-                      child: const Text(
-                        'Show Dialog',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      color: kcDarkGreyColor,
-                      onPressed: viewModel.showBottomSheet,
-                      child: const Text(
-                        'Show Bottom Sheet',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      color: Colors.white,
-                      onPressed: viewModel.signOut,
-                      child: Text('Sign out'))
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  HomeViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
-      HomeViewModel();
-}*/
-
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -99,130 +15,24 @@ class HomeView extends StatelessWidget {
       onViewModelReady: (model) => model.getUsers(),
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
-
         return Scaffold(
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.white,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Stack(
                 children: [
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        verticalSpaceLarge,
-                        Column(
-                          children: [
-                            const Text(
-                              'Hello, in Qaabl!',
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                            verticalSpaceMedium,
-                            if (nextUser != null &&
-                                nextUser['interests'].isNotEmpty)
-                              Column(
-                                children: [
-                                  Text(
-                                      "Interest: ${nextUser['interests'][0]['name']}"),
-                                  Text(
-                                      "Interest: ${nextUser['interests'][0]['description']}"),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      viewModel.like_user(nextUser['id'],
-                                          nextUser['potential_match']);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white),
-                                    child: const Text("Like",
-                                        style: TextStyle(color: Colors.black)),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      viewModel.dislike_user(nextUser['id']);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white),
-                                    child: const Text("Dislike",
-                                        style: TextStyle(color: Colors.black)),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => GestureDetector(
-                                          onTap: () =>
-                                              Navigator.of(context).pop(),
-                                          behavior: HitTestBehavior.opaque,
-                                          child: Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
-                                            child: UserProfileView(
-                                              interests: List<
-                                                      Map<String,
-                                                          dynamic>>.from(
-                                                  nextUser['interests']),
-                                            ),
-                                          ),
-                                        ),
-                                        isScrollControlled: true,
-                                      );
-                                    },
-                                    child: Text("View Profile"),
-                                  ),
-                                ],
-                              )
-                            else if (viewModel.no_more_users)
-                              Text("No more users to display.")
-                            else
-                              Text("Loading..."),
-                          ],
+                  Column(
+                    children: [
+                      _helloText(),
+                      Expanded(
+                        child: Center(
+                          child: _userDetails(nextUser, viewModel, context),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // ... your existing buttons
-                          ],
-                        ),
-                        MaterialButton(
-                          color: Colors.white,
-                          onPressed: viewModel.signOut,
-                          child: Text('Sign out'),
-                        ),
-                        MaterialButton(
-                          color: Colors.white,
-                          onPressed: viewModel.go_to_profile,
-                          child: Text('Profile'),
-                        ),
-                        MaterialButton(
-                          color: Colors.white,
-                          onPressed: viewModel.go_to_chats,
-                          child: Text('Chats'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Positioned(
-                  //   left: 0,
-                  //   right: 0,
-                  //   bottom: 0,
-                  //   child: Container(
-                  //     width: 390,
-                  //     height: 96,
-                  //     decoration: ShapeDecoration(
-                  //       color: Color(0xFFEAEAEA),
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(20),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                      ),
+                      _bottomNavigationBar(viewModel),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -230,6 +40,129 @@ class HomeView extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+Widget _helloText() {
+  return Padding(
+    padding: const EdgeInsets.only(top: 50.0),
+    child: const Text(
+      'Hello, in Qaabl!',
+      style: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );
+}
+
+Widget _userDetails(nextUser, viewModel, context) {
+  if (nextUser != null && nextUser['interests'].isNotEmpty) {
+    return Center( // Center the interests area
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          Text("Interest: ${nextUser['interests'][0]['name']}"),
+          Text("Description: ${nextUser['interests'][0]['description']}"),
+          Row( // Align Like and Dislike buttons horizontally
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  viewModel.dislike_user(nextUser['id']);
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Rounded button
+                  ), backgroundColor: Colors.white,
+                ),
+                child: Icon(Icons.close, color: Colors.black), // Close icon
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // Rounded button
+                  ), backgroundColor: Colors.white,
+                ),
+                child: Icon(Icons.check, color: Colors.black), // Check icon
+              ),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: UserProfileView(
+                      interests: List<Map<String, dynamic>>.from(
+                          nextUser['interests']),
+                    ),
+                  ),
+                ),
+                isScrollControlled: true,
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF3439AB), // Change color of View Profile button
+            ),
+            child: Text("View Profile"),
+          ),
+        ],
+      ),
+      ),
+    );
+  }
+    // return Column(
+    //   children: [
+    //     Text("Interest: ${nextUser['interests'][0]['name']}"),
+    //     Text("Interest: ${nextUser['interests'][0]['description']}"),
+    //     ElevatedButton(
+    //       onPressed: () {
+    //         viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+    //       },
+    //       style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+    //       child: const Text("Like", style: TextStyle(color: Colors.black)),
+    //     ),
+    //     ElevatedButton(
+    //       onPressed: () {
+    //         viewModel.dislike_user(nextUser['id']);
+    //       },
+    //       style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+    //       child: const Text("Dislike", style: TextStyle(color: Colors.black)),
+    //     ),
+    //     ElevatedButton(
+    //       onPressed: () {
+    //         showModalBottomSheet(
+    //           context: context,
+    //           builder: (context) => GestureDetector(
+    //             onTap: () => Navigator.of(context).pop(),
+    //             behavior: HitTestBehavior.opaque,
+    //             child: Container(
+    //               height: MediaQuery.of(context).size.height * 0.5,
+    //               child: UserProfileView(
+    //                 interests: List<Map<String, dynamic>>.from(
+    //                     nextUser['interests']),
+    //               ),
+    //             ),
+    //           ),
+    //           isScrollControlled: true,
+    //         );
+    //       },
+    //       child: Text("View Profile"),
+    //     ),
+    //   ],
+    // );
+  else if (viewModel.no_more_users) {
+    return Text("No more users to display.");
+  } else {
+    return Text("Loading...");
   }
 }
 
@@ -295,4 +228,45 @@ class UserProfileView extends StatelessWidget {
       body: UserInterestsWidget(interests: interests),
     );
   }
+}
+
+Widget _bottomNavigationBar(viewModel) {
+  return Stack(
+    clipBehavior: Clip.none, // Allows the overflowing children to be visible
+    alignment: Alignment.bottomCenter,
+    children: [
+      Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.person), // Replace with your PNG
+              onPressed: viewModel.go_to_profile,
+            ),
+            SizedBox(width: 50), // Leave space for the logo
+            IconButton(
+              icon: Icon(Icons.chat), // Replace with your PNG
+              onPressed: viewModel.go_to_chats,
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        bottom: 10, // Adjust the value as needed to position the logo
+        child: GestureDetector(
+          onTap: () {viewModel.signOut();}, // Add your home action here
+          child: Container(
+            width: 70, // Adjust the width and height as needed
+            height: 70,
+            child: Image.asset('lib/assets/logo.png'),
+          ),
+        ),
+      ),
+    ],
+  );
 }
