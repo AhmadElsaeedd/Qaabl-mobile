@@ -13,7 +13,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -24,7 +24,11 @@ class ChatsView extends StackedView<ChatsViewModel> {
               child: // New Chats Label
                   Text(
                 'New Chats',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: TextStyle(
+                  fontFamily: 'Switzer', // Replace with your font if it's different
+                  fontSize: 22, // Adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             // Horizontal List for New Chats
@@ -52,11 +56,16 @@ class ChatsView extends StackedView<ChatsViewModel> {
             // Messages Label
             Text(
               'Messages',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: TextStyle(
+                  fontFamily: 'Switzer', // Replace with your font if it's different
+                  fontSize: 22, // Adjust the size as needed
+                  fontWeight: FontWeight.bold,
+                ),
             ),
             // Vertical List for Old Chats
             Expanded(
-              child: ListView.builder(
+              child: 
+              ListView.builder(
                 itemCount: viewModel.old_matches.length,
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
@@ -71,6 +80,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 },
               ),
             ),
+            _bottomNavigationBar(viewModel),
           ],
         ),
       ),
@@ -82,4 +92,45 @@ class ChatsView extends StackedView<ChatsViewModel> {
     BuildContext context,
   ) =>
       ChatsViewModel();
+}
+
+Widget _bottomNavigationBar(viewModel) {
+  return Stack(
+    clipBehavior: Clip.none, // Allows the overflowing children to be visible
+    alignment: Alignment.bottomCenter,
+    children: [
+      Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.person), // Replace with your PNG
+              onPressed: viewModel.go_to_profile,
+            ),
+            SizedBox(width: 50), // Leave space for the logo
+            IconButton(
+              icon: Icon(Icons.chat), // Replace with your PNG
+              onPressed: viewModel.go_to_chats,
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        bottom: 10, // Adjust the value as needed to position the logo
+        child: GestureDetector(
+          onTap: () {viewModel.go_to_home();}, // Add your home action here
+          child: Container(
+            width: 70, // Adjust the width and height as needed
+            height: 70,
+            child: Image.asset('lib/assets/logo.png'),
+          ),
+        ),
+      ),
+    ],
+  );
 }

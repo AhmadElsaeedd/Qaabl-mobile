@@ -53,4 +53,16 @@ class ChatsViewModel extends MultipleStreamViewModel {
   void go_to_chat(String match_id, String user_name) {
     _navigationService.navigateToInChatView(matchid: match_id, username: user_name);
   }
+
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
+  void go_to_home() {
+    _navigationService.replaceWithHomeView();
+  }
+
+  void go_to_chats() {
+    _navigationService.replaceWithChatsView();
+  }
 }

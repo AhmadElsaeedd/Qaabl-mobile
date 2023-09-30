@@ -20,6 +20,10 @@ function is_name_changed(old_name, submitted_name) {
   if (old_name != submitted_name) return true;
 }
 
+function is_profile_pic_changed(old_pp_index, new_pp_index) {
+  if (old_pp_index != new_pp_index) return true;
+}
+
 function is_interests_changed(old_interests, new_interests) {
 // Sort the arrays of interests by their 'name' property
   const sortInterests = (interests) => {
@@ -38,12 +42,22 @@ function is_interests_changed(old_interests, new_interests) {
 }
 
 
-async function update_user(name = null, interests = null, uid) {
+async function update_user(name = null, interests = null, uid, pp = null) {
 // in the case of name and interests change
   if (name && interests) {
     await db.collection("Users").doc(uid).update({
       name: name,
       interests: interests,
+    });
+  } else if (name && pp) {
+    await db.collection("Users").doc(uid).update({
+      name: name,
+      image_index: pp,
+    });
+  } else if (interests && pp) {
+    await db.collection("Users").doc(uid).update({
+      interests: interests,
+      image_index: pp,
     });
   } else if (name) {
     // in the case of name change only
@@ -55,6 +69,10 @@ async function update_user(name = null, interests = null, uid) {
     await db.collection("Users").doc(uid).update({
       interests: interests,
     });
+  } else if (pp) {
+    await db.collection("Users").doc(uid).update({
+      image_index: pp,
+    });
   }
   console.log("updated user");
 }
@@ -64,10 +82,12 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     const user_uid = req.body.uid;
     const name = req.body.name;
     const interests = req.body.interests;
+    const profile_pic_index = req.body.image_index;
 
     console.log("user uid: ", user_uid);
     console.log("name is: ", name);
     console.log("interests are: ", interests);
+    console.log("Profile picture is: ", profile_pic_index);
     // ToDo: get more input from the view model code
 
     // get the user's data first
@@ -79,14 +99,21 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     // function that checks that interests have changed
     const interests_changed = is_interests_changed(user_data.interests, interests);
 
-    if (name_changed && interests_changed) {
-      update_user(name, interests, user_uid);
-    } else if (name_changed) {
-      update_user(name, null, user_uid);
-    } else if (interests_changed) {
-      update_user(null, interests, user_uid);
-    }
+    const profile_pic_changed = is_profile_pic_changed(user_data.image_index, profile_pic_index);
 
+    if (name_changed && interests_changed) {
+      update_user(name, interests, user_uid, null);
+    } else if (name_changed && profile_pic_changed) {
+      update_user(name, null, user_uid, profile_pic_index);
+    } else if (interests_changed && profile_pic_changed) {
+      update_user(null, interests_changed, user_uid, profile_pic_index);
+    } else if (name_changed) {
+      update_user(name, null, user_uid, null);
+    } else if (interests_changed) {
+      update_user(null, interests, user_uid, null);
+    } else if (profile_pic_changed) {
+      update_user(null, null, user_uid, profile_pic_index);
+    }
 
     // if success
     if (user_data) {

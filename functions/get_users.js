@@ -95,11 +95,16 @@ async function structure_users(user_uid, users) {
     // check if the user is a potential match
     const potential_match = (user.likes || []).includes(user_uid);
 
+    let image_index;
+    if (user.image_index) image_index = user.image_index;
+    else image_index = 0;
+
     // return the transformed user object
     return {
       id,
       interests,
       potential_match,
+      image_index,
     };
   });
 

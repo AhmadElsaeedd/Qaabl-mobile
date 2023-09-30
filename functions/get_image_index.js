@@ -16,27 +16,22 @@ async function get_user_data(uid) {
   return user_data;
 }
 
-
-const GetProfileData = functions.region("asia-east2").https.onRequest(async (req, res) => {
+const GetImageIndex = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.uid;
+
 
     // get the user's data first
     const user_data = await get_user_data(user_uid);
 
-    // interests
-    const user_interests = user_data.interests;
-
-    // name
-    const user_name = user_data.name;
-
     // image index
-    const image_index = user_data.image_index;
+    let image_index;
+    if (user_data.image_index) image_index = user_data.image_index;
+    else image_index = 0;
+
 
     // ToDo: put them in an object together and send them back as JSON to the client
     const response_data = {
-      name: user_name,
-      interests: user_interests,
       image_index: image_index,
     };
 
@@ -50,4 +45,4 @@ const GetProfileData = functions.region("asia-east2").https.onRequest(async (req
   });
 });
 
-module.exports = GetProfileData;
+module.exports = GetImageIndex;

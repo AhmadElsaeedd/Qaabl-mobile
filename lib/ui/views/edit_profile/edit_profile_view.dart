@@ -1,31 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import 'edit_profile_viewmodel.dart';
-
-// class EditProfileView extends StackedView<EditProfileViewModel> {
-//   const EditProfileView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget builder(
-//     BuildContext context,
-//     EditProfileViewModel viewModel,
-//     Widget? child,
-//   ) {
-//     return Scaffold(
-//       backgroundColor: Theme.of(context).colorScheme.background,
-//       body: Container(
-//         padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-//       ),
-//     );
-//   }
-
-//   @override
-//   EditProfileViewModel viewModelBuilder(
-//     BuildContext context,
-//   ) =>
-//       EditProfileViewModel();
-// }
 
 class EditProfileView extends StatefulWidget {
   final List<String>? selected_interests;
@@ -40,17 +17,20 @@ class _EditProfileViewState extends State<EditProfileView> {
   late TextEditingController nameController;
   late List<TextEditingController> interestControllers;
   late List<TextEditingController> interestNameControllers;
+  //ValueNotifier<int> selectedImageNotifier = ValueNotifier<int>(0);
+  late ValueNotifier<int> selectedImageNotifier;
+  bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
       viewModelBuilder: () =>
           EditProfileViewModel(widget.selected_interests ?? []),
-      //onViewModelReady: (model) => model.load_data(),
       builder: (context, model, child) {
         Map<String, dynamic>? userData = model.user_data;
 
         if (userData.isNotEmpty) {
+          selectedImageNotifier = ValueNotifier<int>(userData['image_index'] ?? 0);
           nameController = TextEditingController(text: userData['name'] ?? '');
           interestNameControllers = List.generate(
             (widget.selected_interests != null &&
@@ -88,11 +68,39 @@ class _EditProfileViewState extends State<EditProfileView> {
           );
 
           return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            body: Container(
+            backgroundColor: Colors.white,
+            
+            body: Stack(
+              children: [
+              Container(
               padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-              child: ListView(
+              child: Column(
                 children: [
+                  ValueListenableBuilder<int>(
+            valueListenable: selectedImageNotifier,
+            builder: (context, value, child) => GestureDetector(
+              onTap: () async {
+                int? chosenIndex = await showDialog<int>(
+                  context: context,
+                  builder: (context) => ImageChooserDialog(),
+                );
+                if (chosenIndex != null) {
+                  selectedImageNotifier.value = chosenIndex; // Set the new value
+                }
+              },
+              child: Column(
+                children: [
+                  Image.asset('lib/assets/$value.png', height: 200,), // Use the value
+                  Text(
+                    'Edit Avatar',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(labelText: 'Name'),
@@ -111,9 +119,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ),
                   ),
+                  CupertinoButton(
+                    onPressed: () {
+                      model.go_to_add_interests();
+                    },
+                    child: Text('Edit interests'),
+                  ),
                   ElevatedButton(
                     onPressed: () async {
-                      // ToDo: Implement save and back logic
+                      setState(() {
+                        isSaving = true; // Set isSaving to true when the button is pressed
+                      });
+                      //Implement save and back logic
+                      //change the color of the button to #3439AB
                       String name = nameController.text;
                       List<Map<String, String>> interests = List.generate(
                         interestControllers.length,
@@ -123,19 +141,38 @@ class _EditProfileViewState extends State<EditProfileView> {
                           'description': interestControllers[index].text,
                         },
                       );
-                      await model.save_and_back(name, interests);
+                      //ToDo: put the correct value into the function, it's not selected_image
+                      await model.save_and_back(name, interests, selectedImageNotifier.value);
+                      //show a circular progress bar while this await is done
+                      setState(() {
+                        isSaving = false; // Reset isSaving to false when the await is done
+                      });
                     },
+                    style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF3439AB), // Change the color of the button to #3439AB
+                          ),
                     child: Text('Save and Back'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      model.go_to_add_interests();
-                    },
-                    child: Text('Add interests'),
-                  ),
+                  
+                  Spacer(),
+                  Container(
+                  margin: EdgeInsets.only(bottom: 20), // Adjust as needed
+                  child: _bottomNavigationBar(model),
+                ),
                 ],
               ),
+
             ),
+            if (isSaving)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black45,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ])
           );
         } else {
           return Scaffold(
@@ -145,6 +182,72 @@ class _EditProfileViewState extends State<EditProfileView> {
           );
         }
       },
+    );
+  }
+}
+
+Widget _bottomNavigationBar(viewModel) {
+  return Stack(
+    clipBehavior: Clip.none, // Allows the overflowing children to be visible
+    alignment: Alignment.bottomCenter,
+    children: [
+      Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.person), // Replace with your PNG
+              onPressed: viewModel.go_to_profile,
+            ),
+            SizedBox(width: 50), // Leave space for the logo
+            IconButton(
+              icon: Icon(Icons.chat), // Replace with your PNG
+              onPressed: viewModel.go_to_chats,
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        bottom: 10, // Adjust the value as needed to position the logo
+        child: GestureDetector(
+          onTap: () {viewModel.signOut();}, // Add your home action here
+          child: Container(
+            width: 70, // Adjust the width and height as needed
+            height: 70,
+            child: Image.asset('lib/assets/logo.png'),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+class ImageChooserDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        width: double.maxFinite, // Take the maximum width available
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Put them in 2 columns next to each other
+          ),
+          itemCount: 7, // As you have images from 0.png to 6.png
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop(index);
+              },
+              child: Image.asset('lib/assets/$index.png', height: 100,), // Increase the sizes of the images
+            );
+          },
+        ),
+      ),
     );
   }
 }

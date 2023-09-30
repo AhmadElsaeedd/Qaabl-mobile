@@ -45,7 +45,8 @@ class EditProfileViewModel extends BaseViewModel {
 
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(
-      String name, List<Map<String, String>> interests) async {
+      String name, List<Map<String, String>> interests, int image_index) async {
+        print("Selected image is:"+image_index.toString());
     //get the values from the input fields and go update the values in the cloud
     //call the function
     final response = await http.post(
@@ -59,11 +60,20 @@ class EditProfileViewModel extends BaseViewModel {
         'uid': uid,
         'name': name,
         'interests': interests,
+        'image_index': image_index,
       }),
       headers: {'Content-Type': 'application/json'},
     );
 
     back_to_profile(response);
+  }
+
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
+  void go_to_chats() {
+    _navigationService.replaceWithChatsView();
   }
 
   void back_to_profile(response) async {

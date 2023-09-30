@@ -45,6 +45,11 @@ function is_there_a_name(name, percentage) {
   return percentage;
 }
 
+function is_there_a_pp(image_index, percentage) {
+  if (image_index != 0) percentage += 10;
+  return percentage;
+}
+
 const GetProfilePercentage = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.uid;
@@ -65,6 +70,8 @@ const GetProfilePercentage = functions.region("asia-east2").https.onRequest(asyn
 
     // give a score if there is a name
     percentage = is_there_a_name(user_data.name, percentage);
+
+    percentage = is_there_a_pp(user_data.image_index, percentage);
 
     // ToDo: add more fields as necessary
 

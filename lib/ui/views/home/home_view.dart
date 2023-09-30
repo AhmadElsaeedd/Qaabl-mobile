@@ -49,6 +49,7 @@ Widget _helloText() {
     child: const Text(
       'Hello, in Qaabl!',
       style: TextStyle(
+        fontFamily: 'Switzer',
         fontSize: 25,
         fontWeight: FontWeight.w900,
       ),
@@ -62,103 +63,96 @@ Widget _userDetails(nextUser, viewModel, context) {
     child: SingleChildScrollView(
       child: Column(
         children: [
-          Text("Interest: ${nextUser['interests'][0]['name']}"),
-          Text("Description: ${nextUser['interests'][0]['description']}"),
-          Row( // Align Like and Dislike buttons horizontally
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  viewModel.dislike_user(nextUser['id']);
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded button
-                  ), backgroundColor: Colors.white,
-                ),
-                child: Icon(Icons.close, color: Colors.black), // Close icon
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  viewModel.like_user(nextUser['id'], nextUser['potential_match']);
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Rounded button
-                  ), backgroundColor: Colors.white,
-                ),
-                child: Icon(Icons.check, color: Colors.black), // Check icon
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: UserProfileView(
-                      interests: List<Map<String, dynamic>>.from(
-                          nextUser['interests']),
-                    ),
-                  ),
-                ),
-                isScrollControlled: true,
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF3439AB), // Change color of View Profile button
+          Text(
+            "I like ${nextUser['interests'][0]['name']}",
+            style: TextStyle(
+              fontFamily: 'Switzer', // Replace with your font if it's different
+              fontSize: 25, // Adjust the size as needed
+              fontWeight: FontWeight.bold,
             ),
-            child: Text("View Profile"),
           ),
+          Image.asset('lib/assets/${nextUser['image_index']}.png', height: 200,),
+          Text(
+            "And... ${nextUser['interests'][0]['description']}",
+            style: TextStyle(
+              fontFamily: 'Switzer', // Replace with your font if it's different
+              fontSize: 18, // Adjust the size as needed
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Row( // Align Like and Dislike buttons horizontally
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    viewModel.dislike_user(nextUser['id']);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30), // Rounded button
+                    ), backgroundColor: Colors.white,
+                  ),
+                  child: Icon(Icons.close, color: Colors.black), // Close icon
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30), // Rounded button
+                    ), backgroundColor: Colors.white,
+                  ),
+                  child: Icon(Icons.check, color: Colors.black), // Check icon
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
+            child:
+              Column(children: [
+                Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
+                    style: TextStyle(
+                  fontFamily: 'Switzer', // Replace with your font if it's different
+                  fontSize: 14, // Adjust the size as needed
+                  //fontWeight: FontWeight.bold,
+                ),
+                ),
+                ElevatedButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            behavior: HitTestBehavior.opaque,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.35,
+                              child: UserProfileView(
+                                interests: List<Map<String, dynamic>>.from(
+                                    nextUser['interests']),
+                              ),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF3439AB), // Change color of View Profile button
+                      ),
+                      child: Text("View Profile"),
+                      ),
+                    ],
+                  )
+             
+                ),
         ],
       ),
       ),
     );
   }
-    // return Column(
-    //   children: [
-    //     Text("Interest: ${nextUser['interests'][0]['name']}"),
-    //     Text("Interest: ${nextUser['interests'][0]['description']}"),
-    //     ElevatedButton(
-    //       onPressed: () {
-    //         viewModel.like_user(nextUser['id'], nextUser['potential_match']);
-    //       },
-    //       style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-    //       child: const Text("Like", style: TextStyle(color: Colors.black)),
-    //     ),
-    //     ElevatedButton(
-    //       onPressed: () {
-    //         viewModel.dislike_user(nextUser['id']);
-    //       },
-    //       style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-    //       child: const Text("Dislike", style: TextStyle(color: Colors.black)),
-    //     ),
-    //     ElevatedButton(
-    //       onPressed: () {
-    //         showModalBottomSheet(
-    //           context: context,
-    //           builder: (context) => GestureDetector(
-    //             onTap: () => Navigator.of(context).pop(),
-    //             behavior: HitTestBehavior.opaque,
-    //             child: Container(
-    //               height: MediaQuery.of(context).size.height * 0.5,
-    //               child: UserProfileView(
-    //                 interests: List<Map<String, dynamic>>.from(
-    //                     nextUser['interests']),
-    //               ),
-    //             ),
-    //           ),
-    //           isScrollControlled: true,
-    //         );
-    //       },
-    //       child: Text("View Profile"),
-    //     ),
-    //   ],
-    // );
   else if (viewModel.no_more_users) {
     return Text("No more users to display.");
   } else {
@@ -179,6 +173,7 @@ class UserInterestsWidget extends StatefulWidget {
 class _UserInterestsWidgetState extends State<UserInterestsWidget> {
   String? selectedInterestDescription;
 
+  //ToDo: add more vertical spacing between the check/x buttons and the view profile button
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -202,6 +197,7 @@ class _UserInterestsWidgetState extends State<UserInterestsWidget> {
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
+              //Add styling to this text, make it bigger and bold, use the Switzer font
               child: Text(selectedInterestDescription!),
             ),
           ),
@@ -219,7 +215,8 @@ class UserProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Profile'),
+        backgroundColor: Color(0xFF3439AB),
+        //title: Text('User Profile'),
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
@@ -245,11 +242,13 @@ Widget _bottomNavigationBar(viewModel) {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.person), // Replace with your PNG
               onPressed: viewModel.go_to_profile,
             ),
             SizedBox(width: 50), // Leave space for the logo
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.chat), // Replace with your PNG
               onPressed: viewModel.go_to_chats,
             ),

@@ -21,6 +21,8 @@ class ProfileViewModel extends BaseViewModel {
   //percentage to be passed to the view
   int? percentage;
 
+  int? image_index;
+
   ProfileViewModel() {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
@@ -43,10 +45,15 @@ class ProfileViewModel extends BaseViewModel {
 
   Future<void> load_data() async {
     try {
-      percentage = await get_percentage();
-      print("Percentage is: " + percentage.toString());
-      //ToDo: function that gets the profile picture
-      notifyListeners();
+      final results = await Future.wait([
+        get_percentage(),
+        get_profile_pic_index(),
+      ]);
+
+      percentage = results[0];
+      image_index = results[1];
+      
+      rebuildUi();
     } catch (e) {
       print("couldn't fetch the percentage: " + e.toString());
     }
@@ -79,4 +86,39 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   //ToDo: function to get the profile picture of the user
+  Future<int> get_profile_pic_index() async{
+    final response = await http.post(
+      //production url
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
+      body: jsonEncode({
+        'uid': uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      return jsonResponse['image_index'] as int;
+    } else {
+      // If the server returns an error, throw an exception
+      throw Exception('Failed to get image_index');
+    }
+  }
+
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
+  void go_to_chats() {
+    _navigationService.replaceWithChatsView();
+  }
+
+  void go_to_home() {
+    _navigationService.replaceWithHomeView();
+  }
 }
