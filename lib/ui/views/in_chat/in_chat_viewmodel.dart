@@ -36,7 +36,6 @@ class InChatViewModel extends StreamViewModel {
     }
     return _firestoreService.load_messages(match_id)
         .map((list) {
-          print('Received messages: $list');
           displayed_messages = list;
           return list;
         });

@@ -26,6 +26,9 @@ const GetProfileData = require("./get_profile_data");
 const UpdateProfileData = require("./update_profile");
 const AddMessage = require("./add_message");
 const GetImageIndex = require("./get_image_index");
+const GetOldMatches = require("./get_old_matches");
+const GetNewMatches = require("./get_new_matches");
+const LoadMessages = require("./load_messages");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -37,3 +40,6 @@ exports.GetProfileData = GetProfileData;
 exports.UpdateProfileData = UpdateProfileData;
 exports.AddMessage = AddMessage;
 exports.GetImageIndex = GetImageIndex;
+exports.GetOldMatches = GetOldMatches;
+exports.GetNewMatches = GetNewMatches;
+exports.LoadMessages = LoadMessages;

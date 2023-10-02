@@ -22,6 +22,7 @@ class StartupView extends StackedView<StartupViewModel> {
             Text(
               'Qaabl',
               style: TextStyle(
+                fontFamily: 'Switzer',
                   fontSize: 40,
                   fontWeight: FontWeight.w900,
                   color: Colors.indigo),

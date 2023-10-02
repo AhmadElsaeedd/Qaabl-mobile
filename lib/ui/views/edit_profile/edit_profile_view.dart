@@ -73,7 +73,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             body: Stack(
               children: [
               Container(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+              padding: const EdgeInsets.only(left: 25.0, right: 25.0, top:20),
               child: Column(
                 children: [
                   ValueListenableBuilder<int>(
@@ -201,11 +201,13 @@ Widget _bottomNavigationBar(viewModel) {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.person), // Replace with your PNG
               onPressed: viewModel.go_to_profile,
             ),
             SizedBox(width: 50), // Leave space for the logo
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.chat), // Replace with your PNG
               onPressed: viewModel.go_to_chats,
             ),
@@ -215,7 +217,7 @@ Widget _bottomNavigationBar(viewModel) {
       Positioned(
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
-          onTap: () {viewModel.signOut();}, // Add your home action here
+          onTap: () {viewModel.go_to_home();}, // Add your home action here
           child: Container(
             width: 70, // Adjust the width and height as needed
             height: 70,

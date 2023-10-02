@@ -76,6 +76,10 @@ class EditProfileViewModel extends BaseViewModel {
     _navigationService.replaceWithChatsView();
   }
 
+  void go_to_home() {
+    _navigationService.replaceWithHomeView();
+  }
+
   void back_to_profile(response) async {
     if (response.statusCode == 200) {
       // Show a green check mark or something that shows success of updating

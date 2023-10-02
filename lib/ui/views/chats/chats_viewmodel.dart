@@ -40,13 +40,11 @@ class ChatsViewModel extends MultipleStreamViewModel {
       _navigationService.replaceWithLoginView();
       return {};
     }
-    print("User making the request is: " + uid.toString());
+    print("here");
 
     return {
-      'new_chats':
-          StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
-      'old_chats':
-          StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
+      'new_chats': StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
+      'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
 

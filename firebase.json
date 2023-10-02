@@ -16,13 +16,13 @@
   ],
   "emulators": {
     "auth": {
-      "port": 9102
+      "port": 9103
     },
     "functions": {
       "port": 5003
     },
     "firestore": {
-      "port": 8083
+      "port": 8084
     },
     "database": {
       "port": 9002

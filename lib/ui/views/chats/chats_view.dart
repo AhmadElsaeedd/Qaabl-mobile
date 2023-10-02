@@ -45,8 +45,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                         width: 80, // Adjust the width as needed
                         child: Card(
                           child: Center(
-                            child: Text(match
-                                .other_user_name), // Display the other user's name
+                            child: Text(match.other_user_name), // Display the other user's name
                           ),
                         ),
                       ));
@@ -80,7 +79,10 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 },
               ),
             ),
-            _bottomNavigationBar(viewModel),
+            Container(
+                  margin: EdgeInsets.only(bottom: 20), // Adjust as needed
+                  child: _bottomNavigationBar(viewModel),
+                ),
           ],
         ),
       ),

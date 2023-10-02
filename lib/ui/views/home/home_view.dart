@@ -46,7 +46,7 @@ class HomeView extends StatelessWidget {
 Widget _helloText() {
   return Padding(
     padding: const EdgeInsets.only(top: 50.0),
-    child: const Text(
+    child: Column(children: [const Text(
       'Hello, in Qaabl!',
       style: TextStyle(
         fontFamily: 'Switzer',
@@ -54,6 +54,17 @@ Widget _helloText() {
         fontWeight: FontWeight.w900,
       ),
     ),
+  Text("explore cool people, at your fingertips",
+                    style: TextStyle(
+                  fontFamily: 'Switzer', // Replace with your font if it's different
+                  fontSize: 14, // Adjust the size as needed
+                  //fontWeight: FontWeight.bold,
+                ),
+                ),
+    ],
+    )
+    
+    
   );
 }
 
@@ -103,9 +114,9 @@ Widget _userDetails(nextUser, viewModel, context) {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30), // Rounded button
-                    ), backgroundColor: Colors.white,
+                    ), backgroundColor: Color(0xFF3439AB),
                   ),
-                  child: Icon(Icons.check, color: Colors.black), // Check icon
+                  child: Icon(Icons.check, color: Colors.white), // Check icon
                 ),
               ],
             ),
@@ -140,7 +151,10 @@ Widget _userDetails(nextUser, viewModel, context) {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF3439AB), // Change color of View Profile button
+                        backgroundColor: Color(0xFF3439AB), // Background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // Rounded button
+                        ),
                       ),
                       child: Text("View Profile"),
                       ),
@@ -171,40 +185,44 @@ class UserInterestsWidget extends StatefulWidget {
 }
 
 class _UserInterestsWidgetState extends State<UserInterestsWidget> {
-  String? selectedInterestDescription;
+  int? selectedIndex;
 
-  //ToDo: add more vertical spacing between the check/x buttons and the view profile button
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListView.builder(
-          shrinkWrap: true, // to give the ListView a height
-          itemCount: widget.interests.length,
-          itemBuilder: (context, index) {
-            final interest = widget.interests[index];
-            return ListTile(
-              title: Text(interest['name']),
-              onTap: () {
-                setState(() {
-                  selectedInterestDescription = interest['description'];
-                });
-              },
-            );
-          },
-        ),
-        if (selectedInterestDescription != null)
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              //Add styling to this text, make it bigger and bold, use the Switzer font
-              child: Text(selectedInterestDescription!),
-            ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true, // This will size the ListView to its content
+            physics: ClampingScrollPhysics(), // This will enable scrolling in the ListView
+            itemCount: widget.interests.length,
+            itemBuilder: (context, index) {
+              final interest = widget.interests[index];
+              return ExpansionTile(
+                title: Text(interest['name']),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(interest['description'] ?? ''),
+                  ),
+                ],
+                initiallyExpanded: index == selectedIndex,
+                onExpansionChanged: (isExpanded) {
+                  if (isExpanded) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  }
+                },
+              );
+            },
           ),
-      ],
+        ],
+      ),
     );
   }
 }
+
 
 class UserProfileView extends StatelessWidget {
   final List<Map<String, dynamic>> interests;

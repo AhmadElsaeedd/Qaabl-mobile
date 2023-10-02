@@ -59,13 +59,14 @@ class LoginView extends StackedView<LoginViewModel> {
                           color: Color(0xFF3439AB),
                           onPressed: () => viewModel.signInWithEmailAndPassword(
                               emailController.text, passwordController.text),
-                          child: Text('Login', style: TextStyle(fontSize: 20),),
+                          child: Text('Login', style: TextStyle(fontFamily: 'Switzer',fontSize: 20),),
                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         )
                       : ElevatedButton(
                           onPressed: () => viewModel.signInWithEmailAndPassword(
                               emailController.text, passwordController.text),
-                          child: Text('Login', style: TextStyle(fontSize: 20),),
+                          child: Text('Login', style: TextStyle(fontFamily: 'Switzer',
+                          fontSize: 20),),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF3439AB),
                             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

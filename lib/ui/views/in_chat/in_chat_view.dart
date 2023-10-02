@@ -22,9 +22,8 @@ class _InChatViewState extends State<InChatView> {
     return ViewModelBuilder<InChatViewModel>.reactive(
       viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name),
       builder: (context, viewModel, child) {
-        print('Rebuilding UI with messages: ${viewModel.displayed_messages}');
         return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Colors.white,
           appBar: AppBar(
             title: Stack(
               children: [
@@ -35,10 +34,11 @@ class _InChatViewState extends State<InChatView> {
                 // Blurred User Name
                 Positioned(
                   child: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Text(widget.user_name, style: Theme.of(context).textTheme.headline6),
-                    ),
+                    child: Text(widget.user_name, style: Theme.of(context).textTheme.titleLarge),
+                    // BackdropFilter(
+                    //   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    //   child: 
+                    // ),
                   ),
                 ),
               ],
@@ -65,7 +65,7 @@ class _InChatViewState extends State<InChatView> {
                           child: Container(
                             padding: const EdgeInsets.all(10.0),
                             decoration: BoxDecoration(
-                              color: isCurrentUser ? Colors.blue : Colors.grey[300],
+                              color: isCurrentUser ? Color(0xFF3439AB) : Colors.grey[300],
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: Column(

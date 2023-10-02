@@ -121,11 +121,13 @@ Widget _bottomNavigationBar(viewModel) {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.person), // Replace with your PNG
               onPressed: viewModel.go_to_profile,
             ),
             SizedBox(width: 50), // Leave space for the logo
             IconButton(
+              iconSize: 30,
               icon: Icon(Icons.chat), // Replace with your PNG
               onPressed: viewModel.go_to_chats,
             ),
