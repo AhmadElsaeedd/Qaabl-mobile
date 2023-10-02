@@ -7,148 +7,165 @@ import 'dart:convert';
 
 @lazySingleton
 class FirestoreService {
-  final _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // FirestoreService(){
   //   _firestore.settings = const Settings(
-  //     host: '172.20.10.2:8083',
-  //     sslEnabled: false,
+  //     host: 'localhost:8084',
+  //     sslEnabled: true,
   //     persistenceEnabled: false,
   //   );
-    
+  //   print("Firestore settings: " + _firestore.settings.toString());
   // }
 
-  // ignore: non_constant_identifier_names
-  Stream<List<ChatMatch>> get_old_matches(String uid) {
-  return Stream.fromFuture(
-    () async {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetOldMatches'),
-        body: jsonEncode({
-          'uid': uid,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        print("HEre2");
-        final List<dynamic> data = jsonDecode(response.body);
-        print("Data is: "+data.toString());
-        try {
-          final List<ChatMatch> matches = data.map<ChatMatch>((e) {
-            print("Mapping: $e");
-            return ChatMatch.fromJson(e, uid);
-          }).toList();
-          print("matches: " + matches.toString());
-          return matches;
-        } catch (e) {
-          print("Error during mapping: $e");
-          throw e; // rethrow the error after logging it
-        }
-      } else {
-        throw Exception('Failed to load new matches');
-      }
-    }()
-  );
-}
-    
-    
-    
-    // return _firestore
-    //     .collection('Matches')
-    //     .where('users', arrayContains: uid)
-    //     .where('has_message', isEqualTo: true)
-    //     .orderBy('timestamp', descending: true)
-    //     .limit(5)
-    //     .snapshots()
-    //     .asyncMap((snapshot) async {
-    //       print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
-    //   //getting the name of the other user
-    //   //using futures to fetch in parallel
-    //   final futures = <Future<ChatMatch>>[];
-    //   for (final doc in snapshot.docs) {
-    //     final match = ChatMatch.fromDocument(doc, uid);
-    //     final otherUserId = match.other_user_id;
-    //     final future = get_user_name(otherUserId).then((userName) {
-    //       match.other_user_name = userName;
-    //       return match;
-    //     });
-    //     futures.add(future);
-    //   }
-    //   final matches = await Future.wait(futures);
-    //   print("asyncMap end, matches.length: ${matches.length}");
-    //   return matches;
-    // }).handleError((error) {
-    //   print("Error fetching old matches: $error");
-    // });
-  //}
-
-  Stream<List<ChatMatch>> get_new_matches(String uid) {
-  return Stream.fromFuture(
-    () async {
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNewMatches'),
-        body: jsonEncode({
-          'uid': uid,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        print("HEre2");
-        final List<dynamic> data = jsonDecode(response.body);
-        print("Data is: "+data.toString());
-        try {
-          final List<ChatMatch> matches = data.map<ChatMatch>((e) {
-            print("Mapping: $e");
-            return ChatMatch.fromJson(e, uid);
-          }).toList();
-          print("matches: " + matches.toString());
-          return matches;
-        } catch (e) {
-          print("Error during mapping: $e");
-          throw e; // rethrow the error after logging it
-        }
-      } else {
-        throw Exception('Failed to load new matches');
-      }
-    }()
-  );
-}
+  FirestoreService(){
+    _firestore.useFirestoreEmulator('localhost',8084);
+    print("I am using the emulator: " + _firestore.settings.toString());
+  }
 
   // ignore: non_constant_identifier_names
-  // Stream<List<ChatMatch>> get_new_matches(String uid) {
-  //   print("get new matches start");
-  //   //query to return the new chats
-  //   return _firestore
-  //       .collection('Matches')
-  //       .where('users', arrayContains: uid)
-  //       .where('has_message', isEqualTo: false)
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(5)
-  //       .snapshots()
-  //       .asyncMap((snapshot) async {
-  //         print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
-  //     //getting the name of the other user
-  //     //using futures to fetch in parallel
-  //     final futures = <Future<ChatMatch>>[];
-  //     for (final doc in snapshot.docs) {
-  //       final match = ChatMatch.fromDocument(doc, uid);
-  //       final otherUserId =
-  //           match.other_user_id; // Ensure this is the correct property name
-  //       final future = get_user_name(otherUserId).then((userName) {
-  //         match.other_user_name = userName; // Ensure this is a mutable property
-  //         return match;
-  //       });
-  //       futures.add(future);
+  //Stream<List<ChatMatch>> get_old_matches(String uid) {
+  // return Stream.fromFuture(
+  //   () async {
+  //     final response = await http.post(
+  //       Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetOldMatches'),
+  //       body: jsonEncode({
+  //         'uid': uid,
+  //       }),
+  //       headers: {'Content-Type': 'application/json'},
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       print("HEre2");
+  //       final List<dynamic> data = jsonDecode(response.body);
+  //       print("Data is: "+data.toString());
+  //       try {
+  //         final List<ChatMatch> matches = data.map<ChatMatch>((e) {
+  //           print("Mapping: $e");
+  //           return ChatMatch.fromJson(e, uid);
+  //         }).toList();
+  //         print("matches: " + matches.toString());
+  //         return matches;
+  //       } catch (e) {
+  //         print("Error during mapping: $e");
+  //         throw e; // rethrow the error after logging it
+  //       }
+  //     } else {
+  //       throw Exception('Failed to load new matches');
   //     }
-  //     final matches = await Future.wait(futures);
-  //     print("asyncMap end, matches.length: ${matches.length}");
-  //     return matches;
-  //   }).handleError((error) {
-  //     print("Error fetching new matches: $error");
-  //   });
-  // }
+  //   }()
+  // );
+//}
+    
+    Stream<List<ChatMatch>> get_old_matches(String uid) {
+    print("user making request is: " + uid.toString());
+    return _firestore.collection('Matches')
+        .where('users', arrayContains: uid)
+        .where('has_message', isEqualTo: true)
+        .orderBy('timestamp', descending: true)
+        .limit(5)
+        .snapshots()
+        .asyncMap((snapshot) async {
+          print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
+          print("Snapshot metadata, isFromCache: ${snapshot.metadata.isFromCache}, hasPendingWrites: ${snapshot.metadata.hasPendingWrites}");
+
+          if (snapshot.docs.isEmpty) {
+            print("No documents found in snapshot");
+          } else {
+            print("Documents found: ${snapshot.docs.map((doc) => doc.id).join(', ')}");
+          }
+      //getting the name of the other user
+      //using futures to fetch in parallel
+      final futures = <Future<ChatMatch>>[];
+      for (final doc in snapshot.docs) {
+        final match = ChatMatch.fromDocument(doc, uid);
+        final otherUserId = match.other_user_id;
+        final future = get_user_name(otherUserId).then((userName) {
+          match.other_user_name = userName;
+          return match;
+        });
+        futures.add(future);
+      }
+      final matches = await Future.wait(futures);
+      print("asyncMap end, matches.length: ${matches.length}");
+      return matches;
+    }).handleError((error) {
+      print("Error fetching old matches: $error");
+    });
+  }
+
+  //Stream<List<ChatMatch>> get_new_matches(String uid) {
+//   return Stream.fromFuture(
+//     () async {
+//       final response = await http.post(
+//         Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNewMatches'),
+//         body: jsonEncode({
+//           'uid': uid,
+//         }),
+//         headers: {'Content-Type': 'application/json'},
+//       );
+
+//       if (response.statusCode == 200) {
+//         print("HEre2");
+//         final List<dynamic> data = jsonDecode(response.body);
+//         print("Data is: "+data.toString());
+//         try {
+//           final List<ChatMatch> matches = data.map<ChatMatch>((e) {
+//             print("Mapping: $e");
+//             return ChatMatch.fromJson(e, uid);
+//           }).toList();
+//           print("matches: " + matches.toString());
+//           return matches;
+//         } catch (e) {
+//           print("Error during mapping: $e");
+//           throw e; // rethrow the error after logging it
+//         }
+//       } else {
+//         throw Exception('Failed to load new matches');
+//       }
+//     }()
+//   );
+// }
+
+  //ignore: non_constant_identifier_names
+  Stream<List<ChatMatch>> get_new_matches(String uid) {
+    print("get new matches start");
+    //query to return the new chats
+    return _firestore.collection('Matches')
+        .where('users', arrayContains: uid)
+        .where('has_message', isEqualTo: false)
+        .orderBy('timestamp', descending: true)
+        .limit(5)
+        .snapshots()
+        .asyncMap((snapshot) async {
+          print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
+          print("Snapshot metadata, isFromCache: ${snapshot.metadata.isFromCache}, hasPendingWrites: ${snapshot.metadata.hasPendingWrites}");
+
+          if (snapshot.docs.isEmpty) {
+            print("No documents found in snapshot");
+          } else {
+            print("Documents found: ${snapshot.docs.map((doc) => doc.id).join(', ')}");
+          }
+      //getting the name of the other user
+      //using futures to fetch in parallel
+      final futures = <Future<ChatMatch>>[];
+      for (final doc in snapshot.docs) {
+        final match = ChatMatch.fromDocument(doc, uid);
+        final otherUserId =
+            match.other_user_id; // Ensure this is the correct property name
+        final future = get_user_name(otherUserId).then((userName) {
+          match.other_user_name = userName; // Ensure this is a mutable property
+          return match;
+        });
+        futures.add(future);
+      }
+      final matches = await Future.wait(futures);
+      print("asyncMap end, matches.length: ${matches.length}");
+      return matches;
+    }).handleError((error) {
+      print("Error fetching new matches: $error");
+    });
+  }
 
   // ignore: non_constant_identifier_names
   Future<String> get_user_name(String uid) async {
@@ -182,42 +199,42 @@ class FirestoreService {
 
   Stream<List<Message>> load_messages(String match_id) {
   print("Match Id: " + match_id.toString());
-  return Stream.fromFuture(
-    () async {
-      try {
-        final response = await http.post(
-          Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LoadMessages'),
-          body: jsonEncode({
-            'match_id': match_id,
-          }),
-          headers: {'Content-Type': 'application/json'},
-        );
+  // return Stream.fromFuture(
+  //   () async {
+  //     try {
+  //       final response = await http.post(
+  //         Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LoadMessages'),
+  //         body: jsonEncode({
+  //           'match_id': match_id,
+  //         }),
+  //         headers: {'Content-Type': 'application/json'},
+  //       );
 
-        if (response.statusCode == 200) {
-          print("here bro");
-          final List<dynamic> list = jsonDecode(response.body);
-          final messages = list.map((e) => Message.fromJson(e)).toList();
-          return messages;
-        } else {
-          throw Exception('Failed to load messages');
-        }
-      } catch (e) {
-        print("Error during mapping: $e");
-        throw e; // rethrow the error after logging it
-      }
-    }()
-  );
-  } 
+  //       if (response.statusCode == 200) {
+  //         print("here bro");
+  //         final List<dynamic> list = jsonDecode(response.body);
+  //         final messages = list.map((e) => Message.fromJson(e)).toList();
+  //         return messages;
+  //       } else {
+  //         throw Exception('Failed to load messages');
+  //       }
+  //     } catch (e) {
+  //       print("Error during mapping: $e");
+  //       throw e; // rethrow the error after logging it
+  //     }
+  //   }()
+  // );
+  // } 
 
-  //   return _firestore.collection('Matches').doc(match_id).collection('Messages')
-  //         .orderBy('timestamp', descending: true)
-  //         .limit(10)
-  //         .snapshots()
-  //         .map((snapshot) {
-  //           print('Received snapshot: $snapshot');
-  //           return snapshot.docs.map((doc) => Message.fromMap(doc.data())).toList();
-  //         })
-  //         .handleError((error) => print('Error loading messages: $error'));
-  // }
+    return _firestore.collection('Matches').doc(match_id).collection('Messages')
+          .orderBy('timestamp', descending: true)
+          .limit(10)
+          .snapshots()
+          .map((snapshot) {
+            print('Received snapshot: $snapshot');
+            return snapshot.docs.map((doc) => Message.fromMap(doc.data())).toList();
+          })
+          .handleError((error) => print('Error loading messages: $error'));
+  }
 
 }

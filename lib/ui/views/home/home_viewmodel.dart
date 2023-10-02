@@ -92,6 +92,7 @@ class HomeViewModel extends BaseViewModel {
       if (!(response.statusCode == 200 || response.statusCode == 204))
         print("failed to go to cloud");
       else if (response.statusCode == 204) {
+        print("No more users");
         //tell the ui that there are no more users
         no_more_users = true;
         rebuildUi();

@@ -41,11 +41,13 @@ async function get_user_likes_dislikes_matches(uid) {
 async function get_other_users(uid, likes, dislikes, matched_users) {
   let filter_out_those = [];
   filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
+  console.log("Filtered users:", filter_out_those);
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
   // let users_snapshot;
   const users = [];
   if (filter_out_those.length <= 10) {
+    console.log("here");
     // If 10 or fewer items to filter out, use 'not-in'
     const users_snapshot = await db.collection("Users")
         .where("id", "not-in", filter_out_those)

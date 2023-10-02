@@ -20,14 +20,14 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
           children: [Padding(
           padding: const EdgeInsets.only(top: 50.0),
           child: Column(children: [const Text(
-            'Hello, in Qaabl!',
+            'its a match!',
             style: TextStyle(
               fontFamily: 'Switzer',
               fontSize: 25,
               fontWeight: FontWeight.w900,
             ),
           ),
-        Text("explore cool people, at your fingertips",
+        Text("you're cool, they're cool, chat!",
                           style: TextStyle(
                         fontFamily: 'Switzer', // Replace with your font if it's different
                         fontSize: 14, // Adjust the size as needed

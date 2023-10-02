@@ -101,7 +101,10 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
 
     const profile_pic_changed = is_profile_pic_changed(user_data.image_index, profile_pic_index);
 
-    if (name_changed && interests_changed) {
+    if(name_changed && interests_changed && profile_pic_changed){
+      update_user(name,interests,user_uid,profile_pic_index);
+    }
+    else if (name_changed && interests_changed) {
       update_user(name, interests, user_uid, null);
     } else if (name_changed && profile_pic_changed) {
       update_user(name, null, user_uid, profile_pic_index);

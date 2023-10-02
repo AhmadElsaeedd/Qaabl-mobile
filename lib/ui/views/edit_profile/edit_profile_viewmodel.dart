@@ -103,7 +103,6 @@ class EditProfileViewModel extends BaseViewModel {
     try {
       user_data = await get_needed_data();
       print("user data fetched from database" + user_data.toString());
-      //ToDo: function that gets the profile picture
       //notifyListeners();
       //Just to be consistent
       rebuildUi();
