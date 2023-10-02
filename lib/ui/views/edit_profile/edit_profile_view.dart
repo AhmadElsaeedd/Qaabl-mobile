@@ -48,7 +48,10 @@ class _EditProfileViewState extends State<EditProfileView> {
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 children: model.predefined_interests.map((interest) {
-                  bool isSelected = model.selected_interests.contains(interest);
+                  //bool isSelected = model.selected_interests.contains(interest);
+                  //ToDo: check the name key of the interests array in each map
+                  bool isSelected = model.user_data['interests'].any((map) => map['name'] == interest);
+                  print("The interest is: " + interest.toString() + " and is selected is: " + isSelected.toString());
                   return ListTile(
                     title: Text(
                       interest,
@@ -61,6 +64,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                       model.toggleInterestSelection(interest);
                       // If the interest is newly selected, create and add a new controller.
                       if (model.selected_interests.contains(interest)) {
+                        print("Added an interest: " + model.selected_interests.toString());
+                        model.interest_are_those(model.selected_interests);
                         interestControllers.add(TextEditingController());
                         interestNameControllers.add(TextEditingController(text: interest));
                       } else {

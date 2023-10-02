@@ -104,14 +104,14 @@ class EditProfileViewModel extends BaseViewModel {
       user_data = await get_needed_data();
       print("user data fetched from database" + user_data.toString());
       //ToDo: assign the names of interests to the list of selected interests
-      if (user_data.containsKey('interests')) {
-      selected_interests.clear(); // Clearing the list before adding new interests
-      for (var interest in user_data['interests']) {
-        if (interest.containsKey('name')) {
-          selected_interests.add(interest['name']); // Adding new interests
-        }
-      }
-    }
+      // if (user_data.containsKey('interests')) {
+      // selected_interests.clear(); // Clearing the list before adding new interests
+      // for (var interest in user_data['interests']) {
+      //   if (interest.containsKey('name')) {
+      //     selected_interests.add(interest['name']); // Adding new interests
+      //   }
+      // }
+    //}
       //notifyListeners();
       //Just to be consistent
       rebuildUi();
@@ -172,5 +172,20 @@ class EditProfileViewModel extends BaseViewModel {
       selected_interests.add(interest);
     }
     notifyListeners(); // Notify the view to rebuild
+  }
+
+  void interest_are_those(interests){
+    print("the interests are: "+ interests.toString());
+      //ToDo: Create a map inside the interests array
+      //ToDo: the map has 2 fields, name and description
+      //ToDo: assign the values inside the interests array to the name field
+      //ToDO: leave the description empyt
+      for(int i = 0; i < interests.length; i++ ){
+        Map<String, String> interestMap = {
+          'name': interests[i], // Assign the values inside the interests array to the name field
+          'description': '' // Leave the description empty
+        };
+        user_data['interests'].add(interestMap);
+      }
   }
 }
