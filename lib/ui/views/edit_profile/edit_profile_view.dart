@@ -5,9 +5,9 @@ import 'package:stacked/stacked.dart';
 import 'edit_profile_viewmodel.dart';
 
 class EditProfileView extends StatefulWidget {
-  final List<String>? selected_interests;
+  List<String>? selected_interests;
   // ignore: non_constant_identifier_names
-  const EditProfileView({Key? key, this.selected_interests}) : super(key: key);
+  EditProfileView({Key? key}) : super(key: key);
 
   @override
   _EditProfileViewState createState() => _EditProfileViewState();
@@ -17,21 +17,90 @@ class _EditProfileViewState extends State<EditProfileView> {
   late TextEditingController nameController;
   late List<TextEditingController> interestControllers;
   late List<TextEditingController> interestNameControllers;
-  //ValueNotifier<int> selectedImageNotifier = ValueNotifier<int>(0);
   late ValueNotifier<int> selectedImageNotifier;
   bool isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedImageNotifier = ValueNotifier<int>(0); 
+    nameController = TextEditingController();
+    interestControllers = <TextEditingController>[];
+    interestNameControllers = <TextEditingController>[];
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    interestControllers.forEach((controller) => controller.dispose());
+    interestNameControllers.forEach((controller) => controller.dispose());
+    selectedImageNotifier.dispose();
+    super.dispose();
+  }
+
+  void _showInterestsDialog(EditProfileViewModel model) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose your interests'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                children: model.predefined_interests.map((interest) {
+                  bool isSelected = model.selected_interests.contains(interest);
+                  return ListTile(
+                    title: Text(
+                      interest,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black, // Change text color based on selection.
+                      ),
+                    ),
+                    tileColor: isSelected ? Color(0xFF3439AB) : Colors.transparent,
+                    onTap: () {
+                      model.toggleInterestSelection(interest);
+                      // If the interest is newly selected, create and add a new controller.
+                      if (model.selected_interests.contains(interest)) {
+                        interestControllers.add(TextEditingController());
+                        interestNameControllers.add(TextEditingController(text: interest));
+                      } else {
+                        // If the interest is deselected, find and remove the corresponding controller.
+                        final index = interestNameControllers.indexWhere((controller) => controller.text == interest);
+                        if (index != -1) {
+                          interestControllers[index].dispose();
+                          interestNameControllers[index].dispose();
+                          interestControllers.removeAt(index);
+                          interestNameControllers.removeAt(index);
+                        }
+                      }
+                      // To rebuild the widgets with the new controllers.
+                      setState(() {});
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
       viewModelBuilder: () =>
-          EditProfileViewModel(widget.selected_interests ?? []),
+          //EditProfileViewModel(widget.selected_interests ?? []),
+          EditProfileViewModel(),
       builder: (context, model, child) {
         Map<String, dynamic>? userData = model.user_data;
+        print("User data is: "+ userData.toString());
 
         if (userData.isNotEmpty) {
           selectedImageNotifier = ValueNotifier<int>(userData['image_index'] ?? 0);
           nameController = TextEditingController(text: userData['name'] ?? '');
+          print("I am rebuilding");
           interestNameControllers = List.generate(
             (widget.selected_interests != null &&
                     widget.selected_interests!.isNotEmpty)
@@ -121,7 +190,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                   CupertinoButton(
                     onPressed: () {
-                      model.go_to_add_interests();
+                      _showInterestsDialog(model);
                     },
                     child: Text('Edit interests'),
                   ),
@@ -141,7 +210,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                           'description': interestControllers[index].text,
                         },
                       );
-                      //ToDo: put the correct value into the function, it's not selected_image
+                      print("Interests are: " + interests.toString());
+                      //put the correct value into the function, it's not selected_image
                       await model.save_and_back(name, interests, selectedImageNotifier.value);
                       //show a circular progress bar while this await is done
                       setState(() {
@@ -149,7 +219,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF3439AB), // Change the color of the button to #3439AB
+                            backgroundColor: Color(0xFF3439AB),
                           ),
                     child: Text('Save and Back'),
                   ),

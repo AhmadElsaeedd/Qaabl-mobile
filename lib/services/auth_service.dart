@@ -7,7 +7,7 @@ class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   AuthenticationService() {
-    _firebaseAuth.useAuthEmulator('localhost', 9103);
+    _firebaseAuth.useAuthEmulator('localhost', 9104);
   }
 
   final GoogleSignIn googleSignIn = GoogleSignIn();

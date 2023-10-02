@@ -12,7 +12,6 @@ import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart';
 import 'package:stacked_app/ui/views/profile/profile_view.dart';
 import 'package:stacked_app/ui/views/settings/settings_view.dart';
 import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart';
-import 'package:stacked_app/ui/views/add_interests/add_interests_view.dart';
 import 'package:stacked_app/ui/views/chats/chats_view.dart';
 import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart';
 import 'package:stacked_app/services/firestore_service.dart';
@@ -29,7 +28,6 @@ import 'package:stacked_app/services/firestore_service.dart';
     MaterialRoute(page: ProfileView),
     MaterialRoute(page: SettingsView),
     MaterialRoute(page: EditProfileView),
-    MaterialRoute(page: AddInterestsView),
     MaterialRoute(page: ChatsView),
     MaterialRoute(page: InChatView),
 // @stacked-route

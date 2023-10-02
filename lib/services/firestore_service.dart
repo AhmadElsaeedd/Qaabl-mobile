@@ -19,7 +19,7 @@ class FirestoreService {
   // }
 
   FirestoreService(){
-    _firestore.useFirestoreEmulator('localhost',8084);
+    _firestore.useFirestoreEmulator('localhost',8085);
     print("I am using the emulator: " + _firestore.settings.toString());
   }
 

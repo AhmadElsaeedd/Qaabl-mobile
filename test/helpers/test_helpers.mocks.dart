@@ -10,6 +10,7 @@ import 'package:flutter/material.dart' as _i4;
 import 'package:google_sign_in/google_sign_in.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_app/models/match_model.dart' as _i9;
+import 'package:stacked_app/models/message_model.dart' as _i10;
 import 'package:stacked_app/services/auth_service.dart' as _i7;
 import 'package:stacked_app/services/firestore_service.dart' as _i8;
 import 'package:stacked_services/stacked_services.dart' as _i3;
@@ -762,4 +763,14 @@ class MockFirestoreService extends _i1.Mock implements _i8.FirestoreService {
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),
       ) as _i5.Future<void>);
+  @override
+  _i5.Stream<List<_i10.Message>> load_messages(String? match_id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #load_messages,
+          [match_id],
+        ),
+        returnValue: _i5.Stream<List<_i10.Message>>.empty(),
+        returnValueForMissingStub: _i5.Stream<List<_i10.Message>>.empty(),
+      ) as _i5.Stream<List<_i10.Message>>);
 }

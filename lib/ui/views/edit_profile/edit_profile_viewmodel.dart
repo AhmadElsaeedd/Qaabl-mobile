@@ -20,9 +20,9 @@ class EditProfileViewModel extends BaseViewModel {
   //initialized empty because it will be initialized later in the code
   Map<String, dynamic> user_data = {};
 
-  final List<String> selected_interests;
+  final List<String> selected_interests = [];
 
-  EditProfileViewModel(this.selected_interests) {
+  EditProfileViewModel() {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
     if (uid == null) {
@@ -32,16 +32,16 @@ class EditProfileViewModel extends BaseViewModel {
     load_data();
   }
 
-  void go_to_add_interests() {
-    //get a list of interests names from the user's data
-    List<String> interests_names = user_data['interests']
-            ?.map<String>((interest) => interest['name'] as String)
-            .toList() ??
-        [];
+  // void go_to_add_interests() {
+  //   //get a list of interests names from the user's data
+  //   List<String> interests_names = user_data['interests']
+  //           ?.map<String>((interest) => interest['name'] as String)
+  //           .toList() ??
+  //       [];
 
-    _navigationService.replaceWithAddInterestsView(
-        interestsnames: interests_names);
-  }
+  //   _navigationService.replaceWithAddInterestsView(
+  //       interestsnames: interests_names);
+  // }
 
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(
@@ -103,6 +103,15 @@ class EditProfileViewModel extends BaseViewModel {
     try {
       user_data = await get_needed_data();
       print("user data fetched from database" + user_data.toString());
+      //ToDo: assign the names of interests to the list of selected interests
+      if (user_data.containsKey('interests')) {
+      selected_interests.clear(); // Clearing the list before adding new interests
+      for (var interest in user_data['interests']) {
+        if (interest.containsKey('name')) {
+          selected_interests.add(interest['name']); // Adding new interests
+        }
+      }
+    }
       //notifyListeners();
       //Just to be consistent
       rebuildUi();
@@ -113,8 +122,7 @@ class EditProfileViewModel extends BaseViewModel {
 
   //function that gets the necessary fields to populate a user's profile
   Future<Map<String, dynamic>> get_needed_data() async {
-    //the needed data is: name, interests
-    //we will also bring avatar/profile picture later
+    //the needed data is: name, interests, picture index
 
     //call the function from the cloud
     final response = await http.post(
@@ -138,5 +146,31 @@ class EditProfileViewModel extends BaseViewModel {
       // If the server returns an error, throw an exception
       throw Exception('Failed to get percentage');
     }
+  }
+
+  //Interests part
+  //predefined interests to show users:
+  final List<String> predefined_interests = [
+    'Football',
+    'Cards',
+    'Pet-training',
+    'Skiing',
+    'Reading',
+    'Coffee',
+    'Walking',
+    'Basketball',
+    'Shopping',
+    'Fishing',
+    'Rock climbing',
+    'Diving',
+  ];
+
+  void toggleInterestSelection(String interest) {
+    if (selected_interests.contains(interest)) {
+      selected_interests.remove(interest);
+    } else if (selected_interests.length < 7) {
+      selected_interests.add(interest);
+    }
+    notifyListeners(); // Notify the view to rebuild
   }
 }
