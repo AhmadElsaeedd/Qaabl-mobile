@@ -32,7 +32,13 @@ class HomeView extends StatelessWidget {
                         child: Center(
                           child: _userDetails(nextUser, viewModel, context),
                         ),
-                      ),  
+                      ),
+                      Container(
+                        margin: EdgeInsets.only( top: 5),
+                        child: Center(
+                          child: check_profile_button(nextUser,viewModel, context), 
+                        ),
+                      ),
                       Spacer(),
                       Container(
                       margin: EdgeInsets.only(bottom: 20), // Adjust as needed
@@ -352,12 +358,62 @@ Widget _userCard(nextUser, viewModel, context) {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
-              child:
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
+            //   child:
                 //take this column out of the card and put it below the card
-                Column(children: [
-                  Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
+                // Column(children: [
+                //   Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
+                //       style: TextStyle(
+                //     fontFamily: 'Switzer', // Replace with your font if it's different
+                //     fontSize: 14, // Adjust the size as needed
+                //     //fontWeight: FontWeight.bold,
+                //   ),
+                //   ),
+                //   ElevatedButton(
+                //         onPressed: () {
+                //           showModalBottomSheet(
+                //             context: context,
+                //             builder: (context) => GestureDetector(
+                //               onTap: () => Navigator.of(context).pop(),
+                //               behavior: HitTestBehavior.opaque,
+                //               child: Container(
+                //                 height: MediaQuery.of(context).size.height * 0.35,
+                //                 child: UserProfileView(
+                //                   interests: List<Map<String, dynamic>>.from(
+                //                       nextUser['interests']),
+                //                 ),
+                //               ),
+                //             ),
+                //             isScrollControlled: true,
+                //           );
+                //         },
+                //         style: ElevatedButton.styleFrom(
+                //           backgroundColor: Color(0xFF3439AB), // Background color
+                //           shape: RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(30), // Rounded button
+                //           ),
+                //         ),
+                //         child: Text("View Profile"),
+                //         ),
+                //       ],
+                //     )
+              
+              //),
+          ],
+        ),
+        ),
+        ],
+      ),
+      )
+      )
+    );
+}
+
+Widget check_profile_button(nextUser, viewModel, context){
+  if(nextUser != null && nextUser['interests'].isNotEmpty){
+    return Column(children: [
+                  Text("but I have ${nextUser['interests'].length} more interests, check me out",
                       style: TextStyle(
                     fontFamily: 'Switzer', // Replace with your font if it's different
                     fontSize: 14, // Adjust the size as needed
@@ -391,15 +447,9 @@ Widget _userCard(nextUser, viewModel, context) {
                         child: Text("View Profile"),
                         ),
                       ],
-                    )
-              
-                  ),
-          ],
-        ),
-        ),
-        ],
-      ),
-      )
-      )
-    );
+                    );
+  }
+  else{
+    return Text("No more users to display.");
+  }
 }
