@@ -86,7 +86,6 @@ class HomeViewModel extends BaseViewModel {
         }),
         headers: {'Content-Type': 'application/json'},
       );
-      print("Sent request");
 
       //response of the function should contain 3 users with their UIDs and interests
       if (!(response.statusCode == 200 || response.statusCode == 204))
@@ -112,8 +111,6 @@ class HomeViewModel extends BaseViewModel {
         user_Ids_in_queue.add(user_Id);
       }
 
-      print("length of users_queue " + users_queue.length.toString());
-
       // Rebuild UI in first load only, because with first load the data is not there yet
       if (first_load == true) {
         rebuildUi();
@@ -133,6 +130,7 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
+    print("Getting user");
     //refill the queue when needed, we want to maintain having users in the queue
     if (users_queue.length < 3 && first_load == false) {
       getUsers();
@@ -207,6 +205,7 @@ class HomeViewModel extends BaseViewModel {
   //function to skip user without performing any action
   void skip_user(String skipped_user_uid){
     user_Ids_in_queue.remove(skipped_user_uid);
+    print("I am rebuilding");
     rebuildUi();
   }
 

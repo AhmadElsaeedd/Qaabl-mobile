@@ -7,8 +7,27 @@ import 'package:stacked_app/ui/common/ui_helpers.dart';
 
 import 'home_viewmodel.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
+
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final CardController cardController = CardController();
+  double _topPosition = 50;
+
+  @override
+  void didUpdateWidget(HomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Whenever the widget updates, animate the position over 500 milliseconds.
+    Future.delayed(Duration(milliseconds: 50), () {
+      setState(() {
+        _topPosition = 0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +36,8 @@ class HomeView extends StatelessWidget {
       onViewModelReady: (model) => model.getUsers(),
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
-        return Scaffold(
+        print("next user is: " + nextUser.toString());
+          return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Padding(
@@ -27,18 +47,20 @@ class HomeView extends StatelessWidget {
                   Column(
                     children: [
                       _helloText(),
-                      Container(
-                        margin: EdgeInsets.only( top: 80),
-                        child: Center(
-                          child: _userDetails(nextUser, viewModel, context),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only( top: 5),
-                        child: Center(
-                          child: check_profile_button(nextUser,viewModel, context), 
-                        ),
-                      ),
+                      if(nextUser != null) ... [
+                            Container(
+                                margin: EdgeInsets.only( top: 80),
+                                child: Center(
+                                  child: _userDetails(nextUser, viewModel, context),
+                                ),
+                              ),
+                            Container(
+                              margin: EdgeInsets.only( top: 5),
+                              child: Center(
+                                child: check_profile_button(nextUser,viewModel, context), 
+                              ),
+                            ),
+                      ],
                       Spacer(),
                       Container(
                       margin: EdgeInsets.only(bottom: 20), // Adjust as needed
@@ -53,6 +75,45 @@ class HomeView extends StatelessWidget {
         );
       },
     );
+  }
+
+
+  Widget _userDetails(nextUser, viewModel, context) { 
+    // CardController cardController = CardController();
+    return 
+    Container(
+      height:400,
+      child: TinderSwapCard(
+          key: ValueKey(nextUser['id']),
+          swipeUp: false,
+          swipeDown: false,
+          orientation: AmassOrientation.bottom,
+          totalNum: 1,
+          stackNum: 3,
+          swipeEdge: 4.0,
+          maxWidth: MediaQuery.of(context).size.width * 0.9,
+          maxHeight: MediaQuery.of(context).size.width * 1.5,
+          minWidth: MediaQuery.of(context).size.width * 0.8,
+          minHeight: MediaQuery.of(context).size.width * 0.8,
+          cardBuilder: (context, index) {
+            print("NEXT USER IS: " + nextUser.toString());
+            return _userCard(nextUser, viewModel, context); 
+          },
+          cardController: cardController,
+          swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
+            // Adjust the orientation to match your need.
+            if (orientation == CardSwipeOrientation.right) {
+              // Placeholder for swipe right action
+              print('Swiped right');
+              viewModel.skip_user(nextUser['id']);
+            } else if (orientation == CardSwipeOrientation.left) {
+              // Placeholder for swipe left action
+              print('Swiped left');
+              viewModel.skip_user(nextUser['id']);
+            }
+          },
+        ),
+      );
   }
 }
 
@@ -79,48 +140,6 @@ Widget _helloText() {
     
     
   );
-}
-
-Widget _userDetails(nextUser, viewModel, context) {
-  if (nextUser != null && nextUser['interests'].isNotEmpty) {
-    print("Yo yo");
-    CardController cardController = CardController();
-    //return 
-    return 
-    Container(
-      height:400,
-      child: TinderSwapCard(
-          swipeUp: false,
-          swipeDown: false,
-          orientation: AmassOrientation.bottom,
-          totalNum: viewModel.users_queue.length, // You'll need to get the total number of users you're displaying
-          stackNum: 3,
-          swipeEdge: 4.0,
-          maxWidth: MediaQuery.of(context).size.width * 0.9,
-          //maxHeight: MediaQuery.of(context).size.width * 0.9,
-          maxHeight: MediaQuery.of(context).size.width * 1.5,
-          minWidth: MediaQuery.of(context).size.width * 0.8,
-          minHeight: MediaQuery.of(context).size.width * 0.8,
-          cardBuilder: (context, index) => _userCard(nextUser, viewModel, context),
-          cardController: cardController,
-          swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
-            // Adjust the orientation to match your need.
-            if (orientation == CardSwipeOrientation.right) {
-              // Placeholder for swipe right action
-              print('Swiped right');
-            } else if (orientation == CardSwipeOrientation.left) {
-              // Placeholder for swipe left action
-              print('Swiped left');
-            }
-          },
-        ),
-      );
-  }
-  else if (viewModel.no_more_users) {
-    return Text("No more users to display.");
-  } else {
-    return Text("Loading...");
-  }
 }
 
 class UserInterestsWidget extends StatefulWidget {
@@ -269,6 +288,7 @@ Widget _userCard(nextUser, viewModel, context) {
   final duration = Duration(seconds: 30);
   ValueKey _tweenKey = ValueKey(DateTime.now());
   return Card(
+    color: Color(0xFFAAAAAA),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
@@ -358,48 +378,6 @@ Widget _userCard(nextUser, viewModel, context) {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
-            //   child:
-                //take this column out of the card and put it below the card
-                // Column(children: [
-                //   Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
-                //       style: TextStyle(
-                //     fontFamily: 'Switzer', // Replace with your font if it's different
-                //     fontSize: 14, // Adjust the size as needed
-                //     //fontWeight: FontWeight.bold,
-                //   ),
-                //   ),
-                //   ElevatedButton(
-                //         onPressed: () {
-                //           showModalBottomSheet(
-                //             context: context,
-                //             builder: (context) => GestureDetector(
-                //               onTap: () => Navigator.of(context).pop(),
-                //               behavior: HitTestBehavior.opaque,
-                //               child: Container(
-                //                 height: MediaQuery.of(context).size.height * 0.35,
-                //                 child: UserProfileView(
-                //                   interests: List<Map<String, dynamic>>.from(
-                //                       nextUser['interests']),
-                //                 ),
-                //               ),
-                //             ),
-                //             isScrollControlled: true,
-                //           );
-                //         },
-                //         style: ElevatedButton.styleFrom(
-                //           backgroundColor: Color(0xFF3439AB), // Background color
-                //           shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(30), // Rounded button
-                //           ),
-                //         ),
-                //         child: Text("View Profile"),
-                //         ),
-                //       ],
-                //     )
-              
-              //),
           ],
         ),
         ),
@@ -417,7 +395,6 @@ Widget check_profile_button(nextUser, viewModel, context){
                       style: TextStyle(
                     fontFamily: 'Switzer', // Replace with your font if it's different
                     fontSize: 14, // Adjust the size as needed
-                    //fontWeight: FontWeight.bold,
                   ),
                   ),
                   ElevatedButton(
