@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:flutter_tindercard_plus/flutter_tindercard_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/ui/common/app_colors.dart';
@@ -27,12 +27,17 @@ class HomeView extends StatelessWidget {
                   Column(
                     children: [
                       _helloText(),
-                      Expanded(
+                      Container(
+                        margin: EdgeInsets.only( top: 80),
                         child: Center(
                           child: _userDetails(nextUser, viewModel, context),
                         ),
+                      ),  
+                      Spacer(),
+                      Container(
+                      margin: EdgeInsets.only(bottom: 20), // Adjust as needed
+                      child: _bottomNavigationBar(viewModel),
                       ),
-                      _bottomNavigationBar(viewModel),
                     ],
                   )
                 ],
@@ -71,143 +76,39 @@ Widget _helloText() {
 }
 
 Widget _userDetails(nextUser, viewModel, context) {
-
-  final duration = Duration(seconds: 30);
-  ValueKey _tweenKey = ValueKey(DateTime.now());
-
-
   if (nextUser != null && nextUser['interests'].isNotEmpty) {
-    return Stack(
-  children: [
-    Center( // Center the interests area
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text(
-              "I like ${nextUser['interests'][0]['name']}",
-              style: TextStyle(
-                fontFamily: 'Switzer', // Replace with your font if it's different
-                fontSize: 25, // Adjust the size as needed
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Image.asset('lib/assets/${nextUser['image_index']}.png', height: 200,),
-            Container(
-                height: 10,
-                child: TweenAnimationBuilder(
-                  duration: duration,
-                  key: _tweenKey,
-                  tween: Tween(begin: 1.0, end: 0.0),
-                  builder: (_, double value, __) {
-                    Color color;
-
-                    if (value > 0.5) {
-                      color = Colors.green;
-                    } else if (value > 0.25) {
-                      color = Colors.yellow;
-                    } else {
-                      color = Colors.red;
-                    }
-
-                    return CustomPaint(
-                      painter: LinearProgressPainter(color: color, percentage: value),
-                      size: Size(MediaQuery.of(context).size.width, 10),
-                    );
-                  },
-                  onEnd: () {
-                    print("Timer ended");
-                    viewModel.skip_user(nextUser['id']);
-                    //setState(() {
-                      _tweenKey = ValueKey(DateTime.now());
-                    //});
-                  },
-                ),
-              ),
-            Text(
-              "And... ${nextUser['interests'][0]['description']}",
-              style: TextStyle(
-                fontFamily: 'Switzer', // Replace with your font if it's different
-                fontSize: 18, // Adjust the size as needed
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Row( // Align Like and Dislike buttons horizontally
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      viewModel.dislike_user(nextUser['id']);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30), // Rounded button
-                      ), backgroundColor: Colors.white,
-                    ),
-                    child: Icon(Icons.close, color: Colors.black), // Close icon
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      viewModel.like_user(nextUser['id'], nextUser['potential_match']);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30), // Rounded button
-                      ), backgroundColor: Color(0xFF3439AB),
-                    ),
-                    child: Icon(Icons.check, color: Colors.white), // Check icon
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
-              child:
-                Column(children: [
-                  Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
-                      style: TextStyle(
-                    fontFamily: 'Switzer', // Replace with your font if it's different
-                    fontSize: 14, // Adjust the size as needed
-                    //fontWeight: FontWeight.bold,
-                  ),
-                  ),
-                  ElevatedButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => GestureDetector(
-                              onTap: () => Navigator.of(context).pop(),
-                              behavior: HitTestBehavior.opaque,
-                              child: Container(
-                                height: MediaQuery.of(context).size.height * 0.35,
-                                child: UserProfileView(
-                                  interests: List<Map<String, dynamic>>.from(
-                                      nextUser['interests']),
-                                ),
-                              ),
-                            ),
-                            isScrollControlled: true,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF3439AB), // Background color
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30), // Rounded button
-                          ),
-                        ),
-                        child: Text("View Profile"),
-                        ),
-                      ],
-                    )
-              
-                  ),
-          ],
+    print("Yo yo");
+    CardController cardController = CardController();
+    //return 
+    return 
+    Container(
+      height:400,
+      child: TinderSwapCard(
+          swipeUp: false,
+          swipeDown: false,
+          orientation: AmassOrientation.bottom,
+          totalNum: viewModel.users_queue.length, // You'll need to get the total number of users you're displaying
+          stackNum: 3,
+          swipeEdge: 4.0,
+          maxWidth: MediaQuery.of(context).size.width * 0.9,
+          //maxHeight: MediaQuery.of(context).size.width * 0.9,
+          maxHeight: MediaQuery.of(context).size.width * 1.5,
+          minWidth: MediaQuery.of(context).size.width * 0.8,
+          minHeight: MediaQuery.of(context).size.width * 0.8,
+          cardBuilder: (context, index) => _userCard(nextUser, viewModel, context),
+          cardController: cardController,
+          swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
+            // Adjust the orientation to match your need.
+            if (orientation == CardSwipeOrientation.right) {
+              // Placeholder for swipe right action
+              print('Swiped right');
+            } else if (orientation == CardSwipeOrientation.left) {
+              // Placeholder for swipe left action
+              print('Swiped left');
+            }
+          },
         ),
-        ),
-      )
-  ],
-);
+      );
   }
   else if (viewModel.no_more_users) {
     return Text("No more users to display.");
@@ -264,7 +165,6 @@ class _UserInterestsWidgetState extends State<UserInterestsWidget> {
     );
   }
 }
-
 
 class UserProfileView extends StatelessWidget {
   final List<Map<String, dynamic>> interests;
@@ -357,4 +257,149 @@ class LinearProgressPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
+}
+
+Widget _userCard(nextUser, viewModel, context) {
+  final duration = Duration(seconds: 30);
+  ValueKey _tweenKey = ValueKey(DateTime.now());
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    elevation: 5,
+    child: Padding(
+      padding: EdgeInsets.all(10.0),
+      child: SingleChildScrollView(child: Column(
+        children: [
+          Center( // Center the interests area
+      child: Column(
+          children: [
+            Text(
+              "I like ${nextUser['interests'][0]['name']}",
+              style: TextStyle(
+                fontFamily: 'Switzer', // Replace with your font if it's different
+                fontSize: 25, // Adjust the size as needed
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Image.asset('lib/assets/${nextUser['image_index']}.png', height: 200,),
+            Container(
+                height: 10,
+                child: TweenAnimationBuilder(
+                  duration: duration,
+                  key: _tweenKey,
+                  tween: Tween(begin: 1.0, end: 0.0),
+                  builder: (_, double value, __) {
+                    Color color;
+
+                    if (value > 0.5) {
+                      color = Colors.green;
+                    } else if (value > 0.25) {
+                      color = Colors.yellow;
+                    } else {
+                      color = Colors.red;
+                    }
+
+                    return CustomPaint(
+                      painter: LinearProgressPainter(color: color, percentage: value),
+                      size: Size(MediaQuery.of(context).size.width, 10),
+                    );
+                  },
+                  onEnd: () {
+                    print("Timer ended");
+                    viewModel.skip_user(nextUser['id']);
+                    //setState(() {
+                      _tweenKey = ValueKey(DateTime.now());
+                    //});
+                  },
+                ),
+              ),
+            Text(
+              "And... ${nextUser['interests'][0]['description']}",
+              style: TextStyle(
+                fontFamily: 'Switzer', // Replace with your font if it's different
+                fontSize: 18, // Adjust the size as needed
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row( // Align Like and Dislike buttons horizontally
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.dislike_user(nextUser['id']);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30), // Rounded button
+                      ), backgroundColor: Colors.white,
+                    ),
+                    child: Icon(Icons.close, color: Colors.black), // Close icon
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30), // Rounded button
+                      ), backgroundColor: Color(0xFF3439AB),
+                    ),
+                    child: Icon(Icons.check, color: Colors.white), // Check icon
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
+              child:
+                //take this column out of the card and put it below the card
+                Column(children: [
+                  Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
+                      style: TextStyle(
+                    fontFamily: 'Switzer', // Replace with your font if it's different
+                    fontSize: 14, // Adjust the size as needed
+                    //fontWeight: FontWeight.bold,
+                  ),
+                  ),
+                  ElevatedButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.35,
+                                child: UserProfileView(
+                                  interests: List<Map<String, dynamic>>.from(
+                                      nextUser['interests']),
+                                ),
+                              ),
+                            ),
+                            isScrollControlled: true,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF3439AB), // Background color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30), // Rounded button
+                          ),
+                        ),
+                        child: Text("View Profile"),
+                        ),
+                      ],
+                    )
+              
+                  ),
+          ],
+        ),
+        ),
+        ],
+      ),
+      )
+      )
+    );
 }
