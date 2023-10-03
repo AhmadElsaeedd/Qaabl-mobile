@@ -205,7 +205,7 @@ class HomeViewModel extends BaseViewModel {
   //function to skip user without performing any action
   void skip_user(String skipped_user_uid){
     user_Ids_in_queue.remove(skipped_user_uid);
-    print("I am rebuilding");
+    print("I am here");
     rebuildUi();
   }
 

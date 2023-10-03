@@ -1,10 +1,9 @@
 import 'dart:math';
-import 'package:flutter_tindercard_plus/flutter_tindercard_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/ui/common/app_colors.dart';
 import 'package:stacked_app/ui/common/ui_helpers.dart';
-
+import 'package:swipe_cards/swipe_cards.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,20 +14,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final CardController cardController = CardController();
-  double _topPosition = 50;
-
-  @override
-  void didUpdateWidget(HomeView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Whenever the widget updates, animate the position over 500 milliseconds.
-    Future.delayed(Duration(milliseconds: 50), () {
-      setState(() {
-        _topPosition = 0;
-      });
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
@@ -77,44 +63,46 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+Widget _userDetails(nextUser, viewModel, context) {
+  print("NEXT USER IS: " + nextUser.toString());
+  SwipeItem swipeItem = SwipeItem(
+      content: _userCard(nextUser, viewModel, context), 
+      likeAction: () {
+        //skip for now
+        print("I am in like");
+          viewModel.skip_user(nextUser['id']);
+      },
+      nopeAction: () {
+        print("I am in dislike");
+          viewModel.skip_user(nextUser['id']);
+      }
+      // Include other actions like superLike if you have them
+  );
 
-  Widget _userDetails(nextUser, viewModel, context) { 
-    // CardController cardController = CardController();
-    return 
-    Container(
-      height:400,
-      child: TinderSwapCard(
-          key: ValueKey(nextUser['id']),
-          swipeUp: false,
-          swipeDown: false,
-          orientation: AmassOrientation.bottom,
-          totalNum: 1,
-          stackNum: 3,
-          swipeEdge: 4.0,
-          maxWidth: MediaQuery.of(context).size.width * 0.9,
-          maxHeight: MediaQuery.of(context).size.width * 1.5,
-          minWidth: MediaQuery.of(context).size.width * 0.8,
-          minHeight: MediaQuery.of(context).size.width * 0.8,
-          cardBuilder: (context, index) {
-            print("NEXT USER IS: " + nextUser.toString());
-            return _userCard(nextUser, viewModel, context); 
-          },
-          cardController: cardController,
-          swipeCompleteCallback: (CardSwipeOrientation orientation, int index) {
-            // Adjust the orientation to match your need.
-            if (orientation == CardSwipeOrientation.right) {
-              // Placeholder for swipe right action
-              print('Swiped right');
-              viewModel.skip_user(nextUser['id']);
-            } else if (orientation == CardSwipeOrientation.left) {
-              // Placeholder for swipe left action
-              print('Swiped left');
-              viewModel.skip_user(nextUser['id']);
-            }
-          },
-        ),
-      );
-  }
+  print("CCCCCC");
+  MatchEngine matchEngine = MatchEngine(swipeItems: [swipeItem]);
+  print("IIIII");
+
+  return Container(
+    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+    height: 400,
+    child: SwipeCards(
+      matchEngine: matchEngine,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+            alignment: Alignment.center,
+            child: swipeItem.content // This displays the content of the SwipeItem
+        );
+      },
+      onStackFinished: () {
+        print("Stack finished");
+        // Load more users or any action when all cards are swiped
+      },
+    ),
+  );
+}
+
+
 }
 
 Widget _helloText() {
@@ -334,9 +322,7 @@ Widget _userCard(nextUser, viewModel, context) {
                   onEnd: () {
                     print("Timer ended");
                     viewModel.skip_user(nextUser['id']);
-                    //setState(() {
                       _tweenKey = ValueKey(DateTime.now());
-                    //});
                   },
                 ),
               ),
