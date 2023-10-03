@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/ui/common/app_colors.dart';
@@ -69,103 +71,143 @@ Widget _helloText() {
 }
 
 Widget _userDetails(nextUser, viewModel, context) {
+
+  final duration = Duration(seconds: 30);
+  ValueKey _tweenKey = ValueKey(DateTime.now());
+
+
   if (nextUser != null && nextUser['interests'].isNotEmpty) {
-    return Center( // Center the interests area
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Text(
-            "I like ${nextUser['interests'][0]['name']}",
-            style: TextStyle(
-              fontFamily: 'Switzer', // Replace with your font if it's different
-              fontSize: 25, // Adjust the size as needed
-              fontWeight: FontWeight.bold,
+    return Stack(
+  children: [
+    Center( // Center the interests area
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              "I like ${nextUser['interests'][0]['name']}",
+              style: TextStyle(
+                fontFamily: 'Switzer', // Replace with your font if it's different
+                fontSize: 25, // Adjust the size as needed
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Image.asset('lib/assets/${nextUser['image_index']}.png', height: 200,),
-          Text(
-            "And... ${nextUser['interests'][0]['description']}",
-            style: TextStyle(
-              fontFamily: 'Switzer', // Replace with your font if it's different
-              fontSize: 18, // Adjust the size as needed
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Row( // Align Like and Dislike buttons horizontally
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    viewModel.dislike_user(nextUser['id']);
+            Image.asset('lib/assets/${nextUser['image_index']}.png', height: 200,),
+            Container(
+                height: 10,
+                child: TweenAnimationBuilder(
+                  duration: duration,
+                  key: _tweenKey,
+                  tween: Tween(begin: 1.0, end: 0.0),
+                  builder: (_, double value, __) {
+                    Color color;
+
+                    if (value > 0.5) {
+                      color = Colors.green;
+                    } else if (value > 0.25) {
+                      color = Colors.yellow;
+                    } else {
+                      color = Colors.red;
+                    }
+
+                    return CustomPaint(
+                      painter: LinearProgressPainter(color: color, percentage: value),
+                      size: Size(MediaQuery.of(context).size.width, 10),
+                    );
                   },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded button
-                    ), backgroundColor: Colors.white,
-                  ),
-                  child: Icon(Icons.close, color: Colors.black), // Close icon
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                  onEnd: () {
+                    print("Timer ended");
+                    viewModel.skip_user(nextUser['id']);
+                    //setState(() {
+                      _tweenKey = ValueKey(DateTime.now());
+                    //});
                   },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded button
-                    ), backgroundColor: Color(0xFF3439AB),
-                  ),
-                  child: Icon(Icons.check, color: Colors.white), // Check icon
                 ),
-              ],
+              ),
+            Text(
+              "And... ${nextUser['interests'][0]['description']}",
+              style: TextStyle(
+                fontFamily: 'Switzer', // Replace with your font if it's different
+                fontSize: 18, // Adjust the size as needed
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
-            child:
-              Column(children: [
-                Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
-                    style: TextStyle(
-                  fontFamily: 'Switzer', // Replace with your font if it's different
-                  fontSize: 14, // Adjust the size as needed
-                  //fontWeight: FontWeight.bold,
-                ),
-                ),
-                ElevatedButton(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            behavior: HitTestBehavior.opaque,
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              child: UserProfileView(
-                                interests: List<Map<String, dynamic>>.from(
-                                    nextUser['interests']),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row( // Align Like and Dislike buttons horizontally
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.dislike_user(nextUser['id']);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30), // Rounded button
+                      ), backgroundColor: Colors.white,
+                    ),
+                    child: Icon(Icons.close, color: Colors.black), // Close icon
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30), // Rounded button
+                      ), backgroundColor: Color(0xFF3439AB),
+                    ),
+                    child: Icon(Icons.check, color: Colors.white), // Check icon
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0), // Adjust the value as needed
+              child:
+                Column(children: [
+                  Text("but I have ${nextUser['interests'].length - 1} more interests, check me out",
+                      style: TextStyle(
+                    fontFamily: 'Switzer', // Replace with your font if it's different
+                    fontSize: 14, // Adjust the size as needed
+                    //fontWeight: FontWeight.bold,
+                  ),
+                  ),
+                  ElevatedButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.35,
+                                child: UserProfileView(
+                                  interests: List<Map<String, dynamic>>.from(
+                                      nextUser['interests']),
+                                ),
                               ),
                             ),
+                            isScrollControlled: true,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF3439AB), // Background color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30), // Rounded button
                           ),
-                          isScrollControlled: true,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF3439AB), // Background color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30), // Rounded button
                         ),
-                      ),
-                      child: Text("View Profile"),
-                      ),
-                    ],
-                  )
-             
-                ),
-        ],
-      ),
-      ),
-    );
+                        child: Text("View Profile"),
+                        ),
+                      ],
+                    )
+              
+                  ),
+          ],
+        ),
+        ),
+      )
+  ],
+);
   }
   else if (viewModel.no_more_users) {
     return Text("No more users to display.");
@@ -286,4 +328,33 @@ Widget _bottomNavigationBar(viewModel) {
       ),
     ],
   );
+}
+
+class LinearProgressPainter extends CustomPainter {
+  final Color color;
+  final double percentage;
+
+  LinearProgressPainter({required this.color, required this.percentage});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 10.0
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(0, size.height)
+      ..lineTo(size.width * percentage, size.height)
+      ..lineTo(size.width * percentage, 0)
+      ..lineTo(0, 0)
+      ..close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
 }

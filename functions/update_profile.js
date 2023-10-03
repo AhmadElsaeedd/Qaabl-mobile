@@ -25,6 +25,8 @@ function is_profile_pic_changed(old_pp_index, new_pp_index) {
 }
 
 function is_interests_changed(old_interests, new_interests) {
+  console.log("Old interests: ", old_interests);
+  console.log("New interests: ", new_interests);
 // Sort the arrays of interests by their 'name' property
   const sortInterests = (interests) => {
     return interests.sort((a, b) => a.name.localeCompare(b.name));

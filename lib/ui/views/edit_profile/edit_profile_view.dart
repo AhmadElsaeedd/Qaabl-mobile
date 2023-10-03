@@ -147,6 +147,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 );
                 if (chosenIndex != null) {
                   selectedImageNotifier.value = chosenIndex; // Set the new value
+                  model.user_data['image_index'] = chosenIndex;
                 }
               },
               child: Column(
@@ -203,8 +204,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                           'description': interestControllers[index].text,
                         },
                       );
-                      print("Interests are: " + interests.toString());
                       //put the correct value into the function, it's not selected_image
+                      print("Save with image index: " + selectedImageNotifier.value.toString());
                       await model.save_and_back(name, interests, selectedImageNotifier.value);
                       //show a circular progress bar while this await is done
                       setState(() {

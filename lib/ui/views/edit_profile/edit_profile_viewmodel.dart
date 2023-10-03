@@ -46,7 +46,7 @@ class EditProfileViewModel extends BaseViewModel {
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(
       String name, List<Map<String, String>> interests, int image_index) async {
-        print("Selected image is:"+image_index.toString());
+        print("I am saving with interests: " + interests.toString());
     //get the values from the input fields and go update the values in the cloud
     //call the function
     final response = await http.post(
@@ -102,6 +102,7 @@ class EditProfileViewModel extends BaseViewModel {
   Future<void> load_data() async {
     try {
       user_data = await get_needed_data();
+      if(user_data['interests'] == true) user_data['interests'] = [];
       print("user data fetched from database" + user_data.toString());
       //ToDo: assign the names of interests to the list of selected interests
       // if (user_data.containsKey('interests')) {
@@ -170,6 +171,7 @@ class EditProfileViewModel extends BaseViewModel {
       print("Removing it from the interests array");
       // Find and remove the map that has 'interest' in the name field
       user_data['interests'].removeWhere((map) => map['name'] == interest);
+      if(user_data['interests'] == true ) user_data['interests'] = [];
     } else if (user_data['interests'].length < 7){
       print("Adding it to the interests array");
       Map<String, String> interestMap = {

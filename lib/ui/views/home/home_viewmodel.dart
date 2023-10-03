@@ -113,14 +113,12 @@ class HomeViewModel extends BaseViewModel {
       }
 
       print("length of users_queue " + users_queue.length.toString());
-      print("users queue:" + users_queue.toString());
 
       // Rebuild UI in first load only, because with first load the data is not there yet
       if (first_load == true) {
         rebuildUi();
         print("first load");
-      } else
-        print("not first load");
+      }
 
       // Stop it from reloading infinitely
       first_load = false;
@@ -203,6 +201,12 @@ class HomeViewModel extends BaseViewModel {
       print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
+    rebuildUi();
+  }
+
+  //function to skip user without performing any action
+  void skip_user(String skipped_user_uid){
+    user_Ids_in_queue.remove(skipped_user_uid);
     rebuildUi();
   }
 
