@@ -166,26 +166,18 @@ class EditProfileViewModel extends BaseViewModel {
   ];
 
   void toggleInterestSelection(String interest) {
-    if (selected_interests.contains(interest)) {
-      selected_interests.remove(interest);
-    } else if (selected_interests.length < 7) {
-      selected_interests.add(interest);
-    }
-    notifyListeners(); // Notify the view to rebuild
-  }
-
-  void interest_are_those(interests){
-    print("the interests are: "+ interests.toString());
-      //ToDo: Create a map inside the interests array
-      //ToDo: the map has 2 fields, name and description
-      //ToDo: assign the values inside the interests array to the name field
-      //ToDO: leave the description empyt
-      for(int i = 0; i < interests.length; i++ ){
-        Map<String, String> interestMap = {
-          'name': interests[i], // Assign the values inside the interests array to the name field
-          'description': '' // Leave the description empty
+    if (user_data['interests'].any((map) => map['name'] == interest)) {
+      print("Removing it from the interests array");
+      // Find and remove the map that has 'interest' in the name field
+      user_data['interests'].removeWhere((map) => map['name'] == interest);
+    } else if (user_data['interests'].length < 7){
+      print("Adding it to the interests array");
+      Map<String, String> interestMap = {
+          'name': interest,
+          'description': ''
         };
-        user_data['interests'].add(interestMap);
-      }
+      user_data['interests'].add(interestMap);
+    }
+    rebuildUi(); // Notify the view to rebuild
   }
 }

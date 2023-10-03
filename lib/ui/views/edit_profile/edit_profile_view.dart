@@ -51,7 +51,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                   //bool isSelected = model.selected_interests.contains(interest);
                   //ToDo: check the name key of the interests array in each map
                   bool isSelected = model.user_data['interests'].any((map) => map['name'] == interest);
-                  print("The interest is: " + interest.toString() + " and is selected is: " + isSelected.toString());
                   return ListTile(
                     title: Text(
                       interest,
@@ -61,24 +60,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                     ),
                     tileColor: isSelected ? Color(0xFF3439AB) : Colors.transparent,
                     onTap: () {
+                      print("I clicked on this interest: " + interest.toString());
                       model.toggleInterestSelection(interest);
-                      // If the interest is newly selected, create and add a new controller.
-                      if (model.selected_interests.contains(interest)) {
-                        print("Added an interest: " + model.selected_interests.toString());
-                        model.interest_are_those(model.selected_interests);
-                        interestControllers.add(TextEditingController());
-                        interestNameControllers.add(TextEditingController(text: interest));
-                      } else {
-                        // If the interest is deselected, find and remove the corresponding controller.
-                        final index = interestNameControllers.indexWhere((controller) => controller.text == interest);
-                        if (index != -1) {
-                          interestControllers[index].dispose();
-                          interestNameControllers[index].dispose();
-                          interestControllers.removeAt(index);
-                          interestNameControllers.removeAt(index);
-                        }
-                      }
-                      // To rebuild the widgets with the new controllers.
                       setState(() {});
                     },
                   );
@@ -107,29 +90,33 @@ class _EditProfileViewState extends State<EditProfileView> {
           nameController = TextEditingController(text: userData['name'] ?? '');
           print("I am rebuilding");
           interestNameControllers = List.generate(
-            (widget.selected_interests != null &&
-                    widget.selected_interests!.isNotEmpty)
-                ? widget.selected_interests!.length
-                : (userData['interests']?.length ?? 0),
+            // (widget.selected_interests != null &&
+            //         widget.selected_interests!.isNotEmpty)
+            //     ? widget.selected_interests!.length
+            //     : (userData['interests']?.length ?? 0),
+                (userData['interests']?.length ?? 0),
             (index) {
-              String interestName = (widget.selected_interests != null &&
-                      widget.selected_interests!.isNotEmpty)
-                  ? widget.selected_interests![index]
-                  : userData['interests'][index]['name'] ?? '';
+              // String interestName = (widget.selected_interests != null &&
+              //         widget.selected_interests!.isNotEmpty)
+              //     ? widget.selected_interests![index]
+              //     : userData['interests'][index]['name'] ?? '';
+              String interestName = userData['interests'][index]['name'] ?? '';
               return TextEditingController(text: interestName);
             },
           );
           interestControllers = List.generate(
             //if selected_interests has length 0 or is null, take the length of the interests array from the userData object to be the length of the list
-            (widget.selected_interests != null &&
-                    widget.selected_interests!.isNotEmpty)
-                ? widget.selected_interests!.length
-                : (userData['interests']?.length ?? 0),
+            // (widget.selected_interests != null &&
+            //         widget.selected_interests!.isNotEmpty)
+            //     ? widget.selected_interests!.length
+            //     : (userData['interests']?.length ?? 0),
+            (userData['interests']?.length ?? 0),
             (index) {
-              String interestName = (widget.selected_interests != null &&
-                      widget.selected_interests!.isNotEmpty)
-                  ? widget.selected_interests![index]
-                  : userData['interests'][index]['name'] ?? '';
+              // String interestName = (widget.selected_interests != null &&
+              //         widget.selected_interests!.isNotEmpty)
+              //     ? widget.selected_interests![index]
+              //     : userData['interests'][index]['name'] ?? '';
+              String interestName = userData['interests'][index]['name'] ?? '';
               return TextEditingController(
                   text: userData['interests']
                           .any((interest) => interest['name'] == interestName)
@@ -185,11 +172,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                       controller: interestControllers[index],
                       decoration: InputDecoration(
                         //condition if the length of selected_interests is 0, use the data fetched from network.
-                        labelText: (widget.selected_interests != null &&
-                                widget.selected_interests!.isNotEmpty)
-                            ? widget.selected_interests![index]
-                            : userData['interests'][index]['name'] ??
-                                'Interest ${index + 1}',
+                        // labelText: (widget.selected_interests != null &&
+                        //         widget.selected_interests!.isNotEmpty)
+                        //     ? widget.selected_interests![index]
+                        //     : userData['interests'][index]['name'] ??
+                        //         'Interest ${index + 1}',
+                                labelText: userData['interests'][index]['name'],
                       ),
                     ),
                   ),

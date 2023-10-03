@@ -166,7 +166,11 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(liked_user_uid);
-    } else
+    }
+    else if (response.statusCode == 204){
+      await both_like_each_other(liked_user_uid);
+    }
+    else
       print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
