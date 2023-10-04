@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'in_chat_viewmodel.dart';
 import 'package:intl/intl.dart';
+import 'dart:ui';
 
 class InChatView extends StatefulWidget {
   final String match_id;
   final String user_name;
-  const InChatView({Key? key, required this.match_id, required this.user_name}) : super(key: key);
+  final int user_pic;
+  const InChatView({Key? key, required this.match_id, required this.user_name, required this.user_pic}) : super(key: key);
 
   @override
   _InChatViewState createState() => _InChatViewState();
@@ -20,27 +22,26 @@ class _InChatViewState extends State<InChatView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<InChatViewModel>.reactive(
-      viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name),
+      viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name, widget.user_pic),
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            backgroundColor: Color(0xFF3439AB),
             title: Stack(
               children: [
-                // Placeholder for Image
-                Positioned(
-                  child: Icon(Icons.account_circle, size: 36.0), // Replace with actual image
-                ),
-                // Blurred User Name
-                Positioned(
-                  child: ClipRect(
-                    child: Text(widget.user_name, style: Theme.of(context).textTheme.titleLarge),
-                    // BackdropFilter(
-                    //   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    //   child: 
-                    // ),
-                  ),
-                ),
+                Row(
+                  children: [
+                    CircleAvatar(backgroundImage: AssetImage('lib/assets/${widget.user_pic}.png',), radius: 30, backgroundColor: const Color(0xFF3439AB),),
+                    ImageFiltered(
+                                imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                child: Text(
+                                widget.user_name,
+                                style: const TextStyle(fontFamily: "Switzer", fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                            ),
+                  ],
+                )   
               ],
             ),
           ),
@@ -95,7 +96,7 @@ class _InChatViewState extends State<InChatView> {
                 ),
               // Input Box and Send Button
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(bottom: 30, right: 10, left:10),
                 child: Row(
                   children: [
                     Expanded(
@@ -117,7 +118,8 @@ class _InChatViewState extends State<InChatView> {
                           curve: Curves.easeOut,
                         );
                         },
-                      child: Text('Send'),
+                      child: Text('Send', style: TextStyle(fontFamily: "Switzer"),),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF34939AB))),
                     ),
                   ],
                 ),

@@ -737,14 +737,17 @@ class MockFirestoreService extends _i1.Mock implements _i8.FirestoreService {
         returnValueForMissingStub: _i5.Stream<List<_i9.ChatMatch>>.empty(),
       ) as _i5.Stream<List<_i9.ChatMatch>>);
   @override
-  _i5.Future<String> get_user_name(String? uid) => (super.noSuchMethod(
+  _i5.Future<Map<String, dynamic>> get_user_info(String? uid) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #get_user_name,
+          #get_user_info,
           [uid],
         ),
-        returnValue: _i5.Future<String>.value(''),
-        returnValueForMissingStub: _i5.Future<String>.value(''),
-      ) as _i5.Future<String>);
+        returnValue:
+            _i5.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+        returnValueForMissingStub:
+            _i5.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i5.Future<Map<String, dynamic>>);
   @override
   _i5.Future<void> send_message(
     String? chat_id,

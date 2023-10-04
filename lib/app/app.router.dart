@@ -158,9 +158,11 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i10.EditProfileView: (data) {
+      final args = data.getArgs<EditProfileViewArguments>(
+        orElse: () => const EditProfileViewArguments(),
+      );
       return _i13.MaterialPageRoute<dynamic>(
-        //builder: (context) => const _i10.EditProfileView(),
-        builder: (context) => _i10.EditProfileView(),
+        builder: (context) => _i10.EditProfileView(key: args.key),
         settings: data,
       );
     },
@@ -174,7 +176,10 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<InChatViewArguments>(nullOk: false);
       return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => _i12.InChatView(
-            key: args.key, match_id: args.matchid, user_name: args.username),
+            key: args.key,
+            match_id: args.matchid,
+            user_name: args.username,
+            user_pic: args.userpic),
         settings: data,
       );
     },
@@ -186,11 +191,34 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
+class EditProfileViewArguments {
+  const EditProfileViewArguments({this.key});
+
+  final _i13.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant EditProfileViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
+  }
+}
+
 class InChatViewArguments {
   const InChatViewArguments({
     this.key,
     required this.matchid,
     required this.username,
+    required this.userpic,
   });
 
   final _i13.Key? key;
@@ -199,9 +227,11 @@ class InChatViewArguments {
 
   final String username;
 
+  final dynamic userpic;
+
   @override
   String toString() {
-    return '{"key": "$key", "matchid": "$matchid", "username": "$username"}';
+    return '{"key": "$key", "matchid": "$matchid", "username": "$username", "userpic": "$userpic"}';
   }
 
   @override
@@ -209,12 +239,16 @@ class InChatViewArguments {
     if (identical(this, other)) return true;
     return other.key == key &&
         other.matchid == matchid &&
-        other.username == username;
+        other.username == username &&
+        other.userpic == userpic;
   }
 
   @override
   int get hashCode {
-    return key.hashCode ^ matchid.hashCode ^ username.hashCode;
+    return key.hashCode ^
+        matchid.hashCode ^
+        username.hashCode ^
+        userpic.hashCode;
   }
 }
 
@@ -331,14 +365,16 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToEditProfileView([
+  Future<dynamic> navigateToEditProfileView({
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.editProfileView,
+        arguments: EditProfileViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -363,6 +399,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
     _i13.Key? key,
     required String matchid,
     required String username,
+    required dynamic userpic,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -370,8 +407,8 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   }) async {
     return navigateTo<dynamic>(Routes.inChatView,
-        arguments:
-            InChatViewArguments(key: key, matchid: matchid, username: username),
+        arguments: InChatViewArguments(
+            key: key, matchid: matchid, username: username, userpic: userpic),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -490,14 +527,16 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithEditProfileView([
+  Future<dynamic> replaceWithEditProfileView({
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.editProfileView,
+        arguments: EditProfileViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -522,6 +561,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
     _i13.Key? key,
     required String matchid,
     required String username,
+    required dynamic userpic,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -529,8 +569,8 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   }) async {
     return replaceWith<dynamic>(Routes.inChatView,
-        arguments:
-            InChatViewArguments(key: key, matchid: matchid, username: username),
+        arguments: InChatViewArguments(
+            key: key, matchid: matchid, username: username, userpic: userpic),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

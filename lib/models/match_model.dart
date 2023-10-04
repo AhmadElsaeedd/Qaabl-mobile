@@ -9,12 +9,14 @@ class ChatMatch {
   late String other_user_name;
   final DateTime timestamp;
   final Message? last_message; //a Message object
+  late int other_user_pic;
 
   ChatMatch({
     required this.match_id,
     required this.users,
     required this.other_user_id,
     required this.other_user_name,
+    required this.other_user_pic,
     required this.timestamp,
     this.last_message,
   });
@@ -43,6 +45,7 @@ class ChatMatch {
       users: usersList,
       other_user_id: other_user_uid,
       other_user_name: other_user_name ?? 'Loading',
+      other_user_pic: 0,
       timestamp: (data['timestamp'] as Timestamp).toDate(),
       last_message: lastMessage,
     );

@@ -80,8 +80,9 @@ class FirestoreService {
       for (final doc in snapshot.docs) {
         final match = ChatMatch.fromDocument(doc, uid);
         final otherUserId = match.other_user_id;
-        final future = get_user_name(otherUserId).then((userName) {
-          match.other_user_name = userName;
+        final future = get_user_info(otherUserId).then((userInfo) {
+          match.other_user_name = userInfo['name']; // Ensure this is a mutable property
+          match.other_user_pic = userInfo['image_index'];
           return match;
         });
         futures.add(future);
@@ -151,10 +152,10 @@ class FirestoreService {
       final futures = <Future<ChatMatch>>[];
       for (final doc in snapshot.docs) {
         final match = ChatMatch.fromDocument(doc, uid);
-        final otherUserId =
-            match.other_user_id; // Ensure this is the correct property name
-        final future = get_user_name(otherUserId).then((userName) {
-          match.other_user_name = userName; // Ensure this is a mutable property
+        final otherUserId = match.other_user_id; // Ensure this is the correct property name
+        final future = get_user_info(otherUserId).then((userInfo) {
+          match.other_user_name = userInfo['name']; // Ensure this is a mutable property
+          match.other_user_pic = userInfo['image_index'];
           return match;
         });
         futures.add(future);
@@ -168,14 +169,23 @@ class FirestoreService {
   }
 
   // ignore: non_constant_identifier_names
-  Future<String> get_user_name(String uid) async {
+  Future<Map<String, dynamic>> get_user_info(String uid) async {
     try {
       final doc = await _firestore.collection('Users').doc(uid).get();
       final data = doc.data() as Map<String, dynamic>;
-      return data['name'] ?? 'No Name';
+      String name = data['name'] ?? 'No Name';
+      int imageIndex = data['image_index'];
+      print("IMAGE INDEX IS: " + imageIndex.toString());
+      return {
+      'name': name,
+      'image_index': imageIndex
+      };
     } catch (e) {
-      print('Error fetching user name: $e');
-      return 'No Name';
+      print('Error fetching user info: $e');
+      return {
+      'name': 'No Name',
+      'imageIndex': 0
+    };
     }
   }
 

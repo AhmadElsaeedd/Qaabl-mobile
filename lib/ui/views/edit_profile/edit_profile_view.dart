@@ -304,7 +304,19 @@ Widget _bottomNavigationBar(viewModel) {
           child: Container(
             width: 70, // Adjust the width and height as needed
             height: 70,
-            child: Image.asset('lib/assets/logo.png'),
+            decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFF3439AB)), // Border color
+                        borderRadius: BorderRadius.circular(40), // Rounded corner radius
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26, // Shadow color
+                            offset: Offset(0, 3),  // Vertical offset
+                            blurRadius: 5.0,      // Blur value
+                            spreadRadius: 1.0,    // Spread value
+                          ),
+                        ],
+                      ),
+            child: CircleAvatar(backgroundImage: AssetImage('lib/assets/logo.png'),backgroundColor: Colors.white,)
           ),
         ),
       ),

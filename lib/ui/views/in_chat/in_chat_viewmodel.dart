@@ -20,10 +20,12 @@ class InChatViewModel extends StreamViewModel {
   //declare the name of the other user in chat
   final String user_name;
 
+  final int user_pic;
+
   List<Message> displayed_messages = [];
 
   //the constructor needs to know which chat it is going to
-  InChatViewModel(this.match_id, this.user_name);
+  InChatViewModel(this.match_id, this.user_name, this.user_pic);
 
   //implement the stream getter, that listens to messages in the chat
   @override
