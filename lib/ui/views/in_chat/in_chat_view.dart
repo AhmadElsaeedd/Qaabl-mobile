@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_app/ui/common/ui_helpers.dart';
 import 'in_chat_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
@@ -31,14 +33,44 @@ class _InChatViewState extends State<InChatView> {
             title: Stack(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(backgroundImage: AssetImage('lib/assets/${widget.user_pic}.png',), radius: 30, backgroundColor: const Color(0xFF3439AB),),
-                    ImageFiltered(
-                                imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                                child: Text(
-                                widget.user_name,
-                                style: const TextStyle(fontFamily: "Switzer", fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
+                    Container(
+                      child: Row(
+                        children: [
+                          CircleAvatar(backgroundImage: AssetImage('lib/assets/${widget.user_pic}.png',), radius: 30, backgroundColor: const Color(0xFF3439AB),),
+                          ImageFiltered(
+                                      imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                      child: Text(
+                                      widget.user_name,
+                                      style: const TextStyle(fontFamily: "Switzer", fontWeight: FontWeight.bold, color: Colors.white),
+                                    ),
+                                  ),
+                        ],
+                      ),
+                    ),
+                            PopupMenuButton<String>(
+                              icon: Icon(Icons.more_vert),
+                              onSelected: (value) {
+                                switch (value) {
+                                  case 'Profile':
+                                    // TODO: Navigate to Profile
+                                    break;
+                                  case 'Delete':
+                                    // TODO: Implement Delete Chat logic
+                                    break;
+                                }
+                              },
+                              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: 'Profile',
+                                  child: Text('View Profile'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'Delete',
+                                  child: Text('Delete Chat'),
+                                ),
+                              ],
                             ),
                   ],
                 )   
@@ -100,15 +132,19 @@ class _InChatViewState extends State<InChatView> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration(
-                          hintText: 'Type a message',
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),  // Add some horizontal padding
+                        child: CupertinoTextField(
+                          controller: _messageController,
+                          placeholder: 'Type a message',
+                          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Adjust the internal padding of the text field
+                          //cursorRadius: BorderRadius.circular(8.0),  // Optional: Add some border radius if you like
+                          //clearButtonMode: OverlayVisibilityMode.editing, // Optional: Show clear button when editing
                         ),
                       ),
                     ),
                     SizedBox(width: 8.0),
-                    ElevatedButton(
+                    CupertinoButton(
                       onPressed: () {
                         viewModel.send_message(_messageController.text);
                         _messageController.clear();
@@ -117,10 +153,12 @@ class _InChatViewState extends State<InChatView> {
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeOut,
                         );
-                        },
-                      child: Text('Send', style: TextStyle(fontFamily: "Switzer"),),
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF34939AB))),
+                      },
+                      child: Text('Send', style: TextStyle(fontFamily: "Switzer")),
+                      color: Color(0xFF3439AB),  // This is still valid for CupertinoButton
+                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0), // Adjust the button padding if needed
                     ),
+
                   ],
                 ),
               ),

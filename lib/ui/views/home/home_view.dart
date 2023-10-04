@@ -340,7 +340,7 @@ Widget _userCard(nextUser, viewModel, context, Animation<Offset> slideAnimation)
   ValueKey _tweenKey = ValueKey(DateTime.now());
     return SlideTransition(position: slideAnimation,
   child: Card(
-    color: Color(0xFFAAAAAA),
+    color: Color.fromARGB(255, 239, 239, 239),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
@@ -352,6 +352,7 @@ Widget _userCard(nextUser, viewModel, context, Animation<Offset> slideAnimation)
           Center( // Center the interests area
       child: Column(
           children: [
+            Padding(padding: EdgeInsets.only(top: 25)),
             Text(
               "I like ${nextUser['interests'][0]['name']}",
               style: TextStyle(

@@ -47,7 +47,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
             // Horizontal List for New Chats
             Padding(padding: const EdgeInsets.only(top:20),
             child: Container(
-              height: 120, // Adjust the height as needed
+              height: 80, // Adjust the height as needed
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: viewModel.new_matches.length,
@@ -124,7 +124,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
                   return Container(
-                      margin: const EdgeInsets.only(top:0), // Adjust as needed
+                      margin: const EdgeInsets.symmetric(vertical:5), // Adjust as needed
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey), // Border color
                         borderRadius: BorderRadius.circular(10), // Rounded corner radius
