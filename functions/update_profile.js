@@ -46,7 +46,14 @@ function is_interests_changed(old_interests, new_interests) {
 
 async function update_user(name = null, interests = null, uid, pp = null) {
 // in the case of name and interests change
-  if (name && interests) {
+  if(name && interests && pp){
+    await db.collection("Users").doc(uid).update({
+      name: name,
+      interests: interests,
+      image_index: pp,
+    });
+  }
+  else if (name && interests) {
     await db.collection("Users").doc(uid).update({
       name: name,
       interests: interests,

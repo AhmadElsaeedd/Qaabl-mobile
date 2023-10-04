@@ -39,7 +39,11 @@ async function check_if_user_likes_them(uid,liked_user_uid){
 
   const liked_user_likes = liked_user_data.likes;
 
-  if(liked_user_likes.has(uid)) return true;
+  if (liked_user_likes.includes(uid)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res) => {

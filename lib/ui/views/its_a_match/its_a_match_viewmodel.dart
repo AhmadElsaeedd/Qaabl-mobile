@@ -17,4 +17,12 @@ class ItsAMatchViewModel extends BaseViewModel {
     //should go back to previous route in the navigation stack (which is supposedly the home page)
     _navigationService.back();
   }
+
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
+  void go_to_home() {
+    _navigationService.replaceWithHomeView();
+  }
 }

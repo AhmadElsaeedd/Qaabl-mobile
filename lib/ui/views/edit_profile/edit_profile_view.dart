@@ -42,19 +42,37 @@ class _EditProfileViewState extends State<EditProfileView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Choose your interests'),
+        return  AlertDialog(
+          title: Column(children: [const Text(
+              'Choose your interests',
+              style: TextStyle(
+                fontFamily: 'Switzer',
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          Text("show us what you're all about!",
+                            style: TextStyle(
+                          fontFamily: 'Switzer', // Replace with your font if it's different
+                          fontSize: 12, // Adjust the size as needed
+                          //fontWeight: FontWeight.bold,
+                        ),
+                        ),
+            ],
+          ),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                children: model.predefined_interests.map((interest) {
-                  //bool isSelected = model.selected_interests.contains(interest);
-                  //ToDo: check the name key of the interests array in each map
+              return SingleChildScrollView(
+                child:
+                  Column(
+                  children: model.predefined_interests.map((interest) {
                   bool isSelected = model.user_data['interests'].any((map) => map['name'] == interest);
                   return ListTile(
                     title: Text(
                       interest,
                       style: TextStyle(
+                        fontFamily: 'Switzer',
+                        fontSize: 16,
                         color: isSelected ? Colors.white : Colors.black, // Change text color based on selection.
                       ),
                     ),
@@ -66,6 +84,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   );
                 }).toList(),
+              ),
               );
             },
           ),
@@ -220,7 +239,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   
                   Spacer(),
                   Container(
-                  margin: EdgeInsets.only(bottom: 20), // Adjust as needed
+                  margin: EdgeInsets.only(bottom: 25), // Adjust as needed
                   child: _bottomNavigationBar(model),
                 ),
                 ],

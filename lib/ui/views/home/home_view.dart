@@ -13,7 +13,36 @@ class HomeView extends StatefulWidget {
   _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin{
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500), // Duration of the slide animation
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, -20),  // Start position (from the top)
+      end: Offset(0, 0),  // End position (final position)
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
+    // Start the animation
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -23,6 +52,11 @@ class _HomeViewState extends State<HomeView> {
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
         print("next user is: " + nextUser.toString());
+
+        // Reset and start the animation for the new user
+        _animationController.reset();
+        _animationController.forward();
+
           return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -37,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
                             Container(
                                 margin: EdgeInsets.only( top: 80),
                                 child: Center(
-                                  child: _userDetails(nextUser, viewModel, context),
+                                  child: _userDetails(nextUser, viewModel, context, _slideAnimation),
                                 ),
                               ),
                             Container(
@@ -46,10 +80,31 @@ class _HomeViewState extends State<HomeView> {
                                 child: check_profile_button(nextUser,viewModel, context), 
                               ),
                             ),
+                      ]
+                      else ... [
+                          Container(margin: EdgeInsets.only( top: 200),
+                          child: Column(children: [const Text(
+                              'No more users  :(',
+                              style: TextStyle(
+                                fontFamily: 'Switzer',
+                                fontSize: 25,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          Text("come back in a bit, see u",
+                                            style: TextStyle(
+                                          fontFamily: 'Switzer', // Replace with your font if it's different
+                                          fontSize: 14, // Adjust the size as needed
+                                          //fontWeight: FontWeight.bold,
+                                        ),
+                                        ),
+                            ],
+                            ),
+                            )
                       ],
                       Spacer(),
                       Container(
-                      margin: EdgeInsets.only(bottom: 20), // Adjust as needed
+                      margin: EdgeInsets.only(bottom: 0), // Adjust as needed
                       child: _bottomNavigationBar(viewModel),
                       ),
                     ],
@@ -63,14 +118,14 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-Widget _userDetails(nextUser, viewModel, context) {
-  print("NEXT USER IS: " + nextUser.toString());
+Widget _userDetails(nextUser, viewModel, context, Animation<Offset> slideAnimation) {
   SwipeItem swipeItem = SwipeItem(
-      content: _userCard(nextUser, viewModel, context), 
+      content: _userCard(nextUser, viewModel, context, slideAnimation), 
       likeAction: () {
         //skip for now
         print("I am in like");
-          viewModel.skip_user(nextUser['id']);
+          //viewModel.skip_user(nextUser['id']);
+          viewModel.like_user(nextUser['id'], nextUser['potential_match']);
       },
       nopeAction: () {
         print("I am in dislike");
@@ -79,9 +134,7 @@ Widget _userDetails(nextUser, viewModel, context) {
       // Include other actions like superLike if you have them
   );
 
-  print("CCCCCC");
   MatchEngine matchEngine = MatchEngine(swipeItems: [swipeItem]);
-  print("IIIII");
 
   return Container(
     key: ValueKey(DateTime.now().millisecondsSinceEpoch),
@@ -125,8 +178,6 @@ Widget _helloText() {
                 ),
     ],
     )
-    
-    
   );
 }
 
@@ -272,10 +323,11 @@ class LinearProgressPainter extends CustomPainter {
   }
 }
 
-Widget _userCard(nextUser, viewModel, context) {
+Widget _userCard(nextUser, viewModel, context, Animation<Offset> slideAnimation) {
   final duration = Duration(seconds: 30);
   ValueKey _tweenKey = ValueKey(DateTime.now());
-  return Card(
+    return SlideTransition(position: slideAnimation,
+  child: Card(
     color: Color(0xFFAAAAAA),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
@@ -352,6 +404,7 @@ Widget _userCard(nextUser, viewModel, context) {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      print("I liked the user: " + nextUser['id'].toString());
                       viewModel.like_user(nextUser['id'], nextUser['potential_match']);
                     },
                     style: ElevatedButton.styleFrom(
@@ -371,6 +424,7 @@ Widget _userCard(nextUser, viewModel, context) {
       ),
       )
       )
+    ),
     );
 }
 
