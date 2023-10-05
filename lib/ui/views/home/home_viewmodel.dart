@@ -70,6 +70,7 @@ class HomeViewModel extends BaseViewModel {
   Future<void> getUsers() async {
     try {
       //call the cloud function that gets 3 users, pass the uid to it
+      print("Users queue length: " + users_queue.length.toString());
       if (users_queue.isEmpty) {
         // queue will never be empty as long as there are users left
         first_load = true;
