@@ -33,6 +33,11 @@ class InChatViewModel extends StreamViewModel {
   //the constructor needs to know which chat it is going to
   InChatViewModel(this.match_id, this.user_name, this.user_pic, this.other_user_id);
 
+  Future<void> go_to_chats() async {
+    print("I AM GOING BACK");
+    _navigationService.back();
+  }
+
   //implement the stream getter, that listens to messages in the chat
   @override
   Stream<List<Message>> get stream {
@@ -65,7 +70,6 @@ class InChatViewModel extends StreamViewModel {
 
   Future<void> view_profile_data(String uid) async{
     user_data = await get_user_data(uid);
-    print("USER DATA IS: "+ user_data.toString());
     rebuildUi();
   }
 
@@ -86,11 +90,27 @@ class InChatViewModel extends StreamViewModel {
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      print("RETURNING THIS FROM SERVER: " + jsonResponse.toString());
       return jsonResponse;
     } else {
       // If the server returns an error, throw an exception
       throw Exception('Failed to get percentage');
     }
+  }
+
+  Future<void> delete_chat(String match_id, String other_user_id) async{
+    await http.post(
+      //production url
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
+      body: jsonEncode({
+        'match_id': match_id,
+        'user1_id': uid,
+        'user2_id': other_user_id,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
   }
 }

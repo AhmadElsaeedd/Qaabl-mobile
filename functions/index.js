@@ -30,6 +30,7 @@ const GetOldMatches = require("./get_old_matches");
 const GetNewMatches = require("./get_new_matches");
 const LoadMessages = require("./load_messages");
 const DeleteAccount = require("./delete_account");
+const DeleteMatch = require("./delete_match");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -45,3 +46,4 @@ exports.GetOldMatches = GetOldMatches;
 exports.GetNewMatches = GetNewMatches;
 exports.LoadMessages = LoadMessages;
 exports.DeleteAccount = DeleteAccount;
+exports.DeleteMatch = DeleteMatch;

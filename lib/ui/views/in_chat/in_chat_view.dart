@@ -75,7 +75,36 @@ class _InChatViewState extends State<InChatView> {
                                     );
                                     break;
                                   case 'Delete':
-                                    // TODO: Implement Delete Chat logic
+                                    //make sure that they want to delete the chat first
+
+                                    //delete chat server-side
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("Confirm Deletion"),
+                                          content: Text("Are you sure you want to delete this chat? This action is irreversible."),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("Cancel", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
+                                              onPressed: () {
+                                                Navigator.of(context).pop(); // Close the alert dialog
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: Text("Delete", style: TextStyle(color: Colors.redAccent)),
+                                              onPressed: () async {
+                                                //Call the function that deletes the chat
+                                                await viewModel.delete_chat(widget.match_id, widget.other_user_id);
+                                                //Go back to the chats view
+                                                await viewModel.go_to_chats();
+                                                Navigator.of(context).pop(); // Close the alert dialog after deleting
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
                                     break;
                                 }
                               },
@@ -86,7 +115,7 @@ class _InChatViewState extends State<InChatView> {
                                 ),
                                 const PopupMenuItem<String>(
                                   value: 'Delete',
-                                  child: Text('Delete Chat'),
+                                  child: Text('Delete Chat', style: TextStyle(color: Colors.red),),
                                 ),
                               ],
                             ),
