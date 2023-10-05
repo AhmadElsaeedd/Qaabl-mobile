@@ -37,6 +37,24 @@ class SettingsView extends StackedView<SettingsViewModel> {
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       // ToDo: Implement action for Edit Password
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Password change email"),
+                            content: Text("we'll send u an email to edit ur password, ok?."),
+                            actions: [
+                              TextButton(
+                                child: Text("Send", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
+                                onPressed: () {
+                                  viewModel.edit_password_email(viewModel.uid);
+                                  Navigator.of(context).pop(); // Close the alert dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                   Divider(),  // Adds a separator
@@ -44,7 +62,28 @@ class SettingsView extends StackedView<SettingsViewModel> {
                     title: Text('Privacy Policy', style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
-                      // ToDo: Implement action for Privacy Policy
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Privacy Policy"),
+                            content: SingleChildScrollView(
+                              child: Text(
+                                "privacy policy content here...", //Replace with your actual privacy policy text
+                                style: TextStyle(fontFamily: 'Switzer'),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                   Divider(),
@@ -52,7 +91,28 @@ class SettingsView extends StackedView<SettingsViewModel> {
                     title: Text('About Us', style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
-                      // ToDo: Implement action for About Us
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("About Us"),
+                            content: SingleChildScrollView(
+                              child: Text(
+                                "info about us", //Replace with your actual about us text
+                                style: TextStyle(fontFamily: 'Switzer'),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                   Divider(),
