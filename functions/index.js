@@ -29,6 +29,7 @@ const GetImageIndex = require("./get_image_index");
 const GetOldMatches = require("./get_old_matches");
 const GetNewMatches = require("./get_new_matches");
 const LoadMessages = require("./load_messages");
+const DeleteAccount = require("./delete_account");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -43,3 +44,4 @@ exports.GetImageIndex = GetImageIndex;
 exports.GetOldMatches = GetOldMatches;
 exports.GetNewMatches = GetNewMatches;
 exports.LoadMessages = LoadMessages;
+exports.DeleteAccount = DeleteAccount;

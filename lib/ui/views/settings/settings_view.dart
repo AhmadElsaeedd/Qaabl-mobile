@@ -13,9 +13,94 @@ class SettingsView extends StackedView<SettingsViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal:25),
+          child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top:25, bottom: 20),
+              child: Text("Settings",
+              style: TextStyle(
+              fontFamily: 'Switzer',
+              fontSize: 25,
+              fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Edit Password', style: TextStyle(fontFamily: 'Switzer')),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                    onTap: () {
+                      // ToDo: Implement action for Edit Password
+                    },
+                  ),
+                  Divider(),  // Adds a separator
+                  ListTile(
+                    title: Text('Privacy Policy', style: TextStyle(fontFamily: 'Switzer')),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                    onTap: () {
+                      // ToDo: Implement action for Privacy Policy
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text('About Us', style: TextStyle(fontFamily: 'Switzer')),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                    onTap: () {
+                      // ToDo: Implement action for About Us
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text('Delete Account', style: TextStyle(fontFamily: 'Switzer', color: Colors.redAccent)),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0, color: Colors.redAccent),
+                    onTap: () {
+                      // Show an alert dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Confirm Deletion"),
+                            content: Text("Are you sure you want to delete your account? This action is irreversible."),
+                            actions: [
+                              TextButton(
+                                child: Text("Cancel", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the alert dialog
+                                },
+                              ),
+                              TextButton(
+                                child: Text("Delete", style: TextStyle(color: Colors.redAccent)),
+                                onPressed: () {
+                                  //Call the function that deletes from the viewmodel
+                                  print("User deleting the account: " + viewModel.uid.toString());
+                                  viewModel.delete_account(viewModel.uid);
+                                  viewModel.signOut();
+                                  Navigator.of(context).pop(); // Close the alert dialog after deleting
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Divider(),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom:5),
+              child: _bottomNavigationBar(viewModel),
+            ),
+          ],
+        ),
+        )
       ),
     );
   }
@@ -25,4 +110,59 @@ class SettingsView extends StackedView<SettingsViewModel> {
     BuildContext context,
   ) =>
       SettingsViewModel();
+}
+
+Widget _bottomNavigationBar(viewModel) {
+  return Stack(
+    clipBehavior: Clip.none, // Allows the overflowing children to be visible
+    alignment: Alignment.bottomCenter,
+    children: [
+      Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 239, 239, 239),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              iconSize: 30,
+              icon: Icon(Icons.person), // Replace with your PNG
+              onPressed: viewModel.go_to_profile,
+            ),
+            SizedBox(width: 50), // Leave space for the logo
+            IconButton(
+              iconSize: 30,
+              icon: Icon(Icons.chat), // Replace with your PNG
+              onPressed: viewModel.go_to_chats,
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        bottom: 10, // Adjust the value as needed to position the logo
+        child: GestureDetector(
+          onTap: () {viewModel.go_to_home();}, // Add your home action here
+          child: Container(
+            width: 70, // Adjust the width and height as needed
+            height: 70,
+            decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFF3439AB)), // Border color
+                        borderRadius: BorderRadius.circular(40), // Rounded corner radius
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26, // Shadow color
+                            offset: Offset(0, 3),  // Vertical offset
+                            blurRadius: 5.0,      // Blur value
+                            spreadRadius: 1.0,    // Spread value
+                          ),
+                        ],
+                      ),
+            child: CircleAvatar(backgroundImage: AssetImage('lib/assets/logo.png'),backgroundColor: Colors.white,)
+          ),
+        ),
+      ),
+    ],
+  );
 }

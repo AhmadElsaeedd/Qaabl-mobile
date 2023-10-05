@@ -177,7 +177,7 @@ Widget _bottomNavigationBar(viewModel) {
       Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: Color.fromARGB(255, 239, 239, 239),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
