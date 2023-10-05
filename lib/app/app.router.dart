@@ -179,7 +179,8 @@ class StackedRouter extends _i1.RouterBase {
             key: args.key,
             match_id: args.matchid,
             user_name: args.username,
-            user_pic: args.userpic),
+            user_pic: args.userpic,
+            other_user_id: args.otheruser_id),
         settings: data,
       );
     },
@@ -219,6 +220,7 @@ class InChatViewArguments {
     required this.matchid,
     required this.username,
     required this.userpic,
+    required this.otheruser_id,
   });
 
   final _i13.Key? key;
@@ -227,11 +229,13 @@ class InChatViewArguments {
 
   final String username;
 
-  final dynamic userpic;
+  final int userpic;
+
+  final dynamic otheruser_id;
 
   @override
   String toString() {
-    return '{"key": "$key", "matchid": "$matchid", "username": "$username", "userpic": "$userpic"}';
+    return '{"key": "$key", "matchid": "$matchid", "username": "$username", "userpic": "$userpic", "otheruser_id": "$otheruser_id"}';
   }
 
   @override
@@ -240,7 +244,8 @@ class InChatViewArguments {
     return other.key == key &&
         other.matchid == matchid &&
         other.username == username &&
-        other.userpic == userpic;
+        other.userpic == userpic &&
+        other.otheruser_id == otheruser_id;
   }
 
   @override
@@ -248,7 +253,8 @@ class InChatViewArguments {
     return key.hashCode ^
         matchid.hashCode ^
         username.hashCode ^
-        userpic.hashCode;
+        userpic.hashCode ^
+        otheruser_id.hashCode;
   }
 }
 
@@ -399,7 +405,8 @@ extension NavigatorStateExtension on _i14.NavigationService {
     _i13.Key? key,
     required String matchid,
     required String username,
-    required dynamic userpic,
+    required int userpic,
+    required dynamic otheruser_id,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -408,7 +415,11 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.inChatView,
         arguments: InChatViewArguments(
-            key: key, matchid: matchid, username: username, userpic: userpic),
+            key: key,
+            matchid: matchid,
+            username: username,
+            userpic: userpic,
+            otheruser_id: otheruser_id),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -561,7 +572,8 @@ extension NavigatorStateExtension on _i14.NavigationService {
     _i13.Key? key,
     required String matchid,
     required String username,
-    required dynamic userpic,
+    required int userpic,
+    required dynamic otheruser_id,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -570,7 +582,11 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }) async {
     return replaceWith<dynamic>(Routes.inChatView,
         arguments: InChatViewArguments(
-            key: key, matchid: matchid, username: username, userpic: userpic),
+            key: key,
+            matchid: matchid,
+            username: username,
+            userpic: userpic,
+            otheruser_id: otheruser_id),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

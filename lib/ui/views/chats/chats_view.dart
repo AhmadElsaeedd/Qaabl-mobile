@@ -61,7 +61,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                         borderRadius: BorderRadius.circular(10),
                         ),
                         child: InkWell(
-                            onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name, match.other_user_pic),
+                            onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name, match.other_user_pic, match.other_user_id),
                             child: Container(
                               width: 80, // Adjust the width as needed
                               child: Card(
@@ -130,7 +130,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                         borderRadius: BorderRadius.circular(10), // Rounded corner radius
                       ),
                       child: InkWell(
-                            onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name, match.other_user_pic),
+                            onTap: () => viewModel.go_to_chat(match.match_id, match.other_user_name, match.other_user_pic, match.other_user_id),
                             child: ListTile(
                               leading: CircleAvatar(backgroundImage: AssetImage('lib/assets/${match.other_user_pic}.png',), radius: 30, backgroundColor: const Color(0xFF3439AB),),
                               title: ImageFiltered(

@@ -11,7 +11,8 @@ class InChatView extends StatefulWidget {
   final String match_id;
   final String user_name;
   final int user_pic;
-  const InChatView({Key? key, required this.match_id, required this.user_name, required this.user_pic}) : super(key: key);
+  final String other_user_id;
+  const InChatView({Key? key, required this.match_id, required this.user_name, required this.user_pic, required this.other_user_id}) : super(key: key);
 
   @override
   _InChatViewState createState() => _InChatViewState();
@@ -24,7 +25,11 @@ class _InChatViewState extends State<InChatView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<InChatViewModel>.reactive(
-      viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name, widget.user_pic),
+      viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name, widget.user_pic, widget.other_user_id),
+      //run the function that gets the other user's data as soon as the chat is fully loaded
+      onViewModelReady: (viewModel) async {
+        await viewModel.view_profile_data(widget.other_user_id);
+      },
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Colors.white,
@@ -46,15 +51,28 @@ class _InChatViewState extends State<InChatView> {
                                       style: const TextStyle(fontFamily: "Switzer", fontWeight: FontWeight.bold, color: Colors.white),
                                     ),
                                   ),
-                        ],
-                      ),
-                    ),
+                                ],
+                              ),
+                            ),
                             PopupMenuButton<String>(
                               icon: Icon(Icons.more_vert),
                               onSelected: (value) {
                                 switch (value) {
-                                  case 'Profile':
-                                    // TODO: Navigate to Profile
+                                  case 'Profile': 
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => GestureDetector(
+                                        onTap: () => Navigator.of(context).pop(),
+                                        behavior: HitTestBehavior.opaque,
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.height * 0.35,
+                                          child: UserProfileView(
+                                            interests: List<Map<String, dynamic>>.from(viewModel.user_data?['interests'] ?? []),
+                                          ),
+                                        ),
+                                      ),
+                                      isScrollControlled: true,
+                                    );
                                     break;
                                   case 'Delete':
                                     // TODO: Implement Delete Chat logic
@@ -166,6 +184,76 @@ class _InChatViewState extends State<InChatView> {
           ),
         );
       },
+    );
+  }
+}
+
+class UserProfileView extends StatelessWidget {
+  final List<Map<String, dynamic>> interests;
+
+  const UserProfileView({Key? key, required this.interests}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF3439AB),
+        //title:
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: UserInterestsWidget(interests: interests),
+    );
+  }
+}
+
+class UserInterestsWidget extends StatefulWidget {
+  final List<Map<String, dynamic>> interests;
+
+  const UserInterestsWidget({Key? key, required this.interests})
+      : super(key: key);
+
+  @override
+  _UserInterestsWidgetState createState() => _UserInterestsWidgetState();
+}
+
+class _UserInterestsWidgetState extends State<UserInterestsWidget> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListView.builder(
+            shrinkWrap: true, // This will size the ListView to its content
+            physics: ClampingScrollPhysics(), // This will enable scrolling in the ListView
+            itemCount: widget.interests.length,
+            itemBuilder: (context, index) {
+              final interest = widget.interests[index];
+              return ExpansionTile(
+                title: Text(interest['name']),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(interest['description'] ?? ''),
+                  ),
+                ],
+                initiallyExpanded: index == selectedIndex,
+                onExpansionChanged: (isExpanded) {
+                  if (isExpanded) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  }
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -710,6 +710,14 @@ class MockAuthenticationService extends _i1.Mock
         returnValue: _i5.Future<bool>.value(false),
         returnValueForMissingStub: _i5.Future<bool>.value(false),
       ) as _i5.Future<bool>);
+  @override
+  void edit_password_email() => super.noSuchMethod(
+        Invocation.method(
+          #edit_password_email,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [FirestoreService].

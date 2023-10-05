@@ -124,8 +124,8 @@ Widget _userDetails(nextUser, viewModel, context, Animation<Offset> slideAnimati
       likeAction: () {
         //skip for now
         print("I am in like");
-          //viewModel.skip_user(nextUser['id']);
-          viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+          viewModel.skip_user(nextUser['id']);
+          //viewModel.like_user(nextUser['id'], nextUser['potential_match']);
       },
       nopeAction: () {
         print("I am in dislike");
