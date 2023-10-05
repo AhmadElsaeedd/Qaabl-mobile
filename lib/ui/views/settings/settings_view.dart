@@ -47,7 +47,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                               TextButton(
                                 child: Text("Send", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
                                 onPressed: () {
-                                  viewModel.edit_password_email(viewModel.uid);
+                                  viewModel.edit_password_email();
                                   Navigator.of(context).pop(); // Close the alert dialog
                                 },
                               ),

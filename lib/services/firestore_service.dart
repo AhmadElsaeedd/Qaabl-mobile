@@ -246,5 +246,4 @@ class FirestoreService {
           })
           .handleError((error) => print('Error loading messages: $error'));
   }
-
 }

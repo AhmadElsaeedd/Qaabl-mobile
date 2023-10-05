@@ -68,9 +68,9 @@ class SettingsViewModel extends BaseViewModel {
     return response;
   }
 
-  Future<void> edit_password_email(uid) async {
+  Future<void> edit_password_email() async {
     //the function to send an automatic email for password reset is a client-side function
-    //write it in the firebase service
-    
+    //write it in the authentication service
+    _authenticationService.edit_password_email();
   }
 }
