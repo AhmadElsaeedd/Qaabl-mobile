@@ -26,9 +26,16 @@ class MessagingService {
     FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
   }
 
-  Future<String> get_token() async{
-    String token = await _firebaseMessaging.getToken() as String;
-    return token;
+  Future<String?> get_token() async{
+    try{
+      final token = await _firebaseMessaging.getToken();
+      return token;
+    }
+    catch (error){
+      print("Failed to generate token: " + error.toString());
+      return "no token";
+    }
+    
   }
 }
 

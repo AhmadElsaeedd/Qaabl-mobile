@@ -11,12 +11,13 @@ import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:collection';
+import 'package:stacked_app/services/firestore_service.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
-  //final _bottomSheetService = locator<BottomSheetService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _firestoreService = locator<FirestoreService>();
 
   // current user id, defined class level to be reusable in all methods
   String? uid;
@@ -248,5 +249,15 @@ class HomeViewModel extends BaseViewModel {
       headers: {'Content-Type': 'application/json'},
     );
     return response;
+  }
+
+  Future<void> set_token_by_waiting_for_document() async{
+    bool is_document_there = false;
+    while(is_document_there != true){
+      print("IN LOOP");
+      await Future.delayed(Duration(seconds: 1));
+      is_document_there = await _firestoreService.is_document_there(uid!);
+    }
+    _firestoreService.set_token(uid!);
   }
 }

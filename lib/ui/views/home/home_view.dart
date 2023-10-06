@@ -48,7 +48,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      onViewModelReady: (model) => model.getUsers(),
+      onViewModelReady: (model) {
+        model.getUsers();
+        model.set_token_by_waiting_for_document();
+      },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
         print("next user is: " + nextUser.toString());

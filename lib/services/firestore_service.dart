@@ -164,19 +164,25 @@ class FirestoreService {
     }).handleError((error) => print('Error loading messages: $error'));
   }
 
-  Future<bool> set_token(String uid) async {
+  Future<void> set_token(String uid) async {
     try{
       String token = await _messagingService.get_token() as String;
+      print("TOKEN FOR USER " + token.toString());
       _firestore.collection('Users').doc(uid).update({
         'fcm_token': token,
       });
-
-      return true;
+      print("SET TOKEN FOR UID: " + uid.toString());
     }
     catch (error){
       print("Setting token failed: " + error.toString());
-      return false;
     }
-    
+  }
+
+  Future<bool> is_document_there(String uid) async {
+    DocumentReference user_doc_ref = _firestore.collection('Users').doc(uid);
+    DocumentSnapshot user_doc_snapshot = await user_doc_ref.get();
+    bool doc_exists;
+    doc_exists = user_doc_snapshot.exists;
+    return doc_exists;
   }
 }
