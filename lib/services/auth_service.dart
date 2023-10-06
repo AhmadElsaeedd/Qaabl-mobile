@@ -66,11 +66,10 @@ class AuthenticationService {
 
   void edit_password_email() async {
     //get the email of the user
-    try{
+    try {
       String? email = _firebaseAuth.currentUser!.email as String;
       await _firebaseAuth.sendPasswordResetEmail(email: email);
-    }
-    catch (error){
+    } catch (error) {
       print("Failed to send email: " + error.toString());
     }
   }

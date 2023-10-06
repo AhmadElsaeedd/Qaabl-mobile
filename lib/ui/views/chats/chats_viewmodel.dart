@@ -43,13 +43,20 @@ class ChatsViewModel extends MultipleStreamViewModel {
     print("here");
 
     return {
-      'new_chats': StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
-      'old_chats': StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
+      'new_chats':
+          StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),
+      'old_chats':
+          StreamData<List<ChatMatch>>(_firestoreService.get_old_matches(uid)),
     };
   }
 
-  void go_to_chat(String match_id, String user_name, int user_pic, String other_user_id) {
-    _navigationService.navigateToInChatView(matchid: match_id, username: user_name, userpic: user_pic, otheruser_id: other_user_id);
+  void go_to_chat(
+      String match_id, String user_name, int user_pic, String other_user_id) {
+    _navigationService.navigateToInChatView(
+        matchid: match_id,
+        username: user_name,
+        userpic: user_pic,
+        otheruser_id: other_user_id);
   }
 
   void go_to_profile() {

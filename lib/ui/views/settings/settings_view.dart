@@ -15,17 +15,18 @@ class SettingsView extends StackedView<SettingsViewModel> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal:25),
-          child: Column(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25),
+        child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top:25, bottom: 20),
-              child: Text("Settings",
-              style: TextStyle(
-              fontFamily: 'Switzer',
-              fontSize: 25,
-              fontWeight: FontWeight.w900,
+              padding: EdgeInsets.only(top: 25, bottom: 20),
+              child: Text(
+                "Settings",
+                style: TextStyle(
+                  fontFamily: 'Switzer',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
             ),
@@ -33,7 +34,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
               child: ListView(
                 children: <Widget>[
                   ListTile(
-                    title: Text('Edit Password', style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('Edit Password',
+                        style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       // ToDo: Implement action for Edit Password
@@ -42,13 +44,18 @@ class SettingsView extends StackedView<SettingsViewModel> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("Password change email"),
-                            content: Text("we'll send u an email to edit ur password, ok?."),
+                            content: Text(
+                                "we'll send u an email to edit ur password, ok?."),
                             actions: [
                               TextButton(
-                                child: Text("Send", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
+                                child: Text("Send",
+                                    style: TextStyle(
+                                        fontFamily: "Switzer",
+                                        color: Color(0xFF3439AB))),
                                 onPressed: () {
                                   viewModel.edit_password_email();
-                                  Navigator.of(context).pop(); // Close the alert dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the alert dialog
                                 },
                               ),
                             ],
@@ -57,9 +64,10 @@ class SettingsView extends StackedView<SettingsViewModel> {
                       );
                     },
                   ),
-                  Divider(),  // Adds a separator
+                  Divider(), // Adds a separator
                   ListTile(
-                    title: Text('Privacy Policy', style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('Privacy Policy',
+                        style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -77,7 +85,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                               TextButton(
                                 child: Text("Close"),
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                               ),
                             ],
@@ -88,7 +97,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('About Us', style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('About Us',
+                        style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -106,7 +116,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                               TextButton(
                                 child: Text("Close"),
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                               ),
                             ],
@@ -117,8 +128,11 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('Delete Account', style: TextStyle(fontFamily: 'Switzer', color: Colors.redAccent)),
-                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0, color: Colors.redAccent),
+                    title: Text('Delete Account',
+                        style: TextStyle(
+                            fontFamily: 'Switzer', color: Colors.redAccent)),
+                    trailing: Icon(Icons.arrow_forward_ios,
+                        size: 14.0, color: Colors.redAccent),
                     onTap: () {
                       // Show an alert dialog
                       showDialog(
@@ -126,22 +140,30 @@ class SettingsView extends StackedView<SettingsViewModel> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("Confirm Deletion"),
-                            content: Text("Are you sure you want to delete your account? This action is irreversible."),
+                            content: Text(
+                                "Are you sure you want to delete your account? This action is irreversible."),
                             actions: [
                               TextButton(
-                                child: Text("Cancel", style:TextStyle(fontFamily: "Switzer", color: Color(0xFF3439AB))),
+                                child: Text("Cancel",
+                                    style: TextStyle(
+                                        fontFamily: "Switzer",
+                                        color: Color(0xFF3439AB))),
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close the alert dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the alert dialog
                                 },
                               ),
                               TextButton(
-                                child: Text("Delete", style: TextStyle(color: Colors.redAccent)),
+                                child: Text("Delete",
+                                    style: TextStyle(color: Colors.redAccent)),
                                 onPressed: () {
                                   //Call the function that deletes from the viewmodel
-                                  print("User deleting the account: " + viewModel.uid.toString());
+                                  print("User deleting the account: " +
+                                      viewModel.uid.toString());
                                   viewModel.delete_account(viewModel.uid);
                                   viewModel.signOut();
-                                  Navigator.of(context).pop(); // Close the alert dialog after deleting
+                                  Navigator.of(context)
+                                      .pop(); // Close the alert dialog after deleting
                                 },
                               ),
                             ],
@@ -155,13 +177,12 @@ class SettingsView extends StackedView<SettingsViewModel> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(bottom:5),
+              margin: EdgeInsets.only(bottom: 5),
               child: _bottomNavigationBar(viewModel),
             ),
           ],
         ),
-        )
-      ),
+      )),
     );
   }
 
@@ -203,24 +224,29 @@ Widget _bottomNavigationBar(viewModel) {
       Positioned(
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
-          onTap: () {viewModel.go_to_home();}, // Add your home action here
+          onTap: () {
+            viewModel.go_to_home();
+          }, // Add your home action here
           child: Container(
-            width: 70, // Adjust the width and height as needed
-            height: 70,
-            decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF3439AB)), // Border color
-                        borderRadius: BorderRadius.circular(40), // Rounded corner radius
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26, // Shadow color
-                            offset: Offset(0, 3),  // Vertical offset
-                            blurRadius: 5.0,      // Blur value
-                            spreadRadius: 1.0,    // Spread value
-                          ),
-                        ],
-                      ),
-            child: CircleAvatar(backgroundImage: AssetImage('lib/assets/logo.png'),backgroundColor: Colors.white,)
-          ),
+              width: 70, // Adjust the width and height as needed
+              height: 70,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF3439AB)), // Border color
+                borderRadius:
+                    BorderRadius.circular(40), // Rounded corner radius
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26, // Shadow color
+                    offset: Offset(0, 3), // Vertical offset
+                    blurRadius: 5.0, // Blur value
+                    spreadRadius: 1.0, // Spread value
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                backgroundImage: AssetImage('lib/assets/logo.png'),
+                backgroundColor: Colors.white,
+              )),
         ),
       ),
     ],

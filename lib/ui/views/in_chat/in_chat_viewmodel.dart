@@ -28,10 +28,11 @@ class InChatViewModel extends StreamViewModel {
 
   final String other_user_id;
 
-  Map<String,dynamic>? user_data;
+  Map<String, dynamic>? user_data;
 
   //the constructor needs to know which chat it is going to
-  InChatViewModel(this.match_id, this.user_name, this.user_pic, this.other_user_id);
+  InChatViewModel(
+      this.match_id, this.user_name, this.user_pic, this.other_user_id);
 
   Future<void> go_to_chats() async {
     print("I AM GOING BACK");
@@ -47,33 +48,32 @@ class InChatViewModel extends StreamViewModel {
       _navigationService.replaceWithLoginView();
       return Stream.value([]);
     }
-    return _firestoreService.load_messages(match_id)
-        .map((list) {
-          displayed_messages = list;
-          return list;
-        });
+    return _firestoreService.load_messages(match_id).map((list) {
+      displayed_messages = list;
+      return list;
+    });
   }
 
   //implement function that adds a message to the chat
-  void send_message(String content){
+  void send_message(String content) {
     //pass a "fake" message to the UI so the UI is updated immediately
     final Message new_message = Message(
       content: content,
       sent_by: uid!,
       timestamp: Timestamp.now().toDate(),
     );
-    displayed_messages.insert(0,new_message);
+    displayed_messages.insert(0, new_message);
     rebuildUi();
 
     _firestoreService.send_message(match_id, content, uid!);
   }
 
-  Future<void> view_profile_data(String uid) async{
+  Future<void> view_profile_data(String uid) async {
     user_data = await get_user_data(uid);
     rebuildUi();
   }
 
-  Future<Map<String,dynamic>> get_user_data(String uid) async {
+  Future<Map<String, dynamic>> get_user_data(String uid) async {
     final response = await http.post(
       //production url
       // Uri.parse(
@@ -97,7 +97,7 @@ class InChatViewModel extends StreamViewModel {
     }
   }
 
-  Future<void> delete_chat(String match_id, String other_user_id) async{
+  Future<void> delete_chat(String match_id, String other_user_id) async {
     await http.post(
       //production url
       // Uri.parse(

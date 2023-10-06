@@ -163,11 +163,9 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(liked_user_uid);
-    }
-    else if (response.statusCode == 204){
+    } else if (response.statusCode == 204) {
       await both_like_each_other(liked_user_uid);
-    }
-    else
+    } else
       print("failed to go to cloud");
 
     //rebuild ui, meaning next user will be fetched
@@ -204,7 +202,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   //function to skip user without performing any action
-  void skip_user(String skipped_user_uid){
+  void skip_user(String skipped_user_uid) {
     user_Ids_in_queue.remove(skipped_user_uid);
     print("I am here");
     rebuildUi();

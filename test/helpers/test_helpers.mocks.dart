@@ -13,6 +13,7 @@ import 'package:stacked_app/models/match_model.dart' as _i9;
 import 'package:stacked_app/models/message_model.dart' as _i10;
 import 'package:stacked_app/services/auth_service.dart' as _i7;
 import 'package:stacked_app/services/firestore_service.dart' as _i8;
+import 'package:stacked_app/services/messaging_service.dart' as _i11;
 import 'package:stacked_services/stacked_services.dart' as _i3;
 
 // ignore_for_file: type=lint
@@ -785,3 +786,8 @@ class MockFirestoreService extends _i1.Mock implements _i8.FirestoreService {
         returnValueForMissingStub: _i5.Stream<List<_i10.Message>>.empty(),
       ) as _i5.Stream<List<_i10.Message>>);
 }
+
+/// A class which mocks [MessagingService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMessagingService extends _i1.Mock implements _i11.MessagingService {}

@@ -231,7 +231,7 @@ class InChatViewArguments {
 
   final int userpic;
 
-  final dynamic otheruser_id;
+  final String otheruser_id;
 
   @override
   String toString() {
@@ -406,7 +406,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
     required String matchid,
     required String username,
     required int userpic,
-    required dynamic otheruser_id,
+    required String otheruser_id,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -573,7 +573,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
     required String matchid,
     required String username,
     required int userpic,
-    required dynamic otheruser_id,
+    required String otheruser_id,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,

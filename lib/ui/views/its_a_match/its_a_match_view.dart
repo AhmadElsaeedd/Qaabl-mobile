@@ -15,71 +15,82 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 300),
-        child: Column(
-          children: [
-            Padding(
-          padding: const EdgeInsets.only(top: 50.0),
-          child: Column(children: [const Text(
-            'its a match!',
-            style: TextStyle(
-              fontFamily: 'Switzer',
-              fontSize: 25,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        Text("you're cool, they're cool, chat!",
-                          style: TextStyle(
-                        fontFamily: 'Switzer', // Replace with your font if it's different
-                        fontSize: 14, // Adjust the size as needed
-                        //fontWeight: FontWeight.bold,
+          padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 300),
+          child: Column(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.only(top: 50.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'its a match!',
+                        style: TextStyle(
+                          fontFamily: 'Switzer',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
+                      Text(
+                        "you're cool, they're cool, chat!",
+                        style: TextStyle(
+                          fontFamily:
+                              'Switzer', // Replace with your font if it's different
+                          fontSize: 14, // Adjust the size as needed
+                          //fontWeight: FontWeight.bold,
+                        ),
                       ),
-          ],
-          )
-        ),
-        Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly, // Center the buttons
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // "Keep swiping" button action here
-                        viewModel.go_to_swiping();
-                      },
-                      child: Text("Keep swiping", style: TextStyle(color: Colors.black, fontFamily: "Switzer"),),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30), // Rounded button
-                        ), backgroundColor: Colors.white,
-                      ),
+                    ],
+                  )),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly, // Center the buttons
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // "Keep swiping" button action here
+                      viewModel.go_to_swiping();
+                    },
+                    child: Text(
+                      "Keep swiping",
+                      style:
+                          TextStyle(color: Colors.black, fontFamily: "Switzer"),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // "Go to chats" button action here
-                        viewModel.go_to_chats();
-                      },
-                      child: Text("Go to chats",style: TextStyle(color: Colors.white, fontFamily: "Switzer"),),
-                      style: ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30), // Rounded button
-                      ), backgroundColor: Color(0xFF3439AB),
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded button
+                      ),
+                      backgroundColor: Colors.white,
                     ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // "Go to chats" button action here
+                      viewModel.go_to_chats();
+                    },
+                    child: Text(
+                      "Go to chats",
+                      style:
+                          TextStyle(color: Colors.white, fontFamily: "Switzer"),
                     ),
-                  ],
-                ),
-                Spacer(),
-                Container(
-                      margin: EdgeInsets.only(bottom: 25), // Adjust as needed
-                      child: _bottomNavigationBar(viewModel),
-                ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(30), // Rounded button
+                      ),
+                      backgroundColor: Color(0xFF3439AB),
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Container(
+                margin: EdgeInsets.only(bottom: 25), // Adjust as needed
+                child: _bottomNavigationBar(viewModel),
+              ),
             ],
-            
-              )
-            ),
-            
-          );
-
+          )),
+    );
   }
 
   @override
@@ -120,24 +131,29 @@ Widget _bottomNavigationBar(viewModel) {
       Positioned(
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
-          onTap: () {viewModel.go_to_home();}, // Add your home action here
+          onTap: () {
+            viewModel.go_to_home();
+          }, // Add your home action here
           child: Container(
-            width: 70, // Adjust the width and height as needed
-            height: 70,
-            decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFF3439AB)), // Border color
-                        borderRadius: BorderRadius.circular(40), // Rounded corner radius
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26, // Shadow color
-                            offset: Offset(0, 3),  // Vertical offset
-                            blurRadius: 5.0,      // Blur value
-                            spreadRadius: 1.0,    // Spread value
-                          ),
-                        ],
-                      ),
-            child: CircleAvatar(backgroundImage: AssetImage('lib/assets/logo.png'),backgroundColor: Colors.white,)
-          ),
+              width: 70, // Adjust the width and height as needed
+              height: 70,
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF3439AB)), // Border color
+                borderRadius:
+                    BorderRadius.circular(40), // Rounded corner radius
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26, // Shadow color
+                    offset: Offset(0, 3), // Vertical offset
+                    blurRadius: 5.0, // Blur value
+                    spreadRadius: 1.0, // Spread value
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                backgroundImage: AssetImage('lib/assets/logo.png'),
+                backgroundColor: Colors.white,
+              )),
         ),
       ),
     ],

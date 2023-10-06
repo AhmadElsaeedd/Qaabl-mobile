@@ -3,11 +3,13 @@ import 'package:stacked_app/app/app.locator.dart';
 import 'package:stacked_app/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:stacked_app/services/auth_service.dart';
+import 'package:stacked_app/services/messaging_service.dart';
 
 class StartupViewModel extends BaseViewModel {
   //get the authentication and navigation service
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _messagingService = locator<MessagingService>();
 
   // Place anything here that needs to happen before we get into the application
   Future runStartupLogic() async {

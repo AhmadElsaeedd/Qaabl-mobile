@@ -31,7 +31,7 @@ class SettingsViewModel extends BaseViewModel {
     _navigationService.replaceWithChatsView();
   }
 
-  void go_to_home(){
+  void go_to_home() {
     _navigationService.replaceWithHomeView();
   }
 
@@ -59,7 +59,8 @@ class SettingsViewModel extends BaseViewModel {
       // Uri.parse(
       //     ''),
       //testing URL
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
       body: jsonEncode({
         'user_uid': uid,
       }),

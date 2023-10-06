@@ -27,7 +27,10 @@ class RegisterView extends StackedView<RegisterViewModel> {
             Container(
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
-                child: Image.asset('lib/assets/logo.png', height: 200,),
+                child: Image.asset(
+                  'lib/assets/logo.png',
+                  height: 200,
+                ),
               ),
             ),
             Container(
@@ -58,18 +61,30 @@ class RegisterView extends StackedView<RegisterViewModel> {
                   Platform.isIOS
                       ? CupertinoButton(
                           color: Color(0xFF3439AB),
-                          onPressed: () => viewModel.createUserWithEmailAndPassword(
-                              emailController.text, passwordController.text),
-                          child: Text('Create Account', style: TextStyle(fontSize: 20),),
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          onPressed: () =>
+                              viewModel.createUserWithEmailAndPassword(
+                                  emailController.text,
+                                  passwordController.text),
+                          child: Text(
+                            'Create Account',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         )
                       : ElevatedButton(
-                          onPressed: () => viewModel.createUserWithEmailAndPassword(
-                              emailController.text, passwordController.text),
-                          child: Text('Create Account', style: TextStyle(fontSize: 20),),
+                          onPressed: () =>
+                              viewModel.createUserWithEmailAndPassword(
+                                  emailController.text,
+                                  passwordController.text),
+                          child: Text(
+                            'Create Account',
+                            style: TextStyle(fontSize: 20),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF3439AB),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                           ),
                         ),
                   SizedBox(height: 20),
@@ -102,13 +117,19 @@ class RegisterView extends StackedView<RegisterViewModel> {
               child: Platform.isIOS
                   ? CupertinoButton(
                       onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset('lib/assets/googlebutton.png', fit: BoxFit.fill,),
+                      child: Image.asset(
+                        'lib/assets/googlebutton.png',
+                        fit: BoxFit.fill,
+                      ),
                       padding: EdgeInsets.zero,
                       pressedOpacity: 0.7,
                     )
                   : ElevatedButton(
                       onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset('lib/assets/googlebutton.png', fit: BoxFit.fill,),
+                      child: Image.asset(
+                        'lib/assets/googlebutton.png',
+                        fit: BoxFit.fill,
+                      ),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         primary: Colors.transparent,

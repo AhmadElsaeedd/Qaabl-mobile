@@ -26,7 +26,10 @@ class LoginView extends StackedView<LoginViewModel> {
             Container(
               height: MediaQuery.of(context).size.height / 3,
               child: Center(
-                child: Image.asset('lib/assets/logo.png', height: 200,),
+                child: Image.asset(
+                  'lib/assets/logo.png',
+                  height: 200,
+                ),
               ),
             ),
             Container(
@@ -59,17 +62,26 @@ class LoginView extends StackedView<LoginViewModel> {
                           color: Color(0xFF3439AB),
                           onPressed: () => viewModel.signInWithEmailAndPassword(
                               emailController.text, passwordController.text),
-                          child: Text('Login', style: TextStyle(fontFamily: 'Switzer',fontSize: 20),),
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          child: Text(
+                            'Login',
+                            style:
+                                TextStyle(fontFamily: 'Switzer', fontSize: 20),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         )
                       : ElevatedButton(
                           onPressed: () => viewModel.signInWithEmailAndPassword(
                               emailController.text, passwordController.text),
-                          child: Text('Login', style: TextStyle(fontFamily: 'Switzer',
-                          fontSize: 20),),
+                          child: Text(
+                            'Login',
+                            style:
+                                TextStyle(fontFamily: 'Switzer', fontSize: 20),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF3439AB),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                           ),
                         ),
                   SizedBox(height: 20),
@@ -102,13 +114,19 @@ class LoginView extends StackedView<LoginViewModel> {
               child: Platform.isIOS
                   ? CupertinoButton(
                       onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset('lib/assets/googlebutton.png', fit: BoxFit.fill,),
+                      child: Image.asset(
+                        'lib/assets/googlebutton.png',
+                        fit: BoxFit.fill,
+                      ),
                       padding: EdgeInsets.zero,
                       pressedOpacity: 0.7,
                     )
                   : ElevatedButton(
                       onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset('lib/assets/googlebutton.png', fit: BoxFit.fill,),
+                      child: Image.asset(
+                        'lib/assets/googlebutton.png',
+                        fit: BoxFit.fill,
+                      ),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         primary: Colors.transparent,

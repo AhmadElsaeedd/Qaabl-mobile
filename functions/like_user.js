@@ -49,6 +49,7 @@ async function check_if_user_likes_them(uid,liked_user_uid){
 const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.user_uid;
+    //ToDo: notify this user that they've been liked
     const liked_user_uid = req.body.liked_user_uid;
 
     const user_likes_them = await check_if_user_likes_them(user_uid,liked_user_uid);

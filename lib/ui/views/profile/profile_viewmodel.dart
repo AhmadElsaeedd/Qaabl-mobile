@@ -52,7 +52,7 @@ class ProfileViewModel extends BaseViewModel {
 
       percentage = results[0];
       image_index = results[1];
-      
+
       rebuildUi();
     } catch (e) {
       print("couldn't fetch the percentage: " + e.toString());
@@ -86,7 +86,7 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   //ToDo: function to get the profile picture of the user
-  Future<int> get_profile_pic_index() async{
+  Future<int> get_profile_pic_index() async {
     final response = await http.post(
       //production url
       // Uri.parse(

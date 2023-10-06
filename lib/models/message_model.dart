@@ -12,18 +12,17 @@ class Message {
   });
 
   factory Message.fromMap(Map<String, dynamic> data) {
-    try{
+    try {
       // final timestampMap = data['timestamp'] as Map<String, dynamic>;
       // final timestamp = DateTime.fromMillisecondsSinceEpoch(
       //   timestampMap['_seconds'] * 1000 + timestampMap['_nanoseconds'] / 1000000);
       final timestamp = (data['timestamp'] as Timestamp).toDate();
-        return Message(
-          content: data['content'] as String,
-          timestamp: timestamp,
-          sent_by: data['sent_by'] as String,
-        );
-    }
-    catch (error){
+      return Message(
+        content: data['content'] as String,
+        timestamp: timestamp,
+        sent_by: data['sent_by'] as String,
+      );
+    } catch (error) {
       print('Error mapping data in from map: $error');
       return Message(
         content: 'Error loading message',
@@ -59,4 +58,3 @@ class Message {
   //   );
   // }
 }
-
