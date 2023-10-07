@@ -14,7 +14,9 @@ class EditProfileView extends StatefulWidget {
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
+  //late EditProfileViewModel model;
   late TextEditingController nameController;
+  // final nameController = TextEditingController();
   late List<TextEditingController> interestControllers;
   late List<TextEditingController> interestNameControllers;
   late ValueNotifier<int> selectedImageNotifier;
@@ -27,6 +29,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     nameController = TextEditingController();
     interestControllers = <TextEditingController>[];
     interestNameControllers = <TextEditingController>[];
+    //nameController.addListener(_nameControllerListener);
   }
 
   @override
@@ -37,6 +40,12 @@ class _EditProfileViewState extends State<EditProfileView> {
     selectedImageNotifier.dispose();
     super.dispose();
   }
+
+  // void _nameControllerListener(){
+  //         final name = nameController.text;
+  //         print("NAME IS: " + name.toString());
+  //         model.update_name(name);
+  // }
 
   void _showInterestsDialog(EditProfileViewModel model) {
     showDialog(
@@ -108,7 +117,10 @@ class _EditProfileViewState extends State<EditProfileView> {
       viewModelBuilder: () =>
           //EditProfileViewModel(widget.selected_interests ?? []),
           EditProfileViewModel(),
+      // onViewModelReady: (model){
+      // },
       builder: (context, model, child) {
+        //this.model = model;
         Map<String, dynamic>? userData = model.user_data;
         print("User data is: " + userData.toString());
 
@@ -197,6 +209,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(labelText: 'Name'),
+                        onChanged: (text){
+                          print("changed");
+                          model.update_name(text);
+                        },
                       ),
                       ...List.generate(
                         interestControllers.length,
@@ -211,6 +227,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                             //         'Interest ${index + 1}',
                             labelText: userData['interests'][index]['name'],
                           ),
+                          onChanged: (text){
+                            model.update_interest_description(userData['interests'][index]['name'], text);
+                          },
                         ),
                       ),
                       CupertinoButton(

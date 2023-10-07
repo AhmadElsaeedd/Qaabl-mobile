@@ -167,16 +167,28 @@ class EditProfileViewModel extends BaseViewModel {
   ];
 
   void toggleInterestSelection(String interest) {
+    print("User name is: " + user_data['name'].toString());
     if (user_data['interests'].any((map) => map['name'] == interest)) {
-      print("Removing it from the interests array");
       // Find and remove the map that has 'interest' in the name field
       user_data['interests'].removeWhere((map) => map['name'] == interest);
       if (user_data['interests'] == true) user_data['interests'] = [];
     } else if (user_data['interests'].length < 7) {
-      print("Adding it to the interests array");
       Map<String, String> interestMap = {'name': interest, 'description': ''};
       user_data['interests'].add(interestMap);
     }
     rebuildUi(); // Notify the view to rebuild
+  }
+
+  void update_name(String name){
+    user_data['name'] = name;
+  }
+
+  void update_interest_description(String interest, String description){
+    for (Map<String, dynamic> interestMap in user_data['interests']) {
+      if (interestMap['name'] == interest) {
+        interestMap['description'] = description;
+        break;
+      }
+    }
   }
 }
