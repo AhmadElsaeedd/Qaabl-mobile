@@ -14,12 +14,15 @@ class MessagingService {
 
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Handle the incoming notification here
+      // Handle the notification caused by a foreground FCM push
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
     });
 
     // Handle background and terminated messages
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // Handle the notification caused by tapping on it
+      print('A new onMessageOpenedApp event was published!');
+      // Navigate to the desired screen based on the message
     });
 
     // Register the background message handler
