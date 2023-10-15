@@ -58,7 +58,6 @@ class AddInterestsViewModel extends BaseViewModel {
   Future<void> save_and_back(selected_interests) async {
     //get the values from the input fields and pass them back to the page
     print("Selected interests are: " + selected_interests.toString());
-    _navigationService.replaceWithEditProfileView(
-        selectedinterests: selected_interests);
+    _navigationService.replaceWithEditProfileView();
   }
 }

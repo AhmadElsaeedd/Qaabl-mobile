@@ -27,7 +27,7 @@ function is_profile_pic_changed(old_pp_index, new_pp_index) {
 function is_interests_changed(old_interests, new_interests) {
   console.log("Old interests: ", old_interests);
   console.log("New interests: ", new_interests);
-// Sort the arrays of interests by their 'name' property
+  // Sort the arrays of interests by their 'name' property
   const sortInterests = (interests) => {
     return interests.sort((a, b) => a.name.localeCompare(b.name));
   };
@@ -46,14 +46,13 @@ function is_interests_changed(old_interests, new_interests) {
 
 async function update_user(name = null, interests = null, uid, pp = null) {
 // in the case of name and interests change
-  if(name && interests && pp){
+  if (name && interests && pp) {
     await db.collection("Users").doc(uid).update({
       name: name,
       interests: interests,
       image_index: pp,
     });
-  }
-  else if (name && interests) {
+  } else if (name && interests) {
     await db.collection("Users").doc(uid).update({
       name: name,
       interests: interests,
@@ -110,10 +109,9 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
 
     const profile_pic_changed = is_profile_pic_changed(user_data.image_index, profile_pic_index);
 
-    if(name_changed && interests_changed && profile_pic_changed){
-      update_user(name,interests,user_uid,profile_pic_index);
-    }
-    else if (name_changed && interests_changed) {
+    if (name_changed && interests_changed && profile_pic_changed) {
+      update_user(name, interests, user_uid, profile_pic_index);
+    } else if (name_changed && interests_changed) {
       update_user(name, interests, user_uid, null);
     } else if (name_changed && profile_pic_changed) {
       update_user(name, null, user_uid, profile_pic_index);

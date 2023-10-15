@@ -18,8 +18,9 @@ class LoginView extends StackedView<LoginViewModel> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+      body: SafeArea(
+        child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -32,6 +33,21 @@ class LoginView extends StackedView<LoginViewModel> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0.0),
+              child: Column(
+                children: [
+                  Text(
+                    "only cool people, at your fingertips",
+                    style: TextStyle(
+                      fontFamily: Platform.isIOS ? '.SF UI Text' : 'Switzer',
+                      fontSize: 14, // Adjust the size as needed
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+              ),
             Container(
               child: Column(
                 children: [
@@ -151,6 +167,7 @@ class LoginView extends StackedView<LoginViewModel> {
           ],
         ),
       ),
+      ) 
     );
   }
 

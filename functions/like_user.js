@@ -32,7 +32,7 @@ async function update_user(uid, user_likes_updated) {
   console.log("done");
 }
 
-async function check_if_user_likes_them(uid,liked_user_uid){
+async function check_if_user_likes_them(uid, liked_user_uid) {
   const liked_user_doc = await (db.collection("Users").doc(liked_user_uid)).get();
 
   const liked_user_data = liked_user_doc.data();
@@ -49,12 +49,12 @@ async function check_if_user_likes_them(uid,liked_user_uid){
 const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.user_uid;
-    //ToDo: notify this user that they've been liked
+    // ToDo: notify this user that they've been liked
     const liked_user_uid = req.body.liked_user_uid;
 
-    const user_likes_them = await check_if_user_likes_them(user_uid,liked_user_uid);
+    const user_likes_them = await check_if_user_likes_them(user_uid, liked_user_uid);
 
-    if(user_likes_them) res.status(204).send("New match");
+    if (user_likes_them) res.status(204).send("New match");
 
     // ToDo: get the user's likes array
     const user_likes = await get_user_likes(user_uid);

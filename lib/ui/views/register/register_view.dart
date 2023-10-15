@@ -19,7 +19,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SafeArea(child: Container(
         padding: const EdgeInsets.only(left: 25.0, right: 25.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -32,6 +32,21 @@ class RegisterView extends StackedView<RegisterViewModel> {
                   height: 200,
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0.0),
+              child: Column(
+                children: [
+                  Text(
+                    "only cool people, at your fingertips",
+                    style: TextStyle(
+                      fontFamily: Platform.isIOS ? '.SF UI Text' : 'Switzer',
+                      fontSize: 14, // Adjust the size as needed
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
             ),
             Container(
               child: Column(
@@ -154,6 +169,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
           ],
         ),
       ),
+      )
     );
   }
 
