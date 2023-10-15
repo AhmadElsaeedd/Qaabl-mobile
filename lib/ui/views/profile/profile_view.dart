@@ -30,7 +30,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                       Image.asset(
                         'lib/assets/${viewModel.image_index}.png',
                         height: 200,
-                      ), // Use the value
+                      ),
                       // Progress Bar and Percentage
                       Stack(
                         children: [
@@ -65,21 +65,19 @@ class ProfileView extends StackedView<ProfileViewModel> {
                           //Rounded Cupertino Button with the color #3439AB
                           Flexible(
                             child: CupertinoButton(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15.0),
+                              color: Colors.grey,
                               onPressed: () {
                                 viewModel.go_to_settings();
                               },
                               child: Text('Settings',
-                                  style: TextStyle(color: Colors.black)),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                                  style: TextStyle(color: Colors.white)),
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              
                             ),
                           ),
                           Flexible(
                             child: CupertinoButton(
                               color: Color(0xFF3439AB),
-                              borderRadius: BorderRadius.circular(15.0),
                               onPressed: () {
                                 viewModel.go_to_edit_profile();
                               },
