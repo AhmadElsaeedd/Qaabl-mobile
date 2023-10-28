@@ -14,9 +14,7 @@ class EditProfileView extends StatefulWidget {
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
-  //late EditProfileViewModel model;
   late TextEditingController nameController;
-  // final nameController = TextEditingController();
   late List<TextEditingController> interestControllers;
   late List<TextEditingController> interestNameControllers;
   late ValueNotifier<int> selectedImageNotifier;
@@ -29,7 +27,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     nameController = TextEditingController();
     interestControllers = <TextEditingController>[];
     interestNameControllers = <TextEditingController>[];
-    //nameController.addListener(_nameControllerListener);
   }
 
   @override
@@ -40,12 +37,6 @@ class _EditProfileViewState extends State<EditProfileView> {
     selectedImageNotifier.dispose();
     super.dispose();
   }
-
-  // void _nameControllerListener(){
-  //         final name = nameController.text;
-  //         print("NAME IS: " + name.toString());
-  //         model.update_name(name);
-  // }
 
   void _showInterestsDialog(EditProfileViewModel model) {
     showDialog(
@@ -65,8 +56,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               Text(
                 "show us what you're all about!",
                 style: TextStyle(
-                  fontFamily:
-                      'Switzer', // Replace with your font if it's different
                   fontSize: 12, // Adjust the size as needed
                   //fontWeight: FontWeight.bold,
                 ),
@@ -84,7 +73,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                       title: Text(
                         interest,
                         style: TextStyle(
-                          fontFamily: 'Switzer',
                           fontSize: 16,
                           color: isSelected
                               ? Colors.white
@@ -95,8 +83,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                       tileColor:
                           isSelected ? Color(0xFF3439AB) : Colors.transparent,
                       onTap: () {
-                        print("I clicked on this interest: " +
-                            interest.toString());
                         model.toggleInterestSelection(interest);
                         setState(() {});
                       },
@@ -114,15 +100,9 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
-      viewModelBuilder: () =>
-          //EditProfileViewModel(widget.selected_interests ?? []),
-          EditProfileViewModel(),
-      // onViewModelReady: (model){
-      // },
+      viewModelBuilder: () => EditProfileViewModel(),
       builder: (context, model, child) {
-        //this.model = model;
         Map<String, dynamic>? userData = model.user_data;
-        print("User data is: " + userData.toString());
 
         if (userData.isNotEmpty) {
           selectedImageNotifier =
@@ -130,32 +110,15 @@ class _EditProfileViewState extends State<EditProfileView> {
           nameController = TextEditingController(text: userData['name'] ?? '');
           print("I am rebuilding");
           interestNameControllers = List.generate(
-            // (widget.selected_interests != null &&
-            //         widget.selected_interests!.isNotEmpty)
-            //     ? widget.selected_interests!.length
-            //     : (userData['interests']?.length ?? 0),
             (userData['interests']?.length ?? 0),
             (index) {
-              // String interestName = (widget.selected_interests != null &&
-              //         widget.selected_interests!.isNotEmpty)
-              //     ? widget.selected_interests![index]
-              //     : userData['interests'][index]['name'] ?? '';
               String interestName = userData['interests'][index]['name'] ?? '';
               return TextEditingController(text: interestName);
             },
           );
           interestControllers = List.generate(
-            //if selected_interests has length 0 or is null, take the length of the interests array from the userData object to be the length of the list
-            // (widget.selected_interests != null &&
-            //         widget.selected_interests!.isNotEmpty)
-            //     ? widget.selected_interests!.length
-            //     : (userData['interests']?.length ?? 0),
             (userData['interests']?.length ?? 0),
             (index) {
-              // String interestName = (widget.selected_interests != null &&
-              //         widget.selected_interests!.isNotEmpty)
-              //     ? widget.selected_interests![index]
-              //     : userData['interests'][index]['name'] ?? '';
               String interestName = userData['interests'][index]['name'] ?? '';
               return TextEditingController(
                   text: userData['interests']
@@ -210,7 +173,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                         controller: nameController,
                         decoration: InputDecoration(labelText: 'Name'),
                         onChanged: (text) {
-                          print("changed");
                           model.update_name(text);
                         },
                       ),
@@ -219,12 +181,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                         (index) => TextField(
                           controller: interestControllers[index],
                           decoration: InputDecoration(
-                            //condition if the length of selected_interests is 0, use the data fetched from network.
-                            // labelText: (widget.selected_interests != null &&
-                            //         widget.selected_interests!.isNotEmpty)
-                            //     ? widget.selected_interests![index]
-                            //     : userData['interests'][index]['name'] ??
-                            //         'Interest ${index + 1}',
                             labelText: userData['interests'][index]['name'],
                           ),
                           onChanged: (text) {
@@ -250,8 +206,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                             isSaving =
                                 true; // Set isSaving to true when the button is pressed
                           });
-                          //Implement save and back logic
-                          //change the color of the button to #3439AB
                           String name = nameController.text;
                           List<Map<String, String>> interests = List.generate(
                             interestControllers.length,
@@ -261,7 +215,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                               'description': interestControllers[index].text,
                             },
                           );
-                          //put the correct value into the function, it's not selected_image
                           print("Save with image index: " +
                               selectedImageNotifier.value.toString());
                           await model.save_and_back(

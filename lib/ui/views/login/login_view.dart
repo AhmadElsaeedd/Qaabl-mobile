@@ -17,158 +17,164 @@ class LoginView extends StackedView<LoginViewModel> {
     final passwordController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 3,
-              child: Center(
-                child: Image.asset(
-                  'lib/assets/logo.png',
-                  height: 200,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: Column(
-                children: [
-                  Text(
-                    "only cool people, at your fingertips",
-                    style: TextStyle(
-                      fontFamily: Platform.isIOS ? '.SF UI Text' : 'Switzer',
-                      fontSize: 14, // Adjust the size as needed
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
-              ),
-            Container(
-              child: Column(
-                children: [
-                  Platform.isIOS
-                      ? CupertinoTextField(
-                          placeholder: 'Email',
-                          controller: emailController,
-                        )
-                      : TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(labelText: 'Email'),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: Center(
+                        child: Image.asset(
+                          'lib/assets/logo.png',
+                          height: 200,
                         ),
-                  SizedBox(height: 20),
-                  Platform.isIOS
-                      ? CupertinoTextField(
-                          placeholder: 'Password',
-                          controller: passwordController,
-                          obscureText: true,
-                        )
-                      : TextField(
-                          controller: passwordController,
-                          decoration: InputDecoration(labelText: 'Password'),
-                          obscureText: true,
-                        ),
-                  SizedBox(height: 20),
-                  Platform.isIOS
-                      ? CupertinoButton(
-                          color: Color(0xFF3439AB),
-                          onPressed: () => viewModel.signInWithEmailAndPassword(
-                              emailController.text, passwordController.text),
-                          child: Text(
-                            'Login',
-                            style:
-                                TextStyle(fontFamily: 'Switzer', fontSize: 20),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                        )
-                      : ElevatedButton(
-                          onPressed: () => viewModel.signInWithEmailAndPassword(
-                              emailController.text, passwordController.text),
-                          child: Text(
-                            'Login',
-                            style:
-                                TextStyle(fontFamily: 'Switzer', fontSize: 20),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF3439AB),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                          ),
-                        ),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: Colors.black,
-                    height: 20,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text("or"),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: Colors.black,
-                    height: 20,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Container(
-              margin: EdgeInsets.only(bottom: 10),
-              child: Platform.isIOS
-                  ? CupertinoButton(
-                      onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset(
-                        'lib/assets/googlebutton.png',
-                        fit: BoxFit.fill,
-                      ),
-                      padding: EdgeInsets.zero,
-                      pressedOpacity: 0.7,
-                    )
-                  : ElevatedButton(
-                      onPressed: viewModel.signInWithGoogle,
-                      child: Image.asset(
-                        'lib/assets/googlebutton.png',
-                        fit: BoxFit.fill,
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        primary: Colors.transparent,
                       ),
                     ),
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('New here?'),
-                  TextButton(
-                    onPressed: viewModel.navigateToRegister,
-                    child: Text(
-                      'Register Now',
-                      style: TextStyle(decoration: TextDecoration.underline),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "only cool people, at your fingertips",
+                              style: TextStyle(
+                                fontSize: 14, // Adjust the size as needed
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )),
+                    Container(
+                      child: Column(
+                        children: [
+                          Platform.isIOS
+                              ? CupertinoTextField(
+                                  placeholder: 'Email',
+                                  controller: emailController,
+                                )
+                              : TextField(
+                                  controller: emailController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Email'),
+                                ),
+                          SizedBox(height: 20),
+                          Platform.isIOS
+                              ? CupertinoTextField(
+                                  placeholder: 'Password',
+                                  controller: passwordController,
+                                  obscureText: true,
+                                )
+                              : TextField(
+                                  controller: passwordController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Password'),
+                                  obscureText: true,
+                                ),
+                          SizedBox(height: 20),
+                          Platform.isIOS
+                              ? CupertinoButton(
+                                  color: Color(0xFF3439AB),
+                                  onPressed: () =>
+                                      viewModel.signInWithEmailAndPassword(
+                                          emailController.text,
+                                          passwordController.text),
+                                  child: Text(
+                                    'Login',
+                                    style: TextStyle(
+                                        fontFamily: 'Switzer', fontSize: 20),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () =>
+                                      viewModel.signInWithEmailAndPassword(
+                                          emailController.text,
+                                          passwordController.text),
+                                  child: Text(
+                                    'Login',
+                                    style: TextStyle(
+                                        fontFamily: 'Switzer', fontSize: 20),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xFF3439AB),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                  ),
+                                ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      ) 
-    );
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black,
+                            height: 20,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("or"),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.black,
+                            height: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Platform.isIOS
+                          ? CupertinoButton(
+                              onPressed: viewModel.signInWithGoogle,
+                              child: Image.asset(
+                                'lib/assets/googlebutton.png',
+                                fit: BoxFit.fill,
+                              ),
+                              padding: EdgeInsets.zero,
+                              pressedOpacity: 0.7,
+                            )
+                          : ElevatedButton(
+                              onPressed: viewModel.signInWithGoogle,
+                              child: Image.asset(
+                                'lib/assets/googlebutton.png',
+                                fit: BoxFit.fill,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                primary: Colors.transparent,
+                              ),
+                            ),
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('New here?'),
+                          TextButton(
+                            onPressed: viewModel.navigateToRegister,
+                            child: Text(
+                              'Register Now',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ));
   }
 
   @override
