@@ -65,14 +65,14 @@ class ProfileView extends StackedView<ProfileViewModel> {
                           //Rounded Cupertino Button with the color #3439AB
                           Flexible(
                             child: CupertinoButton(
-                              color: Colors.grey,
+                              color: Color.fromARGB(255, 239, 239, 239),
                               onPressed: () {
                                 viewModel.go_to_settings();
                               },
                               child: Text('Settings',
-                                  style: TextStyle(color: Colors.white)),
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              
+                                  style: TextStyle(color: Colors.black)),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
                             ),
                           ),
                           Flexible(
@@ -99,7 +99,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 margin: EdgeInsets.only(
-                    bottom: 20), // Add 20 pixels margin at the bottom
+                    bottom: 30), // Add 20 pixels margin at the bottom
                 child: _bottomNavigationBar(viewModel),
               ),
             )
