@@ -173,7 +173,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               body: Stack(children: [
                 Container(
                   padding:
-                      const EdgeInsets.only(left: 25.0, right: 25.0, top: 20),
+                      const EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
                   child: Column(
                     children: [
                       ValueListenableBuilder<int>(
@@ -197,9 +197,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 height: 200,
                               ), // Use the value
                               Text(
-                                'Edit Avatar',
+                                'edit your avatar',
                                 style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Color(0xFF3439AB),
                                 ),
                               ),
                             ],
@@ -209,7 +209,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(labelText: 'Name'),
-                        onChanged: (text){
+                        onChanged: (text) {
                           print("changed");
                           model.update_name(text);
                         },
@@ -227,8 +227,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                             //         'Interest ${index + 1}',
                             labelText: userData['interests'][index]['name'],
                           ),
-                          onChanged: (text){
-                            model.update_interest_description(userData['interests'][index]['name'], text);
+                          onChanged: (text) {
+                            model.update_interest_description(
+                                userData['interests'][index]['name'], text);
                           },
                         ),
                       ),
@@ -236,7 +237,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                         onPressed: () {
                           _showInterestsDialog(model);
                         },
-                        child: Text('Edit interests'),
+                        child: Text(
+                          'edit your interests',
+                          style: TextStyle(
+                            color: Color(0xFF3439AB),
+                          ),
+                        ),
                       ),
                       ElevatedButton(
                         onPressed: () async {
