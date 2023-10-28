@@ -33,187 +33,208 @@ class _InChatViewState extends State<InChatView> {
     return ViewModelBuilder<InChatViewModel>.reactive(
       viewModelBuilder: () => InChatViewModel(widget.match_id, widget.user_name,
           widget.user_pic, widget.other_user_id),
-      //run the function that gets the other user's data as soon as the chat is fully loaded
       onViewModelReady: (viewModel) async {
         await viewModel.view_profile_data(widget.other_user_id);
       },
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Color(0xFF3439AB),
-            title: Stack(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: AssetImage(
-                              'lib/assets/${widget.user_pic}.png',
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(65),
+            child: AppBar(
+              backgroundColor: Color(0xFF3439AB),
+              title: Stack(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: AssetImage(
+                                'lib/assets/${widget.user_pic}.png',
+                              ),
+                              radius: 30,
+                              backgroundColor: const Color(0xFF3439AB),
                             ),
-                            radius: 30,
-                            backgroundColor: const Color(0xFF3439AB),
+                            ImageFiltered(
+                              imageFilter:
+                                  ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                              child: Text(
+                                widget.user_name,
+                                style: const TextStyle(
+                                    fontFamily: "Switzer",
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.more_vert),
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'Profile':
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => GestureDetector(
+                                  onTap: () => Navigator.of(context).pop(),
+                                  behavior: HitTestBehavior.opaque,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.35,
+                                    child: UserProfileView(
+                                      interests:
+                                          List<Map<String, dynamic>>.from(
+                                              viewModel.user_data?[
+                                                      'interests'] ??
+                                                  []),
+                                    ),
+                                  ),
+                                ),
+                                isScrollControlled: true,
+                              );
+                              break;
+                            case 'Delete':
+                              //make sure that they want to delete the chat first
+
+                              //delete chat server-side
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Confirm Deletion"),
+                                    content: Text(
+                                        "Are you sure you want to delete this chat? This action is irreversible."),
+                                    actions: [
+                                      TextButton(
+                                        child: Text("Cancel",
+                                            style: TextStyle(
+                                                fontFamily: "Switzer",
+                                                color: Color(0xFF3439AB))),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the alert dialog
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text("Delete",
+                                            style: TextStyle(
+                                                color: Colors.redAccent)),
+                                        onPressed: () async {
+                                          //Call the function that deletes the chat
+                                          await viewModel.delete_chat(
+                                              widget.match_id,
+                                              widget.other_user_id);
+                                          //Go back to the chats view
+                                          await viewModel.go_to_chats();
+                                          Navigator.of(context)
+                                              .pop(); // Close the alert dialog after deleting
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              break;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
+                          const PopupMenuItem<String>(
+                            value: 'Profile',
+                            child: Text('View Profile'),
                           ),
-                          ImageFiltered(
-                            imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                          const PopupMenuItem<String>(
+                            value: 'Delete',
                             child: Text(
-                              widget.user_name,
-                              style: const TextStyle(
-                                  fontFamily: "Switzer",
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                              'Delete Chat',
+                              style: TextStyle(color: Colors.red),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    PopupMenuButton<String>(
-                      icon: Icon(Icons.more_vert),
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'Profile':
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => GestureDetector(
-                                onTap: () => Navigator.of(context).pop(),
-                                behavior: HitTestBehavior.opaque,
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.35,
-                                  child: UserProfileView(
-                                    interests: List<Map<String, dynamic>>.from(
-                                        viewModel.user_data?['interests'] ??
-                                            []),
-                                  ),
-                                ),
-                              ),
-                              isScrollControlled: true,
-                            );
-                            break;
-                          case 'Delete':
-                            //make sure that they want to delete the chat first
-
-                            //delete chat server-side
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Confirm Deletion"),
-                                  content: Text(
-                                      "Are you sure you want to delete this chat? This action is irreversible."),
-                                  actions: [
-                                    TextButton(
-                                      child: Text("Cancel",
-                                          style: TextStyle(
-                                              fontFamily: "Switzer",
-                                              color: Color(0xFF3439AB))),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Close the alert dialog
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text("Delete",
-                                          style: TextStyle(
-                                              color: Colors.redAccent)),
-                                      onPressed: () async {
-                                        //Call the function that deletes the chat
-                                        await viewModel.delete_chat(
-                                            widget.match_id,
-                                            widget.other_user_id);
-                                        //Go back to the chats view
-                                        await viewModel.go_to_chats();
-                                        Navigator.of(context)
-                                            .pop(); // Close the alert dialog after deleting
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            break;
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'Profile',
-                          child: Text('View Profile'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'Delete',
-                          child: Text(
-                            'Delete Chat',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           body: Column(
             children: [
               // Messages List
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  reverse: true,
-                  //itemCount: viewModel.data?.length ?? 0,
-                  itemCount: viewModel.displayed_messages.length,
-                  itemBuilder: (context, index) {
-                    //final message = viewModel.data![index];
-                    final message = viewModel.displayed_messages[index];
-                    final isCurrentUser = message.sent_by == viewModel.uid;
+                child: NotificationListener<ScrollEndNotification>(
+                  onNotification: (scrollEnd) {
+                    final metrics = scrollEnd.metrics;
+                    if (metrics.atEdge) {
+                      if (metrics.pixels == metrics.maxScrollExtent) {
+                        viewModel.loadMessagesBatch();
+                      }
+                    }
+                    return true;
+                  },
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    reverse: true,
+                    itemCount: viewModel.displayed_messages.length,
+                    // +(viewModel.isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      // if (viewModel.isLoading &&
+                      //     index == viewModel.displayed_messages.length) {
+                      //   // This is the last item and we're loading more messages
+                      //   return Center(child: CircularProgressIndicator());
+                      // }
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5.0, horizontal: 10.0),
-                      child: Align(
-                        alignment: isCurrentUser
-                            ? Alignment.topRight
-                            : Alignment.topLeft,
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            color: isCurrentUser
-                                ? Color(0xFF3439AB)
-                                : Colors.grey[300],
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                message.content,
-                                style: TextStyle(
-                                  color: isCurrentUser
-                                      ? Colors.white
-                                      : Colors.black,
+                      final message = viewModel.displayed_messages[index];
+                      final isCurrentUser = message.sent_by == viewModel.uid;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 10.0),
+                        child: Align(
+                          alignment: isCurrentUser
+                              ? Alignment.topRight
+                              : Alignment.topLeft,
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              color: isCurrentUser
+                                  ? Color(0xFF3439AB)
+                                  : Colors.grey[300],
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  message.content,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: isCurrentUser
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5.0),
-                              Text(
-                                DateFormat('hh:mm a').format(
-                                    message.timestamp), // using intl package
-                                style: TextStyle(
-                                  fontSize: 10.0,
-                                  color: isCurrentUser
-                                      ? Colors.white70
-                                      : Colors.black54,
+                                SizedBox(height: 5.0),
+                                Text(
+                                  DateFormat('hh:mm a').format(
+                                      message.timestamp), // using intl package
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: isCurrentUser
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
               // Input Box and Send Button
@@ -227,26 +248,29 @@ class _InChatViewState extends State<InChatView> {
                             horizontal: 8.0), // Add some horizontal padding
                         child: CupertinoTextField(
                           controller: _messageController,
-                          placeholder: 'Type a message',
+                          placeholder: 'type your message...',
                           padding: EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical:
-                                  8.0), // Adjust the internal padding of the text field
-                          //cursorRadius: BorderRadius.circular(8.0),  // Optional: Add some border radius if you like
-                          //clearButtonMode: OverlayVisibilityMode.editing, // Optional: Show clear button when editing
+                              horizontal: 16.0, vertical: 8.0),
                         ),
                       ),
                     ),
                     SizedBox(width: 8.0),
                     CupertinoButton(
                       onPressed: () {
-                        viewModel.send_message(_messageController.text);
-                        _messageController.clear();
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
+                        final messageText = _messageController.text.trim();
+                        if (messageText.isNotEmpty) {
+                          viewModel.send_message(messageText);
+                          _messageController.clear();
+
+                          if (_scrollController.offset ==
+                              _scrollController.position.maxScrollExtent) {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          }
+                        }
                       },
                       child:
                           Text('Send', style: TextStyle(fontFamily: "Switzer")),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/app/app.locator.dart';
@@ -9,7 +11,7 @@ import 'package:stacked_app/models/message_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class InChatViewModel extends StreamViewModel {
+class InChatViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
@@ -30,9 +32,23 @@ class InChatViewModel extends StreamViewModel {
 
   Map<String, dynamic>? user_data;
 
+  DocumentSnapshot? lastVisibleMessageSnapshot;
+
   //the constructor needs to know which chat it is going to
   InChatViewModel(
-      this.match_id, this.user_name, this.user_pic, this.other_user_id);
+      this.match_id, this.user_name, this.user_pic, this.other_user_id) {
+    uid = _authenticationService.currentUser?.uid;
+    if (uid == null) {
+      _navigationService.replaceWithLoginView();
+    }
+    _listenToNewMessages();
+    loadMessagesBatch();
+  }
+
+  void dispose() {
+    _newMessagesSubscription?.cancel();
+    super.dispose();
+  }
 
   Future<void> go_to_chats() async {
     print("I AM GOING BACK");
@@ -40,19 +56,90 @@ class InChatViewModel extends StreamViewModel {
   }
 
   //implement the stream getter, that listens to messages in the chat
-  @override
-  Stream<List<Message>> get stream {
-    print('Subscribing to stream');
-    uid = _authenticationService.currentUser?.uid;
-    if (uid == null) {
-      _navigationService.replaceWithLoginView();
-      return Stream.value([]);
-    }
-    return _firestoreService.load_messages(match_id).map((list) {
-      displayed_messages = list;
-      return list;
+  // @override
+  // Stream<List<Message>> get stream {
+  //   print('Subscribing to stream');
+  //   uid = _authenticationService.currentUser?.uid;
+  //   if (uid == null) {
+  //     _navigationService.replaceWithLoginView();
+  //     return Stream.value([]);
+  //   }
+
+  //   return _firestoreService
+  //       .load_messages(match_id, lastVisibleMessageSnapshot)
+  //       .map((pair) {
+  //     final messages = pair.first;
+  //     if (messages.isNotEmpty) {
+  //       lastVisibleMessageSnapshot =
+  //           pair.second; // Update with the last DocumentSnapshot
+  //       displayed_messages.insertAll(0, messages);
+  //     }
+  //     return displayed_messages;
+  //   });
+  // }
+
+  StreamSubscription? _newMessagesSubscription;
+
+  void _listenToNewMessages() {
+    _newMessagesSubscription =
+        _firestoreService.listenToNewMessages(match_id).listen((newMessages) {
+      final filteredMessages =
+          newMessages.where((message) => message.sent_by != uid).toList();
+      if (filteredMessages.isNotEmpty) {
+        displayed_messages.insertAll(0, filteredMessages);
+        rebuildUi();
+      }
     });
   }
+
+  bool first_load = true;
+
+  Future<void> loadMessagesBatch() async {
+    try {
+      final pair = await _firestoreService.getMessagesBatch(
+          match_id, lastVisibleMessageSnapshot);
+      final messages = pair.first;
+      if (messages.isNotEmpty) {
+        lastVisibleMessageSnapshot = pair.second;
+        if (first_load) {
+          displayed_messages.insertAll(0, messages);
+          first_load = false;
+        } else {
+          displayed_messages.insertAll(displayed_messages.length, messages);
+        }
+
+        rebuildUi();
+      }
+    } catch (e) {
+      print('Error loading messages batch: $e');
+    }
+  }
+
+  // bool isLoading = false;
+  // int ctr = 1;
+
+  // void loadMoreMessages() {
+  //   if (isLoading) return; // Prevent multiple simultaneous fetches
+  //   isLoading = true;
+  //   print("I am loading");
+  //   //rebuildUi();
+
+  //   _firestoreService
+  //       .load_messages(match_id, lastVisibleMessageSnapshot)
+  //       .listen((pair) {
+  //     final messages = pair.first;
+  //     if (messages.isNotEmpty) {
+  //       lastVisibleMessageSnapshot = pair.second;
+  //       print("COunter is: " + ctr.toString());
+  //       displayed_messages.insertAll(ctr * 10, messages);
+  //     }
+
+  //     ctr++;
+  //     isLoading = false;
+  //     print("I stopped loading");
+  //     rebuildUi();
+  //   });
+  // }
 
   //implement function that adds a message to the chat
   void send_message(String content) {

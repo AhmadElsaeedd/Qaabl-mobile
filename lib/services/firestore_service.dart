@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'package:stacked_app/app/app.locator.dart';
 import 'package:stacked_app/services/messaging_service.dart';
 
-
 @lazySingleton
 class FirestoreService {
   final _messagingService = locator<MessagingService>();
@@ -123,7 +122,6 @@ class FirestoreService {
       final data = doc.data() as Map<String, dynamic>;
       String name = data['name'] ?? 'No Name';
       int imageIndex = data['image_index'];
-      print("IMAGE INDEX IS: " + imageIndex.toString());
       return {'name': name, 'image_index': imageIndex};
     } catch (e) {
       print('Error fetching user info: $e');
@@ -149,31 +147,83 @@ class FirestoreService {
     //Do something with response, Idk what yet
   }
 
-  Stream<List<Message>> load_messages(String match_id) {
-    print("Match Id: " + match_id.toString());
-    return _firestore
+  // Stream<Pair<List<Message>, DocumentSnapshot?>> load_messages(String match_id,
+  //     [DocumentSnapshot? lastVisibleMessageSnapshot]) {
+  //   Query query = _firestore
+  //       .collection('Matches')
+  //       .doc(match_id)
+  //       .collection('Messages')
+  //       .orderBy('timestamp', descending: true)
+  //       .limit(10);
+
+  //   if (lastVisibleMessageSnapshot != null) {
+  //     query = query.startAfterDocument(lastVisibleMessageSnapshot);
+  //   }
+
+  //   return query.snapshots().map((snapshot) {
+  //     final messages = snapshot.docs.map((doc) {
+  //       final data = doc.data() as Map<String, dynamic>;
+  //       return Message.fromMap(data);
+  //     }).toList();
+
+  //     final lastDoc = snapshot.docs.isEmpty ? null : snapshot.docs.last;
+
+  //     return Pair(messages, lastDoc);
+  //   }).handleError((error) => print('Error loading messages: $error'));
+  // }
+
+  Future<Pair<List<Message>, DocumentSnapshot?>> getMessagesBatch(
+      String match_id,
+      [DocumentSnapshot? lastVisibleMessageSnapshot]) async {
+    Query query = _firestore
         .collection('Matches')
         .doc(match_id)
         .collection('Messages')
         .orderBy('timestamp', descending: true)
-        .limit(10)
-        .snapshots()
-        .map((snapshot) {
-      print('Received snapshot: $snapshot');
-      return snapshot.docs.map((doc) => Message.fromMap(doc.data())).toList();
-    }).handleError((error) => print('Error loading messages: $error'));
+        .limit(10);
+
+    if (lastVisibleMessageSnapshot != null) {
+      query = query.startAfterDocument(lastVisibleMessageSnapshot);
+    }
+
+    final snapshot = await query.get();
+    final messages = snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      return Message.fromMap(data);
+    }).toList();
+
+    final lastDoc = snapshot.docs.isEmpty ? null : snapshot.docs.last;
+
+    return Pair(messages, lastDoc);
+  }
+
+  Stream<List<Message>> listenToNewMessages(String match_id) {
+    final query = _firestore
+        .collection('Matches')
+        .doc(match_id)
+        .collection('Messages')
+        .orderBy('timestamp', descending: true)
+        .where('timestamp', isGreaterThan: Timestamp.now())
+        .snapshots();
+
+    return query.map((snapshot) {
+      return snapshot.docChanges
+          .where((change) => change.type == DocumentChangeType.added)
+          .map((change) =>
+              Message.fromMap(change.doc.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   Future<void> set_token(String uid) async {
-    try{
+    try {
       String token = await _messagingService.get_token() as String;
       print("TOKEN FOR USER " + token.toString());
       _firestore.collection('Users').doc(uid).update({
         'fcm_token': token,
       });
       print("SET TOKEN FOR UID: " + uid.toString());
-    }
-    catch (error){
+    } catch (error) {
       print("Setting token failed: " + error.toString());
     }
   }
@@ -185,4 +235,11 @@ class FirestoreService {
     doc_exists = user_doc_snapshot.exists;
     return doc_exists;
   }
+}
+
+class Pair<T, U> {
+  final T first;
+  final U second;
+
+  Pair(this.first, this.second);
 }

@@ -13,14 +13,19 @@ class Message {
 
   factory Message.fromMap(Map<String, dynamic> data) {
     try {
-      // final timestampMap = data['timestamp'] as Map<String, dynamic>;
-      // final timestamp = DateTime.fromMillisecondsSinceEpoch(
-      //   timestampMap['_seconds'] * 1000 + timestampMap['_nanoseconds'] / 1000000);
-      final timestamp = (data['timestamp'] as Timestamp).toDate();
+      final timestampData = data['timestamp'];
+      final timestamp =
+          timestampData is Timestamp ? timestampData.toDate() : DateTime.now();
+
+      final content =
+          data['content'] is String ? data['content'] : 'Unknown content';
+      final sent_by =
+          data['sent_by'] is String ? data['sent_by'] : 'Unknown sender';
+
       return Message(
-        content: data['content'] as String,
+        content: content,
         timestamp: timestamp,
-        sent_by: data['sent_by'] as String,
+        sent_by: sent_by,
       );
     } catch (error) {
       print('Error mapping data in from map: $error');
