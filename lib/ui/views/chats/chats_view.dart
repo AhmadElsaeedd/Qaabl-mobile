@@ -35,10 +35,9 @@ class ChatsView extends StackedView<ChatsViewModel> {
                       ),
                     ),
                     Text(
-                      'chat to reveal the names of ur matches, easy :)',
+                      'chat to reveal the names of ur matches :)',
                       style: TextStyle(
-                        fontFamily: 'Switzer',
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
@@ -48,7 +47,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Container(
-                height: 80, // Adjust the height as needed
+                height: 100, // Adjust the height as needed
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: viewModel.new_matches.length,
@@ -70,10 +69,12 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                 match.other_user_pic,
                                 match.other_user_id),
                             child: Container(
-                              width: 80, // Adjust the width as needed
+                              //constraints: BoxConstraints(minWidth: 80),
+                              width: 100,
                               child: Card(
                                 child: Center(
                                     child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     //Add the user's image here
                                     CircleAvatar(
@@ -88,11 +89,16 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                       child: ImageFiltered(
                                         imageFilter: ImageFilter.blur(
                                             sigmaX: 3, sigmaY: 3),
-                                        child: Text(
-                                          match.other_user_name,
-                                          style: const TextStyle(
+                                        child: FittedBox(
+                                          fit: BoxFit
+                                              .scaleDown, // Adjust the text to fit inside the available space
+                                          child: Text(
+                                            match.other_user_name,
+                                            style: const TextStyle(
                                               fontFamily: "Switzer",
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     )
@@ -113,17 +119,14 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     Text(
                       'Messages',
                       style: TextStyle(
-                        fontFamily:
-                            'Switzer', // Replace with your font if it's different
                         fontSize: 26, // Adjust the size as needed
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'everyday ur a step closer to meeting cool ppl :p',
+                      'everyday ur a step closer to meeting cool ppl',
                       style: TextStyle(
-                        fontFamily: 'Switzer',
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

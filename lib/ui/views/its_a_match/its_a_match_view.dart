@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -19,7 +20,7 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
           child: Column(
             children: [
               Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
                     children: [
                       const Text(
@@ -45,42 +46,49 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                 mainAxisAlignment:
                     MainAxisAlignment.spaceEvenly, // Center the buttons
                 children: [
-                  ElevatedButton(
+                  Flexible(
+                      child: CupertinoButton(
+                    color: Color.fromARGB(255, 239, 239, 239),
                     onPressed: () {
                       // "Keep swiping" button action here
                       viewModel.go_to_swiping();
                     },
                     child: Text(
-                      "Keep swiping",
+                      "keep swiping",
                       style:
                           TextStyle(color: Colors.black, fontFamily: "Switzer"),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Rounded button
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  )
+                      // style: ElevatedButton.styleFrom(
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius:
+                      //         BorderRadius.circular(30), // Rounded button
+                      //   ),
+                      //   backgroundColor: Colors.white,
+                      // ),
                       ),
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
-                  ElevatedButton(
+                  Flexible(
+                      child: CupertinoButton(
+                    color: Color(0xFF3439AB),
                     onPressed: () {
                       // "Go to chats" button action here
                       viewModel.go_to_chats();
                     },
                     child: Text(
-                      "Go to chats",
-                      style:
-                          TextStyle(color: Colors.white, fontFamily: "Switzer"),
+                      "go to chats",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(30), // Rounded button
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  )
+                      // style: ElevatedButton.styleFrom(
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius:
+                      //         BorderRadius.circular(30), // Rounded button
+                      //   ),
+                      //   backgroundColor: Color(0xFF3439AB),
+                      // ),
                       ),
-                      backgroundColor: Color(0xFF3439AB),
-                    ),
-                  ),
                 ],
               ),
               Spacer(),
