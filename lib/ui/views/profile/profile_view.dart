@@ -31,6 +31,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         'lib/assets/${viewModel.image_index}.png',
                         height: 200,
                       ),
+                      //Padding(padding: const EdgeInsets.only(bottom: 10)),
                       // Progress Bar and Percentage
                       Stack(
                         children: [

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -42,7 +43,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return CupertinoAlertDialog(
                             title: Text("Password change email"),
                             content: Text(
                                 "we'll send u an email to edit ur password, ok?."),
@@ -73,7 +74,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return CupertinoAlertDialog(
                             title: Text("Privacy Policy"),
                             content: SingleChildScrollView(
                               child: Text(
@@ -104,7 +105,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return CupertinoAlertDialog(
                             title: Text("About Us"),
                             content: SingleChildScrollView(
                               child: Text(
@@ -138,7 +139,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
+                          return CupertinoAlertDialog(
                             title: Text("Confirm Deletion"),
                             content: Text(
                                 "Are you sure you want to delete your account? This action is irreversible."),

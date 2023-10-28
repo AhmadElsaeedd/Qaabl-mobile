@@ -377,7 +377,7 @@ class ImageChooserDialog extends StatelessWidget {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Put them in 2 columns next to each other
           ),
-          itemCount: 7, // As you have images from 0.png to 6.png
+          itemCount: 11, // As you have images from 0.png to 11.png
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
