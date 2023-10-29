@@ -1,8 +1,9 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/ui/common/app_colors.dart';
 import 'package:stacked_app/ui/common/ui_helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'home_viewmodel.dart';
 
@@ -20,7 +21,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500), // Duration of the slide animation
@@ -54,7 +54,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
-        print("next user is: " + nextUser.toString());
 
         // Reset and start the animation for the new user
         _animationController.reset();
@@ -150,8 +149,26 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
   Widget _userDetails(
       nextUser, viewModel, context, Animation<Offset> slideAnimation) {
-    SwipeItem swipeItem = SwipeItem(
-        content: _userCard(nextUser, viewModel, context, slideAnimation),
+    SwipeItem? swipeItem; // Declare swipeItem as nullable
+    final GlobalKey<_UserCardState> userCardKey = GlobalKey<_UserCardState>();
+
+    // Define the callback outside of swipeItem
+    Future<void> onSlideUpdateCallback(SlideRegion? region) async {
+      if (region.toString() == "SlideRegion.inNopeRegion") {
+        // show dislike feedback
+        userCardKey.currentState!.showFeedback("Dislike");
+      } else if (region.toString() == "SlideRegion.inLikeRegion") {
+        // show like feedback
+        userCardKey.currentState!.showFeedback("Like");
+      } else {
+        // hide feedback for other cases
+        userCardKey.currentState!.hideFeedback();
+      }
+    }
+
+    swipeItem = SwipeItem(
+        content:
+            UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
         likeAction: () {
           //skip for now
           print("I am in like");
@@ -161,7 +178,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         nopeAction: () {
           print("I am in dislike");
           viewModel.skip_user(nextUser['id']);
-        }
+        },
+        onSlideUpdate: onSlideUpdateCallback
         // Include other actions like superLike if you have them
         );
 
@@ -175,12 +193,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         itemBuilder: (BuildContext context, int index) {
           return Container(
               alignment: Alignment.center,
-              child: swipeItem
+              child: swipeItem!
                   .content // This displays the content of the SwipeItem
               );
         },
         onStackFinished: () {
-          print("Stack finished");
           // Load more users or any action when all cards are swiped
         },
       ),
@@ -373,128 +390,157 @@ class LinearProgressPainter extends CustomPainter {
   }
 }
 
-Widget _userCard(
-    nextUser, viewModel, context, Animation<Offset> slideAnimation) {
-  final duration = Duration(seconds: 30);
-  ValueKey _tweenKey = ValueKey(DateTime.now());
-  return SlideTransition(
-    position: slideAnimation,
-    child: Card(
-        color: Color.fromARGB(255, 239, 239, 239),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        elevation: 5,
-        child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Center(
-                    // Center the interests area
-                    child: Column(
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 25)),
-                        Text(
-                          "I like ${nextUser['interests'][0]['name']}",
-                          style: TextStyle(
-                            fontFamily:
-                                'Switzer', // Replace with your font if it's different
-                            fontSize: 25, // Adjust the size as needed
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Image.asset(
-                          'lib/assets/${nextUser['image_index']}.png',
-                          height: 200,
-                        ),
-                        Container(
-                          height: 10,
-                          child: TweenAnimationBuilder(
-                            duration: duration,
-                            key: _tweenKey,
-                            tween: Tween(begin: 1.0, end: 0.0),
-                            builder: (_, double value, __) {
-                              Color color;
+class UserCard extends StatefulWidget {
+  final nextUser;
+  final viewModel;
+  final context;
+  final slideAnimation;
+  final key;
 
-                              if (value > 0.5) {
-                                color = Colors.green;
-                              } else if (value > 0.25) {
-                                color = Colors.yellow;
-                              } else {
-                                color = Colors.red;
-                              }
+  UserCard(this.nextUser, this.viewModel, this.context, this.slideAnimation,
+      this.key)
+      : super(key: key);
 
-                              return CustomPaint(
-                                painter: LinearProgressPainter(
-                                    color: color, percentage: value),
-                                size:
-                                    Size(MediaQuery.of(context).size.width, 10),
-                              );
-                            },
-                            onEnd: () {
-                              print("Timer ended");
-                              viewModel.skip_user(nextUser['id']);
-                              _tweenKey = ValueKey(DateTime.now());
-                            },
-                          ),
-                        ),
-                        Text(
-                          "And... ${nextUser['interests'][0]['description']}",
-                          style: TextStyle(
-                            fontFamily:
-                                'Switzer', // Replace with your font if it's different
-                            fontSize: 18, // Adjust the size as needed
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Row(
-                            // Align Like and Dislike buttons horizontally
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  viewModel.dislike_user(nextUser['id']);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        30), // Rounded button
-                                  ),
-                                  backgroundColor: Colors.white,
-                                ),
-                                child: Icon(Icons.close,
-                                    color: Colors.black), // Close icon
+  @override
+  _UserCardState createState() => _UserCardState();
+}
+
+class _UserCardState extends State<UserCard> {
+  String? feedback; // this variable will store the feedback "Like" or "Dislike"
+  Color? feedbackColor;
+  IconData? feedbackIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    // This is your current code for _userCard, but wrapped inside a stateful widget
+    return SlideTransition(
+      position: widget.slideAnimation,
+      child: Stack(children: [
+        Card(
+            color: Color.fromARGB(255, 239, 239, 239),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5,
+            child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Center(
+                        // Center the interests area
+                        child: Column(
+                          children: [
+                            Padding(padding: EdgeInsets.only(top: 25)),
+                            Text(
+                              "I like ${widget.nextUser['interests'][0]['name']}",
+                              style: TextStyle(
+                                fontSize: 25, // Adjust the size as needed
+                                fontWeight: FontWeight.bold,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  print("I liked the user: " +
-                                      nextUser['id'].toString());
-                                  viewModel.like_user(nextUser['id'],
-                                      nextUser['potential_match']);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        30), // Rounded button
-                                  ),
-                                  backgroundColor: Color(0xFF3439AB),
-                                ),
-                                child: Icon(Icons.check,
-                                    color: Colors.white), // Check icon
+                            ),
+                            Image.asset(
+                              'lib/assets/${widget.nextUser['image_index']}.png',
+                              height: 200,
+                            ),
+                            Text(
+                              "And... ${widget.nextUser['interests'][0]['description']}",
+                              style: TextStyle(
+                                fontSize: 18, // Adjust the size as needed
+                                fontWeight: FontWeight.bold,
                               ),
-                            ],
-                          ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: Row(
+                                // Align Like and Dislike buttons horizontally
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      widget.viewModel
+                                          .dislike_user(widget.nextUser['id']);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), // Rounded button
+                                      ),
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    child: Icon(Icons.close,
+                                        color: Colors.black), // Close icon
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      widget.viewModel.like_user(
+                                          widget.nextUser['id'],
+                                          widget.nextUser['potential_match']);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), // Rounded button
+                                      ),
+                                      backgroundColor: Color(0xFF3439AB),
+                                    ),
+                                    child: Icon(Icons.check,
+                                        color: Colors.white), // Check icon
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ))),
+        if (feedback != null)
+          Positioned(
+            top: 50, // adjust as needed
+            left: feedback == "Like" ? 20 : null, // 20px from left if "Like"
+            right: feedback == "Dislike"
+                ? 20
+                : null, // 20px from right if "Dislike"
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: feedbackColor!.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(30.0), // rounded corners
               ),
-            ))),
-  );
+              child: Icon(
+                feedbackIcon,
+                size: 30,
+                color: Colors.white,
+              ),
+            ),
+          )
+      ]),
+    );
+  }
+
+  void showFeedback(String feedbackText) {
+    setState(() {
+      feedback = feedbackText;
+      if (feedbackText == "Like") {
+        feedbackColor = Color(0xFF3439AB);
+        feedbackIcon = Icons.thumb_up; // change this to your "like" icon
+      } else if (feedbackText == "Dislike") {
+        feedbackColor = Colors.black;
+        feedbackIcon = Icons.thumb_down; // change this to your "dislike" icon
+      }
+    });
+  }
+
+  void hideFeedback() {
+    setState(() {
+      feedback = null;
+      feedbackColor = null;
+      feedbackIcon = null;
+    });
+  }
 }
 
 Widget check_profile_button(nextUser, viewModel, context) {
