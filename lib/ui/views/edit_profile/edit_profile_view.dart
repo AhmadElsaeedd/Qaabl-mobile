@@ -137,10 +137,17 @@ class _EditProfileViewState extends State<EditProfileView> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.only(right: 25.0, left: 25, top: 50),
+                      const EdgeInsets.only(right: 25.0, left: 25, top: 60),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        Text(
+                          "Your Profile",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
                         ValueListenableBuilder<int>(
                           valueListenable: selectedImageNotifier,
                           builder: (context, value, child) => GestureDetector(
@@ -178,6 +185,17 @@ class _EditProfileViewState extends State<EditProfileView> {
                             model.update_name(text);
                           },
                         ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Your Interests",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
                         ...List.generate(
                           interestControllers.length,
                           (index) => TextField(
@@ -202,7 +220,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                             ),
                           ),
                         ),
-                        ElevatedButton(
+                        CupertinoButton(
+                          color: Color(0xFF3439AB),
                           onPressed: () async {
                             setState(() {
                               isSaving =
@@ -225,12 +244,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   false; // Reset isSaving to false when the await is done
                             });
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF3439AB),
-                          ),
-                          child: Text('Save and Back'),
+                          child: Text('Save and back',
+                              style: TextStyle(color: Colors.white)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
                         ),
-                        // Padding(padding: EdgeInsets.only(bottom: 120)),
                       ],
                     ),
                   ),

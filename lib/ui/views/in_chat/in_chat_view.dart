@@ -61,12 +61,15 @@ class _InChatViewState extends State<InChatView> {
                             ImageFiltered(
                               imageFilter:
                                   ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                              child: Text(
-                                widget.user_name,
-                                style: const TextStyle(
-                                    fontFamily: "Switzer",
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                              child: FittedBox(
+                                fit: BoxFit
+                                    .scaleDown, // Adjust the text to fit inside the available space
+                                child: Text(
+                                  widget.user_name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
                           ],
@@ -98,13 +101,11 @@ class _InChatViewState extends State<InChatView> {
                               );
                               break;
                             case 'Delete':
-                              //make sure that they want to delete the chat first
-
                               //delete chat server-side
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
+                                  return CupertinoAlertDialog(
                                     title: Text("Confirm Deletion"),
                                     content: Text(
                                         "Are you sure you want to delete this chat? This action is irreversible."),
@@ -180,14 +181,7 @@ class _InChatViewState extends State<InChatView> {
                     controller: _scrollController,
                     reverse: true,
                     itemCount: viewModel.displayed_messages.length,
-                    // +(viewModel.isLoading ? 1 : 0),
                     itemBuilder: (context, index) {
-                      // if (viewModel.isLoading &&
-                      //     index == viewModel.displayed_messages.length) {
-                      //   // This is the last item and we're loading more messages
-                      //   return Center(child: CircularProgressIndicator());
-                      // }
-
                       final message = viewModel.displayed_messages[index];
                       final isCurrentUser = message.sent_by == viewModel.uid;
                       return Padding(
