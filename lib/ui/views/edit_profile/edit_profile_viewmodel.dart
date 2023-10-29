@@ -46,16 +46,15 @@ class EditProfileViewModel extends BaseViewModel {
   //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(
       String name, List<Map<String, String>> interests, int image_index) async {
-    print("I am saving with interests: " + interests.toString());
     //get the values from the input fields and go update the values in the cloud
     //call the function
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
-      //testing url
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
+      //testing url
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
       body: jsonEncode({
         'uid': uid,
         'name': name,
@@ -128,11 +127,11 @@ class EditProfileViewModel extends BaseViewModel {
     //call the function from the cloud
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
-      //testing url
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      //testing url
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -179,11 +178,11 @@ class EditProfileViewModel extends BaseViewModel {
     rebuildUi(); // Notify the view to rebuild
   }
 
-  void update_name(String name){
+  void update_name(String name) {
     user_data['name'] = name;
   }
 
-  void update_interest_description(String interest, String description){
+  void update_interest_description(String interest, String description) {
     for (Map<String, dynamic> interestMap in user_data['interests']) {
       if (interestMap['name'] == interest) {
         interestMap['description'] = description;

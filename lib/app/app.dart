@@ -4,7 +4,6 @@ import 'package:stacked_app/ui/views/home/home_view.dart';
 import 'package:stacked_app/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:stacked_app/ui/views/counter/counter_view.dart';
 import 'package:stacked_app/ui/views/login/login_view.dart';
 import 'package:stacked_app/services/auth_service.dart';
 import 'package:stacked_app/ui/views/register/register_view.dart';
@@ -22,7 +21,6 @@ import 'package:stacked_app/services/messaging_service.dart';
   routes: [
     MaterialRoute(page: HomeView),
     MaterialRoute(page: StartupView),
-    MaterialRoute(page: CounterView),
     MaterialRoute(page: LoginView),
     MaterialRoute(page: RegisterView),
     MaterialRoute(page: ItsAMatchView),

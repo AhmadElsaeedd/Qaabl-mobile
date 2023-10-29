@@ -56,11 +56,11 @@ class SettingsViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      // Uri.parse(
-      //     ''),
-      //testing URL
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DeleteAccount'),
+      //testing URL
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
       body: jsonEncode({
         'user_uid': uid,
       }),

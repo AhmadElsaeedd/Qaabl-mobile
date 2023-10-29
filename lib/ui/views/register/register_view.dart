@@ -156,6 +156,30 @@ class RegisterView extends StackedView<RegisterViewModel> {
                             ),
                     ),
                     Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Platform.isIOS
+                          ? CupertinoButton(
+                              onPressed: viewModel.signInWithApple,
+                              child: Image.asset(
+                                'lib/assets/applebutton.png',
+                                fit: BoxFit.fill,
+                              ),
+                              padding: EdgeInsets.zero,
+                              pressedOpacity: 0.7,
+                            )
+                          : ElevatedButton(
+                              onPressed: viewModel.signInWithApple,
+                              child: Image.asset(
+                                'lib/assets/applebutton.png',
+                                fit: BoxFit.fill,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                    ),
+                    Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

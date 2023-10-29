@@ -5,29 +5,26 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i12;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_app/ui/views/chats/chats_view.dart' as _i11;
-import 'package:stacked_app/ui/views/counter/counter_view.dart' as _i4;
+import 'package:stacked_app/ui/views/chats/chats_view.dart' as _i10;
 import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart'
-    as _i10;
+    as _i9;
 import 'package:stacked_app/ui/views/home/home_view.dart' as _i2;
-import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart' as _i12;
-import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart' as _i7;
-import 'package:stacked_app/ui/views/login/login_view.dart' as _i5;
-import 'package:stacked_app/ui/views/profile/profile_view.dart' as _i8;
-import 'package:stacked_app/ui/views/register/register_view.dart' as _i6;
-import 'package:stacked_app/ui/views/settings/settings_view.dart' as _i9;
+import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart' as _i11;
+import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart' as _i6;
+import 'package:stacked_app/ui/views/login/login_view.dart' as _i4;
+import 'package:stacked_app/ui/views/profile/profile_view.dart' as _i7;
+import 'package:stacked_app/ui/views/register/register_view.dart' as _i5;
+import 'package:stacked_app/ui/views/settings/settings_view.dart' as _i8;
 import 'package:stacked_app/ui/views/startup/startup_view.dart' as _i3;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i13;
 
 class Routes {
   static const homeView = '/home-view';
 
   static const startupView = '/startup-view';
-
-  static const counterView = '/counter-view';
 
   static const loginView = '/login-view';
 
@@ -48,7 +45,6 @@ class Routes {
   static const all = <String>{
     homeView,
     startupView,
-    counterView,
     loginView,
     registerView,
     itsAMatchView,
@@ -71,116 +67,106 @@ class StackedRouter extends _i1.RouterBase {
       page: _i3.StartupView,
     ),
     _i1.RouteDef(
-      Routes.counterView,
-      page: _i4.CounterView,
-    ),
-    _i1.RouteDef(
       Routes.loginView,
-      page: _i5.LoginView,
+      page: _i4.LoginView,
     ),
     _i1.RouteDef(
       Routes.registerView,
-      page: _i6.RegisterView,
+      page: _i5.RegisterView,
     ),
     _i1.RouteDef(
       Routes.itsAMatchView,
-      page: _i7.ItsAMatchView,
+      page: _i6.ItsAMatchView,
     ),
     _i1.RouteDef(
       Routes.profileView,
-      page: _i8.ProfileView,
+      page: _i7.ProfileView,
     ),
     _i1.RouteDef(
       Routes.settingsView,
-      page: _i9.SettingsView,
+      page: _i8.SettingsView,
     ),
     _i1.RouteDef(
       Routes.editProfileView,
-      page: _i10.EditProfileView,
+      page: _i9.EditProfileView,
     ),
     _i1.RouteDef(
       Routes.chatsView,
-      page: _i11.ChatsView,
+      page: _i10.ChatsView,
     ),
     _i1.RouteDef(
       Routes.inChatView,
-      page: _i12.InChatView,
+      page: _i11.InChatView,
     ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
-    _i4.CounterView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i4.CounterView(),
+    _i4.LoginView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i4.LoginView(),
         settings: data,
       );
     },
-    _i5.LoginView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i5.LoginView(),
+    _i5.RegisterView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i5.RegisterView(),
         settings: data,
       );
     },
-    _i6.RegisterView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.RegisterView(),
+    _i6.ItsAMatchView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.ItsAMatchView(),
         settings: data,
       );
     },
-    _i7.ItsAMatchView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i7.ItsAMatchView(),
+    _i7.ProfileView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i7.ProfileView(),
         settings: data,
       );
     },
-    _i8.ProfileView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i8.ProfileView(),
+    _i8.SettingsView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i8.SettingsView(),
         settings: data,
       );
     },
-    _i9.SettingsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i9.SettingsView(),
-        settings: data,
-      );
-    },
-    _i10.EditProfileView: (data) {
+    _i9.EditProfileView: (data) {
       final args = data.getArgs<EditProfileViewArguments>(
         orElse: () => const EditProfileViewArguments(),
       );
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => _i10.EditProfileView(key: args.key),
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => _i9.EditProfileView(key: args.key),
         settings: data,
       );
     },
-    _i11.ChatsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i11.ChatsView(),
+    _i10.ChatsView: (data) {
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i10.ChatsView(),
         settings: data,
       );
     },
-    _i12.InChatView: (data) {
+    _i11.InChatView: (data) {
       final args = data.getArgs<InChatViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => _i12.InChatView(
+      return _i12.MaterialPageRoute<dynamic>(
+        builder: (context) => _i11.InChatView(
             key: args.key,
-            match_id: args.matchid,
-            user_name: args.username,
-            user_pic: args.userpic,
-            other_user_id: args.otheruser_id),
+            matchid: args.matchid,
+            username: args.username,
+            userpic: args.userpic,
+            otheruser_id: args.otheruser_id),
         settings: data,
       );
     },
@@ -195,7 +181,7 @@ class StackedRouter extends _i1.RouterBase {
 class EditProfileViewArguments {
   const EditProfileViewArguments({this.key});
 
-  final _i13.Key? key;
+  final _i12.Key? key;
 
   @override
   String toString() {
@@ -223,7 +209,7 @@ class InChatViewArguments {
     required this.otheruser_id,
   });
 
-  final _i13.Key? key;
+  final _i12.Key? key;
 
   final String matchid;
 
@@ -258,7 +244,7 @@ class InChatViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+extension NavigatorStateExtension on _i13.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -281,20 +267,6 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.startupView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> navigateToCounterView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return navigateTo<dynamic>(Routes.counterView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -372,7 +344,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToEditProfileView({
-    _i13.Key? key,
+    _i12.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -402,7 +374,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToInChatView({
-    _i13.Key? key,
+    _i12.Key? key,
     required String matchid,
     required String username,
     required int userpic,
@@ -448,20 +420,6 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.startupView,
-        id: routerId,
-        preventDuplicates: preventDuplicates,
-        parameters: parameters,
-        transition: transition);
-  }
-
-  Future<dynamic> replaceWithCounterView([
-    int? routerId,
-    bool preventDuplicates = true,
-    Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
-  ]) async {
-    return replaceWith<dynamic>(Routes.counterView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -539,7 +497,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithEditProfileView({
-    _i13.Key? key,
+    _i12.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -569,7 +527,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithInChatView({
-    _i13.Key? key,
+    _i12.Key? key,
     required String matchid,
     required String username,
     required int userpic,

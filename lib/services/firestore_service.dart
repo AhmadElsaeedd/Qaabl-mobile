@@ -23,10 +23,10 @@ class FirestoreService {
   //   print("Firestore settings: " + _firestore.settings.toString());
   // }
 
-  FirestoreService() {
-    _firestore.useFirestoreEmulator('localhost', 8085);
-    print("I am using the emulator: " + _firestore.settings.toString());
-  }
+  // FirestoreService() {
+  //   _firestore.useFirestoreEmulator('localhost', 8085);
+  //   print("I am using the emulator: " + _firestore.settings.toString());
+  // }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
     print("user making request is: " + uid.toString());

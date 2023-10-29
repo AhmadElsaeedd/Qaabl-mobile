@@ -10,9 +10,9 @@ import 'package:crypto/crypto.dart';
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  AuthenticationService() {
-    _firebaseAuth.useAuthEmulator('localhost', 9104);
-  }
+  // AuthenticationService() {
+  //   _firebaseAuth.useAuthEmulator('localhost', 9104);
+  // }
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
