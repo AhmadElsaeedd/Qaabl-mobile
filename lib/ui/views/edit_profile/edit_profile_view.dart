@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_app/ui/common/ui_helpers.dart';
 
 import 'edit_profile_viewmodel.dart';
 
@@ -108,7 +109,6 @@ class _EditProfileViewState extends State<EditProfileView> {
           selectedImageNotifier =
               ValueNotifier<int>(userData['image_index'] ?? 0);
           nameController = TextEditingController(text: userData['name'] ?? '');
-          print("I am rebuilding");
           interestNameControllers = List.generate(
             (userData['interests']?.length ?? 0),
             (index) {
@@ -132,126 +132,152 @@ class _EditProfileViewState extends State<EditProfileView> {
           );
 
           return Scaffold(
-              backgroundColor: Colors.white,
-              body: Stack(children: [
-                Container(
+            backgroundColor: Colors.white,
+            body: Stack(
+              children: [
+                Padding(
                   padding:
-                      const EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
-                  child: Column(
-                    children: [
-                      ValueListenableBuilder<int>(
-                        valueListenable: selectedImageNotifier,
-                        builder: (context, value, child) => GestureDetector(
-                          onTap: () async {
-                            int? chosenIndex = await showDialog<int>(
-                              context: context,
-                              builder: (context) => ImageChooserDialog(),
-                            );
-                            if (chosenIndex != null) {
-                              selectedImageNotifier.value =
-                                  chosenIndex; // Set the new value
-                              model.user_data['image_index'] = chosenIndex;
-                            }
-                          },
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'lib/assets/$value.png',
-                                height: 200,
-                              ), // Use the value
-                              Text(
-                                'edit your avatar',
-                                style: TextStyle(
-                                  color: Color(0xFF3439AB),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      TextField(
-                        controller: nameController,
-                        decoration: InputDecoration(labelText: 'Name'),
-                        onChanged: (text) {
-                          model.update_name(text);
-                        },
-                      ),
-                      ...List.generate(
-                        interestControllers.length,
-                        (index) => TextField(
-                          controller: interestControllers[index],
-                          decoration: InputDecoration(
-                            labelText: userData['interests'][index]['name'],
-                          ),
-                          onChanged: (text) {
-                            model.update_interest_description(
-                                userData['interests'][index]['name'], text);
-                          },
-                        ),
-                      ),
-                      CupertinoButton(
-                        onPressed: () {
-                          _showInterestsDialog(model);
-                        },
-                        child: Text(
-                          'edit your interests',
-                          style: TextStyle(
-                            color: Color(0xFF3439AB),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            isSaving =
-                                true; // Set isSaving to true when the button is pressed
-                          });
-                          String name = nameController.text;
-                          List<Map<String, String>> interests = List.generate(
-                            interestControllers.length,
-                            (index) => {
-                              'name': interestNameControllers[index]
-                                  .text, // Using the text from the name controller
-                              'description': interestControllers[index].text,
+                      const EdgeInsets.only(right: 25.0, left: 25, top: 50),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ValueListenableBuilder<int>(
+                          valueListenable: selectedImageNotifier,
+                          builder: (context, value, child) => GestureDetector(
+                            onTap: () async {
+                              int? chosenIndex = await showDialog<int>(
+                                context: context,
+                                builder: (context) => ImageChooserDialog(),
+                              );
+                              if (chosenIndex != null) {
+                                selectedImageNotifier.value =
+                                    chosenIndex; // Set the new value
+                                model.user_data['image_index'] = chosenIndex;
+                              }
                             },
-                          );
-                          print("Save with image index: " +
-                              selectedImageNotifier.value.toString());
-                          await model.save_and_back(
-                              name, interests, selectedImageNotifier.value);
-                          //show a circular progress bar while this await is done
-                          setState(() {
-                            isSaving =
-                                false; // Reset isSaving to false when the await is done
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF3439AB),
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'lib/assets/$value.png',
+                                  height: 200,
+                                ), // Use the value
+                                Text(
+                                  'edit your avatar',
+                                  style: TextStyle(
+                                    color: Color(0xFF3439AB),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        child: Text('Save and Back'),
-                      ),
-                      Spacer(),
-                      Container(
-                        margin: EdgeInsets.only(bottom: 25), // Adjust as needed
-                        child: _bottomNavigationBar(model),
-                      ),
-                    ],
+                        TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(labelText: 'Name'),
+                          onChanged: (text) {
+                            model.update_name(text);
+                          },
+                        ),
+                        ...List.generate(
+                          interestControllers.length,
+                          (index) => TextField(
+                            controller: interestControllers[index],
+                            decoration: InputDecoration(
+                              labelText: userData['interests'][index]['name'],
+                            ),
+                            onChanged: (text) {
+                              model.update_interest_description(
+                                  userData['interests'][index]['name'], text);
+                            },
+                          ),
+                        ),
+                        CupertinoButton(
+                          onPressed: () {
+                            _showInterestsDialog(model);
+                          },
+                          child: Text(
+                            'edit your interests',
+                            style: TextStyle(
+                              color: Color(0xFF3439AB),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              isSaving =
+                                  true; // Set isSaving to true when the button is pressed
+                            });
+                            String name = nameController.text;
+                            List<Map<String, String>> interests = List.generate(
+                              interestControllers.length,
+                              (index) => {
+                                'name': interestNameControllers[index]
+                                    .text, // Using the text from the name controller
+                                'description': interestControllers[index].text,
+                              },
+                            );
+                            await model.save_and_back(
+                                name, interests, selectedImageNotifier.value);
+                            //show a circular progress bar while this await is done
+                            setState(() {
+                              isSaving =
+                                  false; // Reset isSaving to false when the await is done
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF3439AB),
+                          ),
+                          child: Text('Save and Back'),
+                        ),
+                        // Padding(padding: EdgeInsets.only(bottom: 120)),
+                      ],
+                    ),
                   ),
                 ),
                 if (isSaving)
                   Positioned.fill(
-                    child: Container(
-                      color: Colors.black45,
-                      child: Center(
-                        child: CircularProgressIndicator(),
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                              strokeWidth: 6,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
-              ]));
+              ],
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.only(right: 25.0, left: 25, bottom: 30),
+              child: _bottomNavigationBar(model),
+            ),
+          );
         } else {
           return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Loading ...', style: TextStyle(fontSize: 16)),
+                  horizontalSpaceSmall,
+                  SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                      strokeWidth: 6,
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         }

@@ -163,10 +163,10 @@ class StackedRouter extends _i1.RouterBase {
       return _i12.MaterialPageRoute<dynamic>(
         builder: (context) => _i11.InChatView(
             key: args.key,
-            matchid: args.matchid,
-            username: args.username,
-            userpic: args.userpic,
-            otheruser_id: args.otheruser_id),
+            match_id: args.matchid,
+            user_name: args.username,
+            user_pic: args.userpic,
+            other_user_id: args.otheruser_id),
         settings: data,
       );
     },

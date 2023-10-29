@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_app/ui/common/ui_helpers.dart';
 
 import 'profile_viewmodel.dart';
 
@@ -93,7 +94,23 @@ class ProfileView extends StackedView<ProfileViewModel> {
                     ],
                   )
                 else
-                  CircularProgressIndicator(), // Show loading indicator while waiting
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Loading ...', style: TextStyle(fontSize: 16)),
+                        horizontalSpaceSmall,
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                            strokeWidth: 6,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
               ],
             ),
             Align(

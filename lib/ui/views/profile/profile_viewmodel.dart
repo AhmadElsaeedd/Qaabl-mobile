@@ -49,13 +49,14 @@ class ProfileViewModel extends BaseViewModel {
         get_percentage(),
         get_profile_pic_index(),
       ]);
-
+      print("Percentage is: " + results[0].toString());
+      print("Image index is: " + results[1].toString());
       percentage = results[0];
       image_index = results[1];
 
       rebuildUi();
     } catch (e) {
-      print("couldn't fetch the percentage: " + e.toString());
+      print("couldn't fetch something: " + e.toString());
     }
   }
 
@@ -90,7 +91,7 @@ class ProfileViewModel extends BaseViewModel {
     final response = await http.post(
       //production url
       Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetImageIndex'),
       //testing url
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
