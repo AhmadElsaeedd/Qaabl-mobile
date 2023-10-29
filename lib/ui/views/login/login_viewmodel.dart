@@ -39,6 +39,18 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
+  Future signInWithApple() async {
+    final success = await _authenticationService.signInWithApple();
+    if (success) {
+      _navigationService.replaceWithHomeView();
+    } else {
+      _dialogService.showDialog(
+        title: 'Login Failure',
+        description: 'Failed to sign in with Apple.',
+      );
+    }
+  }
+
   void navigateToRegister() {
     _navigationService.replaceWithRegisterView();
   }

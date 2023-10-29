@@ -20,6 +20,7 @@ dependencies:
   stacked_services: ^1.1.0
   intl: ^0.18.1
   firebase_messaging: ^14.6.9
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   build_runner: ^2.4.5
