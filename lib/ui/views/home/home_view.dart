@@ -85,6 +85,29 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 nextUser, viewModel, context),
                           ),
                         ),
+                      ] else if (nextUser == null &&
+                          viewModel.no_more_users == false) ...[
+                        Container(
+                          margin: EdgeInsets.only(top: 200),
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Finding people!',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              Text(
+                                "give us a sec :)",
+                                style: TextStyle(
+                                  fontSize: 14, // Adjust the size as needed
+                                  //fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ] else ...[
                         Container(
                           margin: EdgeInsets.only(top: 200),
@@ -101,8 +124,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                               Text(
                                 "come back in a bit, see u",
                                 style: TextStyle(
-                                  fontFamily:
-                                      'Switzer', // Replace with your font if it's different
                                   fontSize: 14, // Adjust the size as needed
                                   //fontWeight: FontWeight.bold,
                                 ),
