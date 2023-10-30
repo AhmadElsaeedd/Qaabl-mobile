@@ -56,18 +56,16 @@ class HomeViewModel extends BaseViewModel {
     _navigationService.replaceWithChatsView();
   }
 
-  // a data structure that will hold the users, should be fast in insertion/deletion
+  //data structure that will hold the users info
   Queue<Map<String, dynamic>> users_queue = Queue();
-  // keeping list of users id's for easy access
+  //list of users id's for easy access
   Set<String> user_Ids_in_queue = Set<String>();
 
-  // logic flags
+  //logic flags
   bool first_load = false;
   bool no_more_users = false;
 
   //A function that sends an HTTP request to a cloud function getUsers()
-  //The function returns 3 users that are not in the likes, dislikes, matches arrays of the user AND not the user
-  //We just need to pass the user_uid to the cloud function and the filtering will be done server-side
   Future<void> getUsers() async {
     try {
       //call the cloud function that gets 3 users, pass the uid to it
@@ -148,11 +146,12 @@ class HomeViewModel extends BaseViewModel {
 
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match) async {
+    //rebuild ui, meaning next user will be fetched
+    rebuildUi();
     dynamic response;
     if (potential_match == true) {
       print("I am in the true place");
-      //call the cloud function that
-      //creates a match between 2 users
+      //create a match between 2 users
       response = await both_like_each_other(liked_user_uid);
     } else {
       print("I am in the false place");
@@ -164,18 +163,26 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(liked_user_uid);
+      print("liked user successfully");
     } else if (response.statusCode == 204) {
-      await both_like_each_other(liked_user_uid);
-    } else
+      try {
+        await both_like_each_other(liked_user_uid);
+      } catch (e) {
+        print("couldn't create a match: " + e.toString());
+      }
+    } else {
       print("failed to go to cloud");
+    }
 
-    //rebuild ui, meaning next user will be fetched
-    rebuildUi();
+    // //rebuild ui, meaning next user will be fetched
+    // rebuildUi();
   }
 
   //ToDo: function that dislikes a user, server-side
   Future<void> dislike_user(String disliked_user_uid) async {
-    //call the cloud function that likes a user
+    //rebuild ui, meaning next user will be fetched
+    rebuildUi();
+    //call the cloud function that dislikes a user
     final response = await http.post(
       //add the url of the function here
       //production URL
@@ -195,11 +202,13 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(disliked_user_uid);
-    } else
+      print("disliked user successfully");
+    } else {
       print("failed to go to cloud");
+    }
 
-    //rebuild ui, meaning next user will be fetched
-    rebuildUi();
+    // //rebuild ui, meaning next user will be fetched
+    // rebuildUi();
   }
 
   //function to skip user without performing any action
@@ -210,14 +219,11 @@ class HomeViewModel extends BaseViewModel {
   }
 
   //function to display it's a match to the current user
-  //ToDo: take in the avatar as a parameter to show the its-a-match page
   Future<http.Response> both_like_each_other(liked_user_uid) async {
     //show the its-a-match screen instantly, fast response
-    //ToDo: pass the avatars of both users to the view so we can construct the UI of the page
     _navigationService.navigateToItsAMatchView();
-    //ToDo: call a function that creates a match between the 2 users, server-side
+    //function that creates a match between the 2 users, server-side
     final response = await http.post(
-      //add the url of the function here
       //production URL
       Uri.parse(
           'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
@@ -234,7 +240,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<http.Response> like_user_in_cloud(liked_user_uid) async {
-    //ToDo: call a function that likes the other user
+    //function that likes the other user
     final response = await http.post(
       //add the url of the function here
       //production URL

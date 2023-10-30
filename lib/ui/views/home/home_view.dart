@@ -508,18 +508,10 @@ class _UserCardState extends State<UserCard> {
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Dislike");
+                                      await Future.delayed(
+                                          Duration(milliseconds: 400));
                                       widget.viewModel
                                           .dislike_user(widget.nextUser['id']);
-                                      // await Future.delayed(
-                                      //     Duration(seconds: 1));
-                                      print("Pressed on dislike");
-                                      // widget.viewModel
-                                      //     .skip_user(widget.nextUser['id']);
-                                      // print(
-                                      //     "Current Item: ${matchEngine!.currentItem}");
-                                      // print("Calling dislike method");
-                                      // matchEngine!.currentItem?.nope();
-                                      // print("Dislike method called");
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -534,19 +526,11 @@ class _UserCardState extends State<UserCard> {
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Like");
+                                      await Future.delayed(
+                                          Duration(milliseconds: 400));
                                       widget.viewModel.like_user(
                                           widget.nextUser['id'],
                                           widget.nextUser['potential_match']);
-                                      print("Pressed on like");
-                                      // await Future.delayed(
-                                      //     Duration(seconds: 1));
-                                      // widget.viewModel
-                                      //     .skip_user(widget.nextUser['id']);
-                                      // print(
-                                      //     "Current Item: ${matchEngine!.currentItem}");
-                                      // print("Calling like method");
-                                      // matchEngine!.currentItem?.like();
-                                      // print("Like method called");
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
