@@ -483,6 +483,7 @@ class _UserCardState extends State<UserCard> {
                               'lib/assets/${widget.nextUser['image_index']}.png',
                               height: 200,
                             ),
+                            Padding(padding: EdgeInsets.only(top: 5)),
                             Text(
                               "And that's what I like about it:",
                               style: TextStyle(
