@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_app/ui/common/app_colors.dart';
 import 'package:stacked_app/ui/common/ui_helpers.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'home_viewmodel.dart';
+import 'dart:async';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -71,14 +74,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       _helloText(),
                       if (nextUser != null) ...[
                         Container(
-                          margin: EdgeInsets.only(top: 80),
+                          //margin: EdgeInsets.only(top: 20),
                           child: Center(
                             child: _userDetails(
                                 nextUser, viewModel, context, _slideAnimation),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 5),
+                          margin: EdgeInsets.only(top: 0),
                           child: Center(
                             child: check_profile_button(
                                 nextUser, viewModel, context),
@@ -150,6 +153,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget _userDetails(
       nextUser, viewModel, context, Animation<Offset> slideAnimation) {
     SwipeItem? swipeItem; // Declare swipeItem as nullable
+    // final Completer<MatchEngine> matchEngineCompleter =
+    //     Completer<MatchEngine>(); //completer to set it later
     final GlobalKey<_UserCardState> userCardKey = GlobalKey<_UserCardState>();
 
     // Define the callback outside of swipeItem
@@ -169,25 +174,34 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     swipeItem = SwipeItem(
         content:
             UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
+        // , matchEngineCompleter.future),
         likeAction: () {
           //skip for now
           print("I am in like");
-          viewModel.skip_user(nextUser['id']);
-          //viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+          // viewModel.skip_user(nextUser['id']);
+          viewModel.like_user(nextUser['id'], nextUser['potential_match']);
         },
         nopeAction: () {
           print("I am in dislike");
-          viewModel.skip_user(nextUser['id']);
+          // viewModel.skip_user(nextUser['id']);
+          viewModel.dislike_user(nextUser['id']);
         },
         onSlideUpdate: onSlideUpdateCallback
         // Include other actions like superLike if you have them
         );
+    print("Swipe Item initialized: $swipeItem");
 
     MatchEngine matchEngine = MatchEngine(swipeItems: [swipeItem]);
+    // matchEngineCompleter.complete(_matchEngine);
+    // print("MatchEngine Completed with Swipe Item: ${_matchEngine.currentItem}");
+
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   (userCardKey.currentState as _UserCardState).setMatchEngine(_matchEngine);
+    // });
 
     return Container(
       key: ValueKey(DateTime.now().millisecondsSinceEpoch),
-      height: 400,
+      height: 500,
       child: SwipeCards(
         matchEngine: matchEngine,
         itemBuilder: (BuildContext context, int index) {
@@ -290,7 +304,7 @@ class UserProfileView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF3439AB),
-        //title: Text('User Profile'),
+        title: Text('More about me...'),
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
@@ -396,9 +410,11 @@ class UserCard extends StatefulWidget {
   final context;
   final slideAnimation;
   final key;
+  //final Future<MatchEngine> setMatchEngine;
 
   UserCard(this.nextUser, this.viewModel, this.context, this.slideAnimation,
       this.key)
+      // , this.setMatchEngine)
       : super(key: key);
 
   @override
@@ -410,9 +426,26 @@ class _UserCardState extends State<UserCard> {
   Color? feedbackColor;
   IconData? feedbackIcon;
 
+  // MatchEngine? matchEngine;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.setMatchEngine.then((engine) {
+  //     setMatchEngine(engine);
+  //   });
+  // }
+
+  // void setMatchEngine(MatchEngine engine) {
+  //   print("Setting Match Engine: $engine");
+  //   setState(() {
+  //     matchEngine = engine;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
-    // This is your current code for _userCard, but wrapped inside a stateful widget
+    // code for _userCard, but wrapped inside a stateful widget
     return SlideTransition(
       position: widget.slideAnimation,
       child: Stack(children: [
@@ -433,10 +466,17 @@ class _UserCardState extends State<UserCard> {
                           children: [
                             Padding(padding: EdgeInsets.only(top: 25)),
                             Text(
-                              "I like ${widget.nextUser['interests'][0]['name']}",
+                              "One of my interests is:",
+                              style: TextStyle(
+                                fontSize: 22, // Adjust the size as needed
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "${widget.nextUser['interests'][0]['name']}",
                               style: TextStyle(
                                 fontSize: 25, // Adjust the size as needed
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             Image.asset(
@@ -444,10 +484,17 @@ class _UserCardState extends State<UserCard> {
                               height: 200,
                             ),
                             Text(
-                              "And... ${widget.nextUser['interests'][0]['description']}",
+                              "And that's what I like about it:",
+                              style: TextStyle(
+                                fontSize: 14, // Adjust the size as needed
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "${widget.nextUser['interests'][0]['description']}",
                               style: TextStyle(
                                 fontSize: 18, // Adjust the size as needed
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             Padding(
@@ -458,9 +505,20 @@ class _UserCardState extends State<UserCard> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      showFeedback("Dislike");
                                       widget.viewModel
                                           .dislike_user(widget.nextUser['id']);
+                                      // await Future.delayed(
+                                      //     Duration(seconds: 1));
+                                      print("Pressed on dislike");
+                                      // widget.viewModel
+                                      //     .skip_user(widget.nextUser['id']);
+                                      // print(
+                                      //     "Current Item: ${matchEngine!.currentItem}");
+                                      // print("Calling dislike method");
+                                      // matchEngine!.currentItem?.nope();
+                                      // print("Dislike method called");
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -473,10 +531,21 @@ class _UserCardState extends State<UserCard> {
                                         color: Colors.black), // Close icon
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      showFeedback("Like");
                                       widget.viewModel.like_user(
                                           widget.nextUser['id'],
                                           widget.nextUser['potential_match']);
+                                      print("Pressed on like");
+                                      // await Future.delayed(
+                                      //     Duration(seconds: 1));
+                                      // widget.viewModel
+                                      //     .skip_user(widget.nextUser['id']);
+                                      // print(
+                                      //     "Current Item: ${matchEngine!.currentItem}");
+                                      // print("Calling like method");
+                                      // matchEngine!.currentItem?.like();
+                                      // print("Like method called");
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -522,6 +591,7 @@ class _UserCardState extends State<UserCard> {
   }
 
   void showFeedback(String feedbackText) {
+    print("I am showing feedback");
     setState(() {
       feedback = feedbackText;
       if (feedbackText == "Like") {
@@ -548,9 +618,8 @@ Widget check_profile_button(nextUser, viewModel, context) {
     return Column(
       children: [
         Text(
-          "but I have ${nextUser['interests'].length} more interests, check me out",
+          "I have ${nextUser['interests'].length} interests, check me out",
           style: TextStyle(
-            fontFamily: 'Switzer', // Replace with your font if it's different
             fontSize: 14, // Adjust the size as needed
           ),
         ),
