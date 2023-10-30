@@ -469,7 +469,7 @@ class _UserCardState extends State<UserCard> {
                                       ),
                                       backgroundColor: Colors.white,
                                     ),
-                                    child: Icon(Icons.close,
+                                    child: Icon(Icons.thumb_down,
                                         color: Colors.black), // Close icon
                                   ),
                                   ElevatedButton(
@@ -485,7 +485,7 @@ class _UserCardState extends State<UserCard> {
                                       ),
                                       backgroundColor: Color(0xFF3439AB),
                                     ),
-                                    child: Icon(Icons.check,
+                                    child: Icon(Icons.thumb_up,
                                         color: Colors.white), // Check icon
                                   ),
                                 ],

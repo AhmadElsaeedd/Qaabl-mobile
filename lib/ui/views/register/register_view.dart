@@ -6,7 +6,11 @@ import 'package:stacked/stacked.dart';
 import 'register_viewmodel.dart';
 
 class RegisterView extends StackedView<RegisterViewModel> {
-  const RegisterView({Key? key}) : super(key: key);
+  RegisterView({Key? key}) : super(key: key);
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget builder(
@@ -14,14 +18,17 @@ class RegisterView extends StackedView<RegisterViewModel> {
     RegisterViewModel viewModel,
     Widget? child,
   ) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
+            child: GestureDetector(
+          onTap: () {
+            //dismiss keyboard when tapped outside
+            FocusScope.of(context).unfocus();
+          },
           child: Container(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,8 +49,6 @@ class RegisterView extends StackedView<RegisterViewModel> {
                             Text(
                               "only cool people, at your fingertips",
                               style: TextStyle(
-                                fontFamily:
-                                    Platform.isIOS ? '.SF UI Text' : 'Switzer',
                                 fontSize: 14, // Adjust the size as needed
                                 fontWeight: FontWeight.bold,
                               ),
@@ -57,24 +62,69 @@ class RegisterView extends StackedView<RegisterViewModel> {
                               ? CupertinoTextField(
                                   placeholder: 'Email',
                                   controller: emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 12),
                                 )
                               : TextField(
                                   controller: emailController,
                                   decoration:
                                       InputDecoration(labelText: 'Email'),
+                                  keyboardType: TextInputType.emailAddress,
                                 ),
                           SizedBox(height: 20),
                           Platform.isIOS
-                              ? CupertinoTextField(
-                                  placeholder: 'Password',
-                                  controller: passwordController,
-                                  obscureText: true,
+                              ? StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      StateSetter setCupertinoState) {
+                                    return Stack(
+                                      alignment: Alignment.centerRight,
+                                      children: [
+                                        CupertinoTextField(
+                                          placeholder: 'Password',
+                                          controller: passwordController,
+                                          obscureText: !_isPasswordVisible,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10.0,
+                                              horizontal:
+                                                  12.0), // make room for the button
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            _isPasswordVisible
+                                                ? Icons.visibility
+                                                : Icons.visibility_off,
+                                          ),
+                                          onPressed: () {
+                                            setCupertinoState(() {
+                                              _isPasswordVisible =
+                                                  !_isPasswordVisible;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 )
                               : TextField(
                                   controller: passwordController,
-                                  decoration:
-                                      InputDecoration(labelText: 'Password'),
-                                  obscureText: true,
+                                  obscureText: !_isPasswordVisible,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    // 2. Use suffixIcon to add the "eye" icon.
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        // Depending on the state, show the appropriate icon.
+                                        _isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                      onPressed: () {
+                                        _isPasswordVisible =
+                                            !_isPasswordVisible;
+                                      },
+                                    ),
+                                  ),
                                 ),
                           SizedBox(height: 20),
                           Platform.isIOS
@@ -139,6 +189,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                               child: Image.asset(
                                 'lib/assets/googlebutton.png',
                                 fit: BoxFit.fill,
+                                scale: 2,
                               ),
                               padding: EdgeInsets.zero,
                               pressedOpacity: 0.7,
@@ -148,10 +199,11 @@ class RegisterView extends StackedView<RegisterViewModel> {
                               child: Image.asset(
                                 'lib/assets/googlebutton.png',
                                 fit: BoxFit.fill,
+                                scale: 2,
                               ),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.zero,
-                                primary: Colors.transparent,
+                                backgroundColor: Colors.transparent,
                               ),
                             ),
                     ),
@@ -163,6 +215,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                               child: Image.asset(
                                 'lib/assets/applebutton.png',
                                 fit: BoxFit.fill,
+                                scale: 2,
                               ),
                               padding: EdgeInsets.zero,
                               pressedOpacity: 0.7,
@@ -172,6 +225,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                               child: Image.asset(
                                 'lib/assets/applebutton.png',
                                 fit: BoxFit.fill,
+                                scale: 2,
                               ),
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.zero,
@@ -198,7 +252,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                   ],
                 ),
               )),
-        ));
+        )));
   }
 
   @override
