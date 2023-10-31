@@ -15,6 +15,7 @@ import 'package:stacked_app/models/message_model.dart' as _i10;
 import 'package:stacked_app/services/auth_service.dart' as _i8;
 import 'package:stacked_app/services/firestore_service.dart' as _i3;
 import 'package:stacked_app/services/messaging_service.dart' as _i12;
+import 'package:stacked_app/services/mixpanel_service.dart' as _i13;
 import 'package:stacked_services/stacked_services.dart' as _i4;
 
 // ignore_for_file: type=lint
@@ -900,3 +901,8 @@ class MockMessagingService extends _i1.Mock implements _i12.MessagingService {
         returnValueForMissingStub: _i6.Future<String?>.value(),
       ) as _i6.Future<String?>);
 }
+
+/// A class which mocks [MixpanelService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMixpanelService extends _i1.Mock implements _i13.MixpanelService {}

@@ -3,11 +3,13 @@ import 'package:stacked_app/app/app.locator.dart';
 import 'package:stacked_app/app/app.router.dart';
 import 'package:stacked_app/services/auth_service.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:stacked_app/services/mixpanel_service.dart';
 
 class LoginViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   Future signInWithGoogle() async {
     final success = await _authenticationService.signInWithGoogle();

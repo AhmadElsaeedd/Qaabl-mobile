@@ -5,6 +5,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:stacked_app/services/auth_service.dart';
 import 'package:stacked_app/services/firestore_service.dart';
 import 'package:stacked_app/services/messaging_service.dart';
+import 'package:stacked_app/services/mixpanel_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -16,6 +17,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<AuthenticationService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<FirestoreService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<MessagingService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<MixpanelService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -25,6 +27,7 @@ void registerServices() {
   getAndRegisterAuthenticationService();
   getAndRegisterFirestoreService();
   getAndRegisterMessagingService();
+  getAndRegisterMixpanelService();
 // @stacked-mock-register
 }
 
@@ -96,6 +99,13 @@ MockMessagingService getAndRegisterMessagingService() {
   _removeRegistrationIfExists<MessagingService>();
   final service = MockMessagingService();
   locator.registerSingleton<MessagingService>(service);
+  return service;
+}
+
+MockMixpanelService getAndRegisterMixpanelService() {
+  _removeRegistrationIfExists<MixpanelService>();
+  final service = MockMixpanelService();
+  locator.registerSingleton<MixpanelService>(service);
   return service;
 }
 // @stacked-mock-create

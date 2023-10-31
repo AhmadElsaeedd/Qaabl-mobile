@@ -15,6 +15,7 @@ import 'package:stacked_app/ui/views/chats/chats_view.dart';
 import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart';
 import 'package:stacked_app/services/firestore_service.dart';
 import 'package:stacked_app/services/messaging_service.dart';
+import 'package:stacked_app/services/mixpanel_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -38,6 +39,7 @@ import 'package:stacked_app/services/messaging_service.dart';
     LazySingleton(classType: AuthenticationService),
     LazySingleton(classType: FirestoreService),
     LazySingleton(classType: MessagingService),
+    LazySingleton(classType: MixpanelService),
 // @stacked-service
   ],
   bottomsheets: [
