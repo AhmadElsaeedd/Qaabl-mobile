@@ -88,7 +88,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                       padding: const EdgeInsets.only(top: 5),
                                       child: ImageFiltered(
                                         imageFilter: ImageFilter.blur(
-                                            sigmaX: 3, sigmaY: 3),
+                                            sigmaX: 4, sigmaY: 4),
                                         child: FittedBox(
                                           fit: BoxFit
                                               .scaleDown, // Adjust the text to fit inside the available space
@@ -162,7 +162,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                             backgroundColor: const Color(0xFF3439AB),
                           ),
                           title: ImageFiltered(
-                            imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                            imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                             child: Text(
                               match.other_user_name,
                               style: const TextStyle(

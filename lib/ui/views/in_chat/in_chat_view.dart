@@ -84,7 +84,7 @@ class _InChatViewState extends State<InChatView> {
                             ),
                             ImageFiltered(
                               imageFilter:
-                                  ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                                  ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                               child: FittedBox(
                                 fit: BoxFit
                                     .scaleDown, // Adjust the text to fit inside the available space
