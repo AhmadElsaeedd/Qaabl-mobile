@@ -6,7 +6,7 @@ import 'package:stacked_app/ui/common/ui_helpers.dart';
 import 'edit_profile_viewmodel.dart';
 
 class EditProfileView extends StatefulWidget {
-  List<String>? selected_interests;
+  //List<String>? selected_interests;
   // ignore: non_constant_identifier_names
   EditProfileView({Key? key}) : super(key: key);
 

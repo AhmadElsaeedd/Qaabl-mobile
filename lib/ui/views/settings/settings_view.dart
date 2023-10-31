@@ -129,9 +129,46 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
+                    title: Text('Logout', style: TextStyle()),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CupertinoAlertDialog(
+                            title: Text("Logout"),
+                            content: SingleChildScrollView(
+                              child: Text(
+                                "sure, wanna logout?",
+                                style: TextStyle(),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("Cancel",
+                                    style: TextStyle(color: Color(0xFF3439AB))),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the alert dialog
+                                },
+                              ),
+                              TextButton(
+                                child: Text("yes"),
+                                onPressed: () {
+                                  viewModel.signOut();
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
                     title: Text('Delete Account',
-                        style: TextStyle(
-                            fontFamily: 'Switzer', color: Colors.redAccent)),
+                        style: TextStyle(color: Colors.redAccent)),
                     trailing: Icon(Icons.arrow_forward_ios,
                         size: 14.0, color: Colors.redAccent),
                     onTap: () {
@@ -159,8 +196,6 @@ class SettingsView extends StackedView<SettingsViewModel> {
                                     style: TextStyle(color: Colors.redAccent)),
                                 onPressed: () {
                                   //Call the function that deletes from the viewmodel
-                                  print("User deleting the account: " +
-                                      viewModel.uid.toString());
                                   viewModel.delete_account(viewModel.uid);
                                   viewModel.signOut();
                                   Navigator.of(context)

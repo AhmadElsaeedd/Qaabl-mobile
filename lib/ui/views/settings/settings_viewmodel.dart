@@ -41,12 +41,12 @@ class SettingsViewModel extends BaseViewModel {
       _navigationService.replaceWithLoginView();
       _dialogService.showConfirmationDialog(
         title: "Successful",
-        description: "Successfully deleted account.",
+        description: "Success.",
       );
     } else {
       _dialogService.showConfirmationDialog(
         title: "Unsuccessful",
-        description: "Couldn't delete account.",
+        description: "Unsuccessful.",
       );
     }
   }

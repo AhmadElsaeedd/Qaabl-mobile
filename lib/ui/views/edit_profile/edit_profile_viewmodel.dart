@@ -20,8 +20,6 @@ class EditProfileViewModel extends BaseViewModel {
   //initialized empty because it will be initialized later in the code
   Map<String, dynamic> user_data = {};
 
-  final List<String> selected_interests = [];
-
   EditProfileViewModel() {
     // get the uid of the user
     uid = _authenticationService.currentUser?.uid;
@@ -32,22 +30,10 @@ class EditProfileViewModel extends BaseViewModel {
     load_data();
   }
 
-  // void go_to_add_interests() {
-  //   //get a list of interests names from the user's data
-  //   List<String> interests_names = user_data['interests']
-  //           ?.map<String>((interest) => interest['name'] as String)
-  //           .toList() ??
-  //       [];
-
-  //   _navigationService.replaceWithAddInterestsView(
-  //       interestsnames: interests_names);
-  // }
-
-  //ToDo: function that gets the inputted values, updates the user document, and navigates back to profile page
+  //function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(
       String name, List<Map<String, String>> interests, int image_index) async {
     //get the values from the input fields and go update the values in the cloud
-    //call the function
     final response = await http.post(
       //production url
       Uri.parse(
@@ -81,14 +67,12 @@ class EditProfileViewModel extends BaseViewModel {
 
   void back_to_profile(response) async {
     if (response.statusCode == 200) {
-      // Show a green check mark or something that shows success of updating
+      //navigate back and show success
+      _navigationService.replaceWithProfileView();
       await _dialogService.showDialog(
         title: 'Success',
         description: 'Profile updated successfully.',
       );
-      //the problem is that the back method doesn't reload the page, so the constructor doesn't get called again
-      //_navigationService.back();
-      _navigationService.replaceWithProfileView();
     } else {
       // Handle error
       await _dialogService.showDialog(
@@ -103,17 +87,6 @@ class EditProfileViewModel extends BaseViewModel {
       user_data = await get_needed_data();
       if (user_data['interests'] == true) user_data['interests'] = [];
       print("user data fetched from database" + user_data.toString());
-      //ToDo: assign the names of interests to the list of selected interests
-      // if (user_data.containsKey('interests')) {
-      // selected_interests.clear(); // Clearing the list before adding new interests
-      // for (var interest in user_data['interests']) {
-      //   if (interest.containsKey('name')) {
-      //     selected_interests.add(interest['name']); // Adding new interests
-      //   }
-      // }
-      //}
-      //notifyListeners();
-      //Just to be consistent
       rebuildUi();
     } catch (e) {
       print("couldn't fetch the percentage");
@@ -122,8 +95,6 @@ class EditProfileViewModel extends BaseViewModel {
 
   //function that gets the necessary fields to populate a user's profile
   Future<Map<String, dynamic>> get_needed_data() async {
-    //the needed data is: name, interests, picture index
-
     //call the function from the cloud
     final response = await http.post(
       //production url
@@ -148,7 +119,6 @@ class EditProfileViewModel extends BaseViewModel {
     }
   }
 
-  //Interests part
   //predefined interests to show users:
   final List<String> predefined_interests = [
     // 'Performing & Visual Arts 🎭🎨',
