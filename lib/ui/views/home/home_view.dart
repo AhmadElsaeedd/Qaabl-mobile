@@ -52,11 +52,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
       onViewModelReady: (model) {
-        model.getUsers();
-        model.set_token_by_waiting_for_document();
+        //model.getUsers();
+        //uncomment when implementing notifs
+        //model.set_token_by_waiting_for_document();
       },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
+        print("next user is: " + nextUser.toString());
 
         // Reset and start the animation for the new user
         _animationController.reset();

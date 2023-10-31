@@ -117,7 +117,7 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.uid;
 
-    // get likes dislikes
+    // get likes, dislikes, and matched users
     const {likes, dislikes, matched_users} = await get_user_likes_dislikes_matches(user_uid);
 
     // query to return 3 users
@@ -132,9 +132,12 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
     const ready_to_send_back_users = await structure_users(user_uid, filtered_users);
 
     // if success
-    if (user_uid && likes && dislikes && filtered_users && ready_to_send_back_users) {
+    if (ready_to_send_back_users.length > 0) {
       res.status(200).json(ready_to_send_back_users);
-    } else {
+    } else if (ready_to_send_back_users.length === 0){
+      res.status(204).send("No more users");
+    }
+    else {
     // if failed
       res.status(500).send("Error");
     }

@@ -22,6 +22,10 @@ class HomeViewModel extends BaseViewModel {
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
+  //logic flags
+  bool first_load = false;
+  bool no_more_users = false;
+
   // constructor runs whenever the page is loaded or reloaded
   HomeViewModel() {
     // get the uid of the user
@@ -29,6 +33,9 @@ class HomeViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
+    //logic flags
+    first_load = true;
+    no_more_users = false;
   }
 
   // option to sign out (for testing purposes, will be removed from production)
@@ -61,19 +68,15 @@ class HomeViewModel extends BaseViewModel {
   //list of users id's for easy access
   Set<String> user_Ids_in_queue = Set<String>();
 
-  //logic flags
-  bool first_load = false;
-  bool no_more_users = false;
-
   //A function that sends an HTTP request to a cloud function getUsers()
   Future<void> getUsers() async {
     try {
-      //call the cloud function that gets 3 users, pass the uid to it
-      print("Users queue length: " + users_queue.length.toString());
-      if (users_queue.isEmpty) {
-        // queue will never be empty as long as there are users left
-        first_load = true;
-      }
+      // if (users_queue.isEmpty) {
+      //   print("I am here in the first load");
+      //   first_load = true;
+      // }
+      print("first load is: " + first_load.toString());
+      print("Calling the cloud");
 
       final response = await http.post(
         //production url
@@ -86,12 +89,13 @@ class HomeViewModel extends BaseViewModel {
         }),
         headers: {'Content-Type': 'application/json'},
       );
+      print(
+          "Cloud called with response code: " + response.statusCode.toString());
 
       //response of the function should contain 3 users with their UIDs and interests
       if (!(response.statusCode == 200 || response.statusCode == 204))
         print("failed to go to cloud");
       else if (response.statusCode == 204) {
-        print("No more users");
         //tell the ui that there are no more users
         no_more_users = true;
         rebuildUi();
@@ -104,6 +108,7 @@ class HomeViewModel extends BaseViewModel {
         // if user already exists in queue, skip them
         String user_Id = user['id'];
         if (user_Ids_in_queue.contains(user_Id)) {
+          print("skipping user");
           continue;
         }
         // add user to queue
@@ -114,7 +119,7 @@ class HomeViewModel extends BaseViewModel {
       // Rebuild UI in first load only, because with first load the data is not there yet
       if (first_load == true) {
         rebuildUi();
-        print("first load");
+        print("rebuilding");
       }
 
       // Stop it from reloading infinitely
@@ -130,18 +135,22 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
-    print("Getting user");
+    print("Get next user function call");
+    print("Length of users queue: " + users_queue.length.toString());
+    print("first load: " + first_load.toString());
+    if ((no_more_users == true) ||
+        (users_queue.length == 0 && first_load == false)) {
+      no_more_users = true;
+      return null;
+    }
     //refill the queue when needed, we want to maintain having users in the queue
-    if (users_queue.length < 3 && first_load == false) {
+    if (users_queue.length < 2 || first_load == true) {
       getUsers();
     }
-
     //when queue has users, show the first user and banish them from existence
     if (users_queue.isNotEmpty) {
       return users_queue.removeFirst();
     }
-
-    return null;
   }
 
   //function that likes a user, server-side
