@@ -51,12 +51,36 @@ class _InChatViewState extends State<InChatView> {
                       Container(
                         child: Row(
                           children: [
-                            CircleAvatar(
-                              backgroundImage: AssetImage(
-                                'lib/assets/${widget.user_pic}.png',
+                            InkWell(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => GestureDetector(
+                                    onTap: () => Navigator.of(context).pop(),
+                                    behavior: HitTestBehavior.opaque,
+                                    child: Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.35,
+                                      child: UserProfileView(
+                                        interests:
+                                            List<Map<String, dynamic>>.from(
+                                                viewModel.user_data?[
+                                                        'interests'] ??
+                                                    []),
+                                      ),
+                                    ),
+                                  ),
+                                  isScrollControlled: true,
+                                );
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  'lib/assets/${widget.user_pic}.png',
+                                ),
+                                radius: 30,
+                                backgroundColor: const Color(0xFF3439AB),
                               ),
-                              radius: 30,
-                              backgroundColor: const Color(0xFF3439AB),
                             ),
                             ImageFiltered(
                               imageFilter:
@@ -113,7 +137,6 @@ class _InChatViewState extends State<InChatView> {
                                       TextButton(
                                         child: Text("Cancel",
                                             style: TextStyle(
-                                                fontFamily: "Switzer",
                                                 color: Color(0xFF3439AB))),
                                         onPressed: () {
                                           Navigator.of(context)
@@ -266,8 +289,7 @@ class _InChatViewState extends State<InChatView> {
                           }
                         }
                       },
-                      child:
-                          Text('Send', style: TextStyle(fontFamily: "Switzer")),
+                      child: Text('Send', style: TextStyle()),
                       color: Color(
                           0xFF3439AB), // This is still valid for CupertinoButton
                       padding: EdgeInsets.symmetric(
