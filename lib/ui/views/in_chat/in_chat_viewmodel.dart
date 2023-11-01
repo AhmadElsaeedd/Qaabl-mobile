@@ -55,29 +55,6 @@ class InChatViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  //implement the stream getter, that listens to messages in the chat
-  // @override
-  // Stream<List<Message>> get stream {
-  //   print('Subscribing to stream');
-  //   uid = _authenticationService.currentUser?.uid;
-  //   if (uid == null) {
-  //     _navigationService.replaceWithLoginView();
-  //     return Stream.value([]);
-  //   }
-
-  //   return _firestoreService
-  //       .load_messages(match_id, lastVisibleMessageSnapshot)
-  //       .map((pair) {
-  //     final messages = pair.first;
-  //     if (messages.isNotEmpty) {
-  //       lastVisibleMessageSnapshot =
-  //           pair.second; // Update with the last DocumentSnapshot
-  //       displayed_messages.insertAll(0, messages);
-  //     }
-  //     return displayed_messages;
-  //   });
-  // }
-
   StreamSubscription? _newMessagesSubscription;
 
   void _listenToNewMessages() {
@@ -115,44 +92,33 @@ class InChatViewModel extends BaseViewModel {
     }
   }
 
-  // bool isLoading = false;
-  // int ctr = 1;
-
-  // void loadMoreMessages() {
-  //   if (isLoading) return; // Prevent multiple simultaneous fetches
-  //   isLoading = true;
-  //   print("I am loading");
-  //   //rebuildUi();
-
-  //   _firestoreService
-  //       .load_messages(match_id, lastVisibleMessageSnapshot)
-  //       .listen((pair) {
-  //     final messages = pair.first;
-  //     if (messages.isNotEmpty) {
-  //       lastVisibleMessageSnapshot = pair.second;
-  //       print("COunter is: " + ctr.toString());
-  //       displayed_messages.insertAll(ctr * 10, messages);
-  //     }
-
-  //     ctr++;
-  //     isLoading = false;
-  //     print("I stopped loading");
-  //     rebuildUi();
-  //   });
-  // }
-
-  //implement function that adds a message to the chat
+  //function that adds a message to the chat
   void send_message(String content) {
     //pass a "fake" message to the UI so the UI is updated immediately
     final Message new_message = Message(
       content: content,
       sent_by: uid!,
       timestamp: Timestamp.now().toDate(),
+      reaction: "",
     );
     displayed_messages.insert(0, new_message);
     rebuildUi();
 
     _firestoreService.send_message(match_id, content, uid!);
+  }
+
+  void react_to_message(String reaction, Message message) {
+    //find the instance of message inside displayed_messages and add the reaction to it
+    // Find the index of the message in displayed_messages
+    int? index = displayed_messages.indexWhere((msg) =>
+        msg.timestamp == message.timestamp && msg.sent_by == message.sent_by);
+
+    if (index != -1) {
+      displayed_messages[index].reaction = reaction;
+      rebuildUi();
+    }
+
+    _firestoreService.reaction_to_message(match_id, reaction, message.content);
   }
 
   Future<void> view_profile_data(String uid) async {

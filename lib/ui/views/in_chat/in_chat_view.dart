@@ -6,6 +6,7 @@ import 'package:stacked_app/ui/common/ui_helpers.dart';
 import 'in_chat_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'dart:ui';
+import 'package:stacked_app/models/message_model.dart';
 
 class InChatView extends StatefulWidget {
   final String match_id;
@@ -27,6 +28,8 @@ class InChatView extends StatefulWidget {
 class _InChatViewState extends State<InChatView> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
+  Map<String, GlobalKey> messageKeys = {};
 
   @override
   Widget build(BuildContext context) {
@@ -207,45 +210,78 @@ class _InChatViewState extends State<InChatView> {
                     itemBuilder: (context, index) {
                       final message = viewModel.displayed_messages[index];
                       final isCurrentUser = message.sent_by == viewModel.uid;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 10.0),
-                        child: Align(
-                          alignment: isCurrentUser
-                              ? Alignment.topRight
-                              : Alignment.topLeft,
-                          child: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              color: isCurrentUser
-                                  ? Color(0xFF3439AB)
-                                  : Colors.grey[300],
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  message.content,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: isCurrentUser
-                                        ? Colors.white
-                                        : Colors.black,
+                      final timestampString =
+                          message.timestamp.toIso8601String();
+                      messageKeys[timestampString] =
+                          messageKeys[timestampString] ?? GlobalKey();
+                      final key = messageKeys[timestampString] ?? GlobalKey();
+                      return GestureDetector(
+                        onLongPress: isCurrentUser
+                            ? null // Disable long press for the current user's messages.
+                            : () {
+                                _showEmojiOptions(
+                                    viewModel, message, timestampString);
+                              },
+                        child: Padding(
+                          key: key,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 10.0),
+                          child: Align(
+                            alignment: isCurrentUser
+                                ? Alignment.topRight
+                                : Alignment.topLeft,
+                            child: Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: isCurrentUser
+                                    ? Color(0xFF3439AB)
+                                    : Colors.grey[300],
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        message.content,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: isCurrentUser
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Text(
+                                        DateFormat('hh:mm a')
+                                            .format(message.timestamp),
+                                        style: TextStyle(
+                                          fontSize: 10.0,
+                                          color: isCurrentUser
+                                              ? Colors.white70
+                                              : Colors.black54,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  DateFormat('hh:mm a').format(
-                                      message.timestamp), // using intl package
-                                  style: TextStyle(
-                                    fontSize: 10.0,
-                                    color: isCurrentUser
-                                        ? Colors.white70
-                                        : Colors.black54,
-                                  ),
-                                ),
-                              ],
+                                  if (message.reaction != "No reaction")
+                                    Positioned(
+                                      bottom: -5,
+                                      right: 0,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 15.0),
+                                        child: Text(
+                                          message.reaction,
+                                          style: TextStyle(
+                                              fontSize: 20), // Adjust as needed
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -304,6 +340,75 @@ class _InChatViewState extends State<InChatView> {
           ),
         );
       },
+    );
+  }
+
+  void _showEmojiOptions(
+      InChatViewModel viewModel, Message message, String timestampString) {
+    final GlobalKey? messageKey = messageKeys[timestampString];
+
+    // Ensure the key is not null and has a context before proceeding
+    if (messageKey?.currentContext == null) {
+      print("I am returning");
+      return;
+    }
+
+    final RenderBox renderBox =
+        messageKey!.currentContext!.findRenderObject()! as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
+
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: offset.dx,
+        top: offset.dy + size.height,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(5.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[300], // gray color
+              borderRadius: BorderRadius.circular(25.0), // rounded corners
+            ),
+            child: Row(
+              children: [
+                _buildEmojiOption(viewModel, '😀', message),
+                _buildEmojiOption(viewModel, '❤️', message),
+                _buildEmojiOption(viewModel, '😂', message),
+                _buildEmojiOption(viewModel, '👍', message),
+                _buildEmojiOption(viewModel, '😢', message),
+                _buildEmojiOption(viewModel, '😡', message),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    // Remove the overlay when an emoji is selected
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+
+  Widget _buildEmojiOption(
+      InChatViewModel viewModel, String emoji, Message message) {
+    return GestureDetector(
+      onTap: () {
+        print("emoji tapped!");
+        print("emoji: " + emoji);
+        viewModel.react_to_message(emoji, message);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          emoji,
+          style: TextStyle(fontSize: 24.0),
+        ),
+      ),
     );
   }
 }

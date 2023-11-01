@@ -4,11 +4,13 @@ class Message {
   final String content;
   final DateTime timestamp;
   final String sent_by;
+  String reaction;
 
   Message({
     required this.content,
     required this.timestamp,
     required this.sent_by,
+    required this.reaction,
   });
 
   factory Message.fromMap(Map<String, dynamic> data) {
@@ -21,11 +23,14 @@ class Message {
           data['content'] is String ? data['content'] : 'Unknown content';
       final sent_by =
           data['sent_by'] is String ? data['sent_by'] : 'Unknown sender';
+      final reaction =
+          data['reaction'] is String ? data['reaction'] : 'No reaction';
 
       return Message(
         content: content,
         timestamp: timestamp,
         sent_by: sent_by,
+        reaction: reaction,
       );
     } catch (error) {
       print('Error mapping data in from map: $error');
@@ -33,6 +38,7 @@ class Message {
         content: 'Error loading message',
         timestamp: DateTime.now(),
         sent_by: 'System',
+        reaction: 'No reaction',
       );
     }
   }

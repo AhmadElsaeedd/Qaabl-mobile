@@ -136,6 +136,23 @@ class FirestoreService {
     //Do something with response, Idk what yet
   }
 
+  Future<void> reaction_to_message(
+      String chat_id, String reaction, String content) async {
+    await http.post(
+      //production url
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/MessageReaction'),
+      //testing url
+      // Uri.parse(''),
+      body: jsonEncode({
+        'reaction': reaction,
+        'chat_id': chat_id,
+        'content': content,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+  }
+
   // Stream<Pair<List<Message>, DocumentSnapshot?>> load_messages(String match_id,
   //     [DocumentSnapshot? lastVisibleMessageSnapshot]) {
   //   Query query = _firestore

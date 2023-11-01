@@ -54,6 +54,7 @@ const AddMessage = functions.region("asia-east2").https.onRequest(async (req, re
       sent_by: user_uid,
       content: content,
       timestamp: timestamp,
+      reaction: "",
     };
 
     // Start Process 2: add_message_to_chat
