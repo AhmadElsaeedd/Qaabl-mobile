@@ -189,6 +189,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     'edit your avatar',
                                     style: TextStyle(
                                       color: Color(0xFF3439AB),
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ],
@@ -245,9 +246,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                               'edit your interests',
                               style: TextStyle(
                                 color: Color(0xFF3439AB),
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
+                          SizedBox(height: 10),
                           CupertinoButton(
                             color: Color(0xFF3439AB),
                             onPressed: () async {
