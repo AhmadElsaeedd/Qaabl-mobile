@@ -28,8 +28,6 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     Text(
                       'New Chats',
                       style: TextStyle(
-                        fontFamily:
-                            'Switzer', // Replace with your font if it's different
                         fontSize: 26, // Adjust the size as needed
                         fontWeight: FontWeight.bold,
                       ),
@@ -38,7 +36,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                       'chat to reveal the names of ur matches :)',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -95,7 +93,6 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                           child: Text(
                                             match.other_user_name,
                                             style: const TextStyle(
-                                              fontFamily: "Switzer",
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -124,10 +121,10 @@ class ChatsView extends StackedView<ChatsViewModel> {
                       ),
                     ),
                     Text(
-                      'everyday ur a step closer to meeting cool ppl',
+                      'ur steps closer to the coolest ppl :p',
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],

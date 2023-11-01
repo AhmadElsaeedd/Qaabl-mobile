@@ -32,12 +32,12 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                         ),
                       ),
                       Text(
-                        "you're cool, they're cool, chat!",
+                        "ur cool, they're cool, chat!",
                         style: TextStyle(
                           fontFamily:
                               'Switzer', // Replace with your font if it's different
                           fontSize: 14, // Adjust the size as needed
-                          //fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -54,7 +54,7 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                       viewModel.go_to_swiping();
                     },
                     child: Text(
-                      "keep swiping",
+                      "Keep Swiping",
                       style:
                           TextStyle(color: Colors.black, fontFamily: "Switzer"),
                     ),
@@ -76,7 +76,7 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                       viewModel.go_to_chats();
                     },
                     child: Text(
-                      "go to chats",
+                      "Chats",
                       style: TextStyle(color: Colors.white),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

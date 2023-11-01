@@ -2,14 +2,19 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_app/app/app.locator.dart';
 import 'package:stacked_app/app/app.router.dart';
 import 'package:stacked_app/services/auth_service.dart';
+import 'package:stacked_app/services/mixpanel_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class RegisterViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   Future signInWithGoogle() async {
+    _mixpanelService.mixpanel.track('Sign up', properties: {
+      'Method': 'Google',
+    });
     final success = await _authenticationService.signInWithGoogle();
     if (success) {
       _navigationService.replaceWithHomeView();
@@ -23,6 +28,9 @@ class RegisterViewModel extends BaseViewModel {
   }
 
   Future createUserWithEmailAndPassword(String email, String password) async {
+    _mixpanelService.mixpanel.track('Sign up', properties: {
+      'Method': 'Email and password',
+    });
     //call the function
     final success = await _authenticationService.createUserWithEmailAndPassword(
         email, password);
@@ -40,6 +48,9 @@ class RegisterViewModel extends BaseViewModel {
   }
 
   Future signInWithApple() async {
+    _mixpanelService.mixpanel.track('Sign up', properties: {
+      'Method': 'Apple',
+    });
     final success = await _authenticationService.signInWithApple();
     if (success) {
       _navigationService.replaceWithHomeView();

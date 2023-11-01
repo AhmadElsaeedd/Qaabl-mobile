@@ -106,7 +106,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 "give us a sec :)",
                                 style: TextStyle(
                                   fontSize: 14, // Adjust the size as needed
-                                  //fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -118,7 +118,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           child: Column(
                             children: [
                               const Text(
-                                'No more users  :(',
+                                'No more users',
                                 style: TextStyle(
                                   fontFamily: 'Switzer',
                                   fontSize: 25,
@@ -126,10 +126,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 ),
                               ),
                               Text(
-                                "come back in a bit, see u",
+                                "come back in a bit, see u :*",
                                 style: TextStyle(
                                   fontSize: 14, // Adjust the size as needed
-                                  //fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -191,7 +191,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         onSlideUpdate: onSlideUpdateCallback
         // Include other actions like superLike if you have them
         );
-    print("Swipe Item initialized: $swipeItem");
 
     MatchEngine matchEngine = MatchEngine(swipeItems: [swipeItem]);
     // matchEngineCompleter.complete(_matchEngine);
@@ -229,17 +228,15 @@ Widget _helloText() {
           const Text(
             'Hello, in Qaabl!',
             style: TextStyle(
-              fontFamily: 'Switzer',
               fontSize: 25,
               fontWeight: FontWeight.w900,
             ),
           ),
           Text(
-            "explore cool people, at your fingertips",
+            "explore cool people, at ur fingertips",
             style: TextStyle(
-              fontFamily: 'Switzer', // Replace with your font if it's different
               fontSize: 14, // Adjust the size as needed
-              //fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -501,7 +498,7 @@ class _UserCardState extends State<UserCard> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
+                              padding: const EdgeInsets.only(top: 10.0),
                               child: Row(
                                 // Align Like and Dislike buttons horizontally
                                 mainAxisAlignment:

@@ -57,9 +57,17 @@ class ProfileView extends StackedView<ProfileViewModel> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 10),
+                      Text(
+                        "add more stuff to ur profile, much better :)",
+                        style: TextStyle(
+                          fontSize: 14, // Adjust the size as needed
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       SizedBox(
                           height:
-                              40), // Add space between progress bar and buttons
+                              30), // Add space between progress bar and buttons
                       // Buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

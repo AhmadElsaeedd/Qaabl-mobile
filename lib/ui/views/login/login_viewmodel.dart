@@ -12,6 +12,9 @@ class LoginViewModel extends BaseViewModel {
   final _mixpanelService = locator<MixpanelService>();
 
   Future signInWithGoogle() async {
+    _mixpanelService.mixpanel.track('Login', properties: {
+      'Method': 'Google',
+    });
     final success = await _authenticationService.signInWithGoogle();
     if (success) {
       _navigationService.replaceWithHomeView();
@@ -25,6 +28,9 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future signInWithEmailAndPassword(String email, String password) async {
+    _mixpanelService.mixpanel.track('Login', properties: {
+      'Method': 'Email and password',
+    });
     //call the function
     final success = await _authenticationService.signInWithEmailAndPassword(
         email, password);
@@ -42,6 +48,9 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future signInWithApple() async {
+    _mixpanelService.mixpanel.track('Login', properties: {
+      'Method': 'Apple',
+    });
     final success = await _authenticationService.signInWithApple();
     if (success) {
       _navigationService.replaceWithHomeView();

@@ -35,7 +35,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
               child: ListView(
                 children: <Widget>[
                   ListTile(
-                    title: Text('Edit Password',
+                    title: Text('edit password',
                         style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
@@ -67,7 +67,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(), // Adds a separator
                   ListTile(
-                    title: Text('Privacy Policy',
+                    title: Text('privacy policy',
                         style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
@@ -98,7 +98,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('About Us',
+                    title: Text('about us',
                         style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
@@ -129,7 +129,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('Logout', style: TextStyle()),
+                    title: Text('logout', style: TextStyle()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -167,7 +167,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('Delete Account',
+                    title: Text('delete account',
                         style: TextStyle(color: Colors.redAccent)),
                     trailing: Icon(Icons.arrow_forward_ios,
                         size: 14.0, color: Colors.redAccent),
