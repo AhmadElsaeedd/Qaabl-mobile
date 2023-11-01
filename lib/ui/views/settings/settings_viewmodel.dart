@@ -13,6 +13,8 @@ class SettingsViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
+  String? current_page;
+
   String? uid;
 
   SettingsViewModel() {
@@ -21,6 +23,7 @@ class SettingsViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
+    current_page = "settings";
   }
 
   void go_to_profile() {

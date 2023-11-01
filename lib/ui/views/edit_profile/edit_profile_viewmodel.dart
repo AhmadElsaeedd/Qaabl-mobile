@@ -14,6 +14,8 @@ class EditProfileViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
+  String? current_page;
+
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
@@ -26,6 +28,7 @@ class EditProfileViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
+    current_page = "edit_profile";
     //this data is the data that will populate all fields
     load_data();
   }

@@ -14,6 +14,8 @@ class ChatsViewModel extends MultipleStreamViewModel {
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
 
+  String? current_page;
+
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
@@ -40,8 +42,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
       _navigationService.replaceWithLoginView();
       return {};
     }
-    print("here");
-
+    current_page = "chats";
     return {
       'new_chats':
           StreamData<List<ChatMatch>>(_firestoreService.get_new_matches(uid)),

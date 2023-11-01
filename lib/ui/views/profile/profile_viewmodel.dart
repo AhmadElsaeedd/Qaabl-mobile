@@ -15,6 +15,8 @@ class ProfileViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
+  String? current_page;
+
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
@@ -29,7 +31,7 @@ class ProfileViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
-
+    current_page = "profile";
     load_data();
   }
 
@@ -49,8 +51,6 @@ class ProfileViewModel extends BaseViewModel {
         get_percentage(),
         get_profile_pic_index(),
       ]);
-      print("Percentage is: " + results[0].toString());
-      print("Image index is: " + results[1].toString());
       percentage = results[0];
       image_index = results[1];
 

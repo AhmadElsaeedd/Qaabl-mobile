@@ -19,12 +19,14 @@ class HomeViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
 
+  String? current_page;
+
   // current user id, defined class level to be reusable in all methods
   String? uid;
 
   //logic flags
-  bool first_load = false;
-  bool no_more_users = false;
+  bool? first_load;
+  bool? no_more_users;
 
   // constructor runs whenever the page is loaded or reloaded
   HomeViewModel() {
@@ -33,6 +35,7 @@ class HomeViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
+    current_page = "home";
     //logic flags
     first_load = true;
     no_more_users = false;

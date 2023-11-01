@@ -230,6 +230,16 @@ class SettingsView extends StackedView<SettingsViewModel> {
 }
 
 Widget _bottomNavigationBar(viewModel) {
+  Color profileColor = (viewModel.current_page == "profile" ||
+          viewModel.current_page == "edit_profile" ||
+          viewModel.current_page == "settings")
+      ? Color(0xFF3439AB)
+      : const Color.fromARGB(255, 104, 104, 104);
+
+  Color chatColor = (viewModel.current_page == "chats")
+      ? Color(0xFF3439AB)
+      : const Color.fromARGB(255, 104, 104, 104);
+
   return Stack(
     clipBehavior: Clip.none, // Allows the overflowing children to be visible
     alignment: Alignment.bottomCenter,
@@ -245,13 +255,15 @@ Widget _bottomNavigationBar(viewModel) {
           children: [
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.person), // Replace with your PNG
+              icon: Icon(Icons.person),
+              color: profileColor,
               onPressed: viewModel.go_to_profile,
             ),
             SizedBox(width: 50), // Leave space for the logo
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.chat), // Replace with your PNG
+              icon: Icon(Icons.chat),
+              color: chatColor,
               onPressed: viewModel.go_to_chats,
             ),
           ],
