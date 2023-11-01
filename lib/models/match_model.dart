@@ -10,6 +10,7 @@ class ChatMatch {
   final DateTime timestamp;
   final Message? last_message; //a Message object
   late int other_user_pic;
+  late bool? last_message_sent_by_user;
 
   ChatMatch({
     required this.match_id,
@@ -19,9 +20,11 @@ class ChatMatch {
     required this.other_user_pic,
     required this.timestamp,
     this.last_message,
+    required this.last_message_sent_by_user,
   });
 
   factory ChatMatch.fromDocument(DocumentSnapshot doc, String uid) {
+    bool lastMessageSentByUser = false; // default value
     final data = doc.data() as Map<String, dynamic>;
     final Map<String, dynamic>? lastMessageMap =
         data['last_message'] as Map<String, dynamic>?;
@@ -31,6 +34,9 @@ class ChatMatch {
         lastMessageMap.containsKey('timestamp') &&
         lastMessageMap.containsKey('sent_by')) {
       lastMessage = Message.fromMap(lastMessageMap);
+      if (lastMessage.sent_by == uid) {
+        lastMessageSentByUser = true;
+      }
     }
 
     //get the uid of the other user in the chat
@@ -40,6 +46,10 @@ class ChatMatch {
 
     final String? other_user_name = data['other_user_name'] as String?;
 
+    print("Is last message sent by current user? " +
+        lastMessageSentByUser.toString());
+    //HERE
+
     return ChatMatch(
       match_id: doc.id,
       users: usersList,
@@ -48,6 +58,7 @@ class ChatMatch {
       other_user_pic: 0,
       timestamp: (data['timestamp'] as Timestamp).toDate(),
       last_message: lastMessage,
+      last_message_sent_by_user: lastMessageSentByUser,
     );
   }
 

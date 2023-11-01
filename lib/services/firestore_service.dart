@@ -29,7 +29,6 @@ class FirestoreService {
   // }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
-    print("user making request is: " + uid.toString());
     return _firestore
         .collection('Matches')
         .where('users', arrayContains: uid)
@@ -38,15 +37,10 @@ class FirestoreService {
         .limit(5)
         .snapshots()
         .asyncMap((snapshot) async {
-      print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
-      print(
-          "Snapshot metadata, isFromCache: ${snapshot.metadata.isFromCache}, hasPendingWrites: ${snapshot.metadata.hasPendingWrites}");
-
       if (snapshot.docs.isEmpty) {
         print("No documents found in snapshot");
       } else {
-        print(
-            "Documents found: ${snapshot.docs.map((doc) => doc.id).join(', ')}");
+        print("Documents found");
       }
       //getting the name of the other user
       //using futures to fetch in parallel
@@ -63,7 +57,7 @@ class FirestoreService {
         futures.add(future);
       }
       final matches = await Future.wait(futures);
-      print("asyncMap end, matches.length: ${matches.length}");
+      print("number of old matches: ${matches.length}");
       return matches;
     }).handleError((error) {
       print("Error fetching old matches: $error");
@@ -72,7 +66,6 @@ class FirestoreService {
 
   //ignore: non_constant_identifier_names
   Stream<List<ChatMatch>> get_new_matches(String uid) {
-    print("get new matches start");
     //query to return the new chats
     return _firestore
         .collection('Matches')
@@ -82,15 +75,10 @@ class FirestoreService {
         .limit(5)
         .snapshots()
         .asyncMap((snapshot) async {
-      print("asyncMap start, snapshot.docs.length: ${snapshot.docs.length}");
-      print(
-          "Snapshot metadata, isFromCache: ${snapshot.metadata.isFromCache}, hasPendingWrites: ${snapshot.metadata.hasPendingWrites}");
-
       if (snapshot.docs.isEmpty) {
         print("No documents found in snapshot");
       } else {
-        print(
-            "Documents found: ${snapshot.docs.map((doc) => doc.id).join(', ')}");
+        print("Documents found");
       }
       //getting the name of the other user
       //using futures to fetch in parallel
@@ -108,7 +96,7 @@ class FirestoreService {
         futures.add(future);
       }
       final matches = await Future.wait(futures);
-      print("asyncMap end, matches.length: ${matches.length}");
+      print("number of new matches: ${matches.length}");
       return matches;
     }).handleError((error) {
       print("Error fetching new matches: $error");

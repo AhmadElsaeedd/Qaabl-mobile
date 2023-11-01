@@ -136,6 +136,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                 itemCount: viewModel.old_matches.length,
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
+                  bool? is_sent_by_user = match.last_message_sent_by_user;
                   return Container(
                     margin: const EdgeInsets.symmetric(
                         vertical: 5), // Adjust as needed
@@ -162,13 +163,22 @@ class ChatsView extends StackedView<ChatsViewModel> {
                             imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                             child: Text(
                               match.other_user_name,
-                              style: const TextStyle(
-                                  fontFamily: "Switzer",
-                                  fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          subtitle: Text(match.last_message?.content ??
-                              ''), // Replace with actual data
+                          subtitle: Text(
+                            (is_sent_by_user! ? 'you: ' : '') +
+                                (match.last_message?.content ?? ''),
+                            style: TextStyle(
+                              fontWeight: is_sent_by_user
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                              color: is_sent_by_user
+                                  ? const Color.fromARGB(255, 115, 115, 115)
+                                  : Colors.black,
+                            ),
+                          ),
                           trailing: Text(formattedTimestamp(
                               match.last_message!.timestamp)),
                         )),
