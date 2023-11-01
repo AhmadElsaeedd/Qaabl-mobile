@@ -49,16 +49,15 @@ class _EditProfileViewState extends State<EditProfileView> {
               const Text(
                 'Choose your interests',
                 style: TextStyle(
-                  fontFamily: 'Switzer',
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               Text(
-                "show us what you're all about!",
+                "show us what ur all about!",
                 style: TextStyle(
-                  fontSize: 12, // Adjust the size as needed
-                  //fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -93,6 +92,18 @@ class _EditProfileViewState extends State<EditProfileView> {
               );
             },
           ),
+          actions: [
+            // This is the check mark button
+            IconButton(
+              icon: Icon(
+                Icons.check,
+                color: Color(0xFF3439AB),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
         );
       },
     );
@@ -143,7 +154,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(right: 25.0, left: 25, top: 60),
+                        const EdgeInsets.only(right: 25.0, left: 25, top: 10),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -202,11 +213,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                               ),
                             ),
                           ),
-                          Padding(padding: EdgeInsets.only(top: 2)),
+                          Padding(padding: EdgeInsets.only(top: 5)),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "What exactly interests you in what you chose?",
+                              "tell us what really interests u!",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
