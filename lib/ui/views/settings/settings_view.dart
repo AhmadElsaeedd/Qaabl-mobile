@@ -109,7 +109,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             title: Text("About Us"),
                             content: SingleChildScrollView(
                               child: Text(
-                                "info about us", //Replace with your actual about us text
+                                "we are 3 people who like working on cool stuff: Ahmad, Salem, and Guglielmo. we do this for fun (but are serious sometimes) and we work on qaabl to make it the best for you... alright, enjoy :*",
                                 style: TextStyle(fontFamily: 'Switzer'),
                               ),
                             ),
