@@ -34,6 +34,8 @@ class InChatViewModel extends BaseViewModel {
 
   DocumentSnapshot? lastVisibleMessageSnapshot;
 
+  bool first_load = false;
+
   //the constructor needs to know which chat it is going to
   InChatViewModel(
       this.match_id, this.user_name, this.user_pic, this.other_user_id) {
@@ -41,7 +43,9 @@ class InChatViewModel extends BaseViewModel {
     if (uid == null) {
       _navigationService.replaceWithLoginView();
     }
-    _listenToNewMessages();
+    first_load = true;
+    // _listenToNewMessages();
+    _listenToMessages();
     loadMessagesBatch();
   }
 
@@ -51,25 +55,76 @@ class InChatViewModel extends BaseViewModel {
   }
 
   Future<void> go_to_chats() async {
-    print("I AM GOING BACK");
     _navigationService.back();
   }
 
   StreamSubscription? _newMessagesSubscription;
 
-  void _listenToNewMessages() {
-    _newMessagesSubscription =
-        _firestoreService.listenToNewMessages(match_id).listen((newMessages) {
-      final filteredMessages =
-          newMessages.where((message) => message.sent_by != uid).toList();
-      if (filteredMessages.isNotEmpty) {
-        displayed_messages.insertAll(0, filteredMessages);
-        rebuildUi();
-      }
-    });
-  }
+  // void _listenToNewMessages() {
+  //   _newMessagesSubscription =
+  //       _firestoreService.listenToNewMessages(match_id).listen((newMessages) {
+  //     print("Subscribed and in function");
+  //     final filteredMessages =
+  //         newMessages.where((message) => message.sent_by != uid).toList();
+  //     if (filteredMessages.isNotEmpty) {
+  //       print("I am inserting");
+  //       displayed_messages.insertAll(0, filteredMessages);
+  //       rebuildUi();
+  //     }
+  //   });
+  // }
 
-  bool first_load = true;
+  void _listenToMessages() {
+    _newMessagesSubscription =
+        _firestoreService.listenToMessages(match_id).listen(
+      (List<DocumentChange> documentChanges) {
+        bool shouldRebuildUi = false;
+
+        for (var change in documentChanges) {
+          print("some change happened");
+          // Create a Message instance from the DocumentSnapshot
+          Message message =
+              Message.fromMap(change.doc.data() as Map<String, dynamic>);
+          print("the message is: " + message.toString());
+          int index = displayed_messages
+              .indexWhere((m) => m.content == message.content);
+          print("It's index is: " + index.toString());
+
+          switch (change.type) {
+            case DocumentChangeType.added:
+              if (index == -1) {
+                //if it's a new message, and is not by the user add it
+                if (first_load != true && message.sent_by != uid) {
+                  print("I am inserting");
+                  displayed_messages.insert(0, message);
+                  shouldRebuildUi = true;
+                }
+              }
+              break;
+            case DocumentChangeType.modified:
+              if (index != -1) {
+                // If the message exists, update it
+                displayed_messages[index] = message;
+                shouldRebuildUi = true;
+              }
+              break;
+            case DocumentChangeType.removed:
+              if (index != -1) {
+                // If the message exists, remove it
+                displayed_messages.removeAt(index);
+                shouldRebuildUi = true;
+              }
+              break;
+          }
+        }
+
+        if (shouldRebuildUi) {
+          // If there's any UI change, call a method to update the UI
+          rebuildUi(); // Or however you trigger a rebuild in your architecture
+        }
+      },
+    );
+  }
 
   Future<void> loadMessagesBatch() async {
     try {
@@ -84,7 +139,6 @@ class InChatViewModel extends BaseViewModel {
         } else {
           displayed_messages.insertAll(displayed_messages.length, messages);
         }
-
         rebuildUi();
       }
     } catch (e) {

@@ -268,7 +268,7 @@ class _InChatViewState extends State<InChatView> {
                                   ),
                                   if (message.reaction != "No reaction")
                                     Positioned(
-                                      bottom: -5,
+                                      bottom: -4,
                                       right: 0,
                                       child: Padding(
                                         padding:
@@ -276,7 +276,7 @@ class _InChatViewState extends State<InChatView> {
                                         child: Text(
                                           message.reaction,
                                           style: TextStyle(
-                                              fontSize: 20), // Adjust as needed
+                                              fontSize: 15), // Adjust as needed
                                         ),
                                       ),
                                     ),
@@ -347,7 +347,6 @@ class _InChatViewState extends State<InChatView> {
       InChatViewModel viewModel, Message message, String timestampString) {
     final GlobalKey? messageKey = messageKeys[timestampString];
 
-    // Ensure the key is not null and has a context before proceeding
     if (messageKey?.currentContext == null) {
       print("I am returning");
       return;
@@ -366,12 +365,15 @@ class _InChatViewState extends State<InChatView> {
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: EdgeInsets.all(5.0),
+            margin:
+                EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal margin
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Colors.grey[300], // gray color
-              borderRadius: BorderRadius.circular(25.0), // rounded corners
+              color: Colors.grey
+                  .withOpacity(0.8), // Make the background slightly opaque
+              borderRadius: BorderRadius.circular(25.0),
             ),
-            child: Row(
+            child: Wrap(
               children: [
                 _buildEmojiOption(viewModel, '😀', message),
                 _buildEmojiOption(viewModel, '❤️', message),
@@ -388,7 +390,7 @@ class _InChatViewState extends State<InChatView> {
 
     overlay.insert(overlayEntry);
 
-    // Remove the overlay when an emoji is selected
+    // Remove the overlay after some time or on selection
     Future.delayed(Duration(seconds: 3), () {
       overlayEntry.remove();
     });
@@ -398,8 +400,6 @@ class _InChatViewState extends State<InChatView> {
       InChatViewModel viewModel, String emoji, Message message) {
     return GestureDetector(
       onTap: () {
-        print("emoji tapped!");
-        print("emoji: " + emoji);
         viewModel.react_to_message(emoji, message);
       },
       child: Padding(

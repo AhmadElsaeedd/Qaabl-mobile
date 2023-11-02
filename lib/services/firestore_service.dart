@@ -203,21 +203,34 @@ class FirestoreService {
     return Pair(messages, lastDoc);
   }
 
-  Stream<List<Message>> listenToNewMessages(String match_id) {
+  // Stream<List<Message>> listenToNewMessages(String match_id) {
+  //   final query = _firestore
+  //       .collection('Matches')
+  //       .doc(match_id)
+  //       .collection('Messages')
+  //       .orderBy('timestamp', descending: true)
+  //       .where('timestamp', isGreaterThan: Timestamp.now())
+  //       .snapshots();
+
+  //   return query.map((snapshot) {
+  //     return snapshot.docChanges
+  //         .where((change) => change.type == DocumentChangeType.added)
+  //         .map((change) =>
+  //             Message.fromMap(change.doc.data() as Map<String, dynamic>))
+  //         .toList();
+  //   });
+  // }
+
+  Stream<List<DocumentChange>> listenToMessages(String match_id) {
     final query = _firestore
         .collection('Matches')
         .doc(match_id)
         .collection('Messages')
         .orderBy('timestamp', descending: true)
-        .where('timestamp', isGreaterThan: Timestamp.now())
         .snapshots();
 
     return query.map((snapshot) {
-      return snapshot.docChanges
-          .where((change) => change.type == DocumentChangeType.added)
-          .map((change) =>
-              Message.fromMap(change.doc.data() as Map<String, dynamic>))
-          .toList();
+      return snapshot.docChanges;
     });
   }
 
