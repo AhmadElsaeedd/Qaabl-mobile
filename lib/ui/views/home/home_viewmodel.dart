@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:collection';
 import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
+import 'package:qaabl_mobile/services/messaging_service.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
@@ -20,6 +21,7 @@ class HomeViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
   final _mixpanelService = locator<MixpanelService>();
+  final _messagingService = locator<MessagingService>();
 
   String? current_page;
 

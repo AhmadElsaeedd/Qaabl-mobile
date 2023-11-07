@@ -54,7 +54,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       onViewModelReady: (model) {
         //model.getUsers();
         //uncomment when implementing notifs
-        //model.set_token_by_waiting_for_document();
+        model.set_token_by_waiting_for_document();
       },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();

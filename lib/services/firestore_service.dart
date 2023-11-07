@@ -198,7 +198,6 @@ class FirestoreService {
   Future<void> set_token(String uid) async {
     try {
       String token = await _messagingService.get_token() as String;
-      print("TOKEN FOR USER " + token.toString());
       _firestore.collection('Users').doc(uid).update({
         'fcm_token': token,
       });
