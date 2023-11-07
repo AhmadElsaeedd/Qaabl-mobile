@@ -1,13 +1,13 @@
-import 'package:stacked_app/app/app.locator.dart';
-import 'package:stacked_app/app/app.router.dart';
-import 'package:stacked_app/services/auth_service.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
+import 'package:qaabl_mobile/app/app.router.dart';
+import 'package:qaabl_mobile/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_app/services/firestore_service.dart';
+import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:collection';
-import 'package:stacked_app/models/match_model.dart';
+import 'package:qaabl_mobile/models/match_model.dart';
 
 class ChatsViewModel extends MultipleStreamViewModel {
   final _authenticationService = locator<AuthenticationService>();

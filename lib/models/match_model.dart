@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stacked_app/models/message_model.dart';
-import 'package:stacked_app/services/firestore_service.dart';
+import 'package:qaabl_mobile/models/message_model.dart';
+import 'package:qaabl_mobile/services/firestore_service.dart';
 
 class ChatMatch {
   final String match_id;

@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:stacked_app/app/app.locator.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 @lazySingleton

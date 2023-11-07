@@ -61,9 +61,7 @@ class AuthenticationService {
 
   Future<bool> signInWithApple() async {
     try {
-      print("HERE");
       final rawNonce = createNonce(32);
-      print("DONE1");
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -71,12 +69,10 @@ class AuthenticationService {
         ],
         nonce: sha256.convert(utf8.encode(rawNonce)).toString(),
       );
-      print("DONE2");
       final oauthCredential = OAuthProvider("apple.com").credential(
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
-      print("DONE3");
       await _firebaseAuth.signInWithCredential(oauthCredential);
       return true;
     } catch (error) {

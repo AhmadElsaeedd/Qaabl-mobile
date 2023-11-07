@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_app/app/app.locator.dart';
-import 'package:stacked_app/app/app.router.dart';
-import 'package:stacked_app/services/auth_service.dart';
-import 'package:stacked_app/services/firestore_service.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
+import 'package:qaabl_mobile/app/app.router.dart';
+import 'package:qaabl_mobile/services/auth_service.dart';
+import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:stacked_app/models/message_model.dart';
+import 'package:qaabl_mobile/models/message_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

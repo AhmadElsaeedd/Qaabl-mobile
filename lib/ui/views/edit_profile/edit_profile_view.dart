@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_app/ui/common/ui_helpers.dart';
+import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 
 import 'edit_profile_viewmodel.dart';
 

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';
-import 'package:stacked_app/models/match_model.dart';
-import 'package:stacked_app/models/message_model.dart';
+import 'package:qaabl_mobile/models/match_model.dart';
+import 'package:qaabl_mobile/models/message_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:stacked_app/app/app.locator.dart';
-import 'package:stacked_app/services/messaging_service.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
+import 'package:qaabl_mobile/services/messaging_service.dart';
 
 @lazySingleton
 class FirestoreService {

@@ -8,17 +8,17 @@
 import 'package:flutter/material.dart' as _i12;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_app/ui/views/chats/chats_view.dart' as _i10;
-import 'package:stacked_app/ui/views/edit_profile/edit_profile_view.dart'
+import 'package:qaabl_mobile/ui/views/chats/chats_view.dart' as _i10;
+import 'package:qaabl_mobile/ui/views/edit_profile/edit_profile_view.dart'
     as _i9;
-import 'package:stacked_app/ui/views/home/home_view.dart' as _i2;
-import 'package:stacked_app/ui/views/in_chat/in_chat_view.dart' as _i11;
-import 'package:stacked_app/ui/views/its_a_match/its_a_match_view.dart' as _i6;
-import 'package:stacked_app/ui/views/login/login_view.dart' as _i4;
-import 'package:stacked_app/ui/views/profile/profile_view.dart' as _i7;
-import 'package:stacked_app/ui/views/register/register_view.dart' as _i5;
-import 'package:stacked_app/ui/views/settings/settings_view.dart' as _i8;
-import 'package:stacked_app/ui/views/startup/startup_view.dart' as _i3;
+import 'package:qaabl_mobile/ui/views/home/home_view.dart' as _i2;
+import 'package:qaabl_mobile/ui/views/in_chat/in_chat_view.dart' as _i11;
+import 'package:qaabl_mobile/ui/views/its_a_match/its_a_match_view.dart' as _i6;
+import 'package:qaabl_mobile/ui/views/login/login_view.dart' as _i4;
+import 'package:qaabl_mobile/ui/views/profile/profile_view.dart' as _i7;
+import 'package:qaabl_mobile/ui/views/register/register_view.dart' as _i5;
+import 'package:qaabl_mobile/ui/views/settings/settings_view.dart' as _i8;
+import 'package:qaabl_mobile/ui/views/startup/startup_view.dart' as _i3;
 import 'package:stacked_services/stacked_services.dart' as _i13;
 
 class Routes {
