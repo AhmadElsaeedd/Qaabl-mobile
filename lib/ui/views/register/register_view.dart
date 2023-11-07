@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 
 import 'register_viewmodel.dart';
 
+// ignore: must_be_immutable
 class RegisterView extends StackedView<RegisterViewModel> {
   RegisterView({Key? key}) : super(key: key);
 

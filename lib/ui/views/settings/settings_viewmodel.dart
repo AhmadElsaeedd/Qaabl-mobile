@@ -2,7 +2,7 @@ import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/app/app.router.dart';
 import 'package:qaabl_mobile/services/auth_service.dart';
-import 'package:stacked/stacked.dart';
+// import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

@@ -15,9 +15,10 @@ class LoginViewModel extends BaseViewModel {
     _mixpanelService.mixpanel.track('Login', properties: {
       'Method': 'Google',
     });
-    final success = await _authenticationService.signInWithGoogle();
-    if (success) {
+    final email = await _authenticationService.signInWithGoogle();
+    if (email != null) {
       _navigationService.replaceWithHomeView();
+      _mixpanelService.mixpanel.getPeople().set("Email", email);
     } else {
       //display error logging in using the dialog service
       _dialogService.showDialog(
@@ -38,6 +39,7 @@ class LoginViewModel extends BaseViewModel {
     //check whether success or failure
     if (success) {
       _navigationService.replaceWithHomeView();
+      _mixpanelService.mixpanel.getPeople().set("Email", email);
     } else {
       //error logging in
       _dialogService.showDialog(
@@ -51,9 +53,10 @@ class LoginViewModel extends BaseViewModel {
     _mixpanelService.mixpanel.track('Login', properties: {
       'Method': 'Apple',
     });
-    final success = await _authenticationService.signInWithApple();
-    if (success) {
+    final email = await _authenticationService.signInWithApple();
+    if (email != null) {
       _navigationService.replaceWithHomeView();
+      _mixpanelService.mixpanel.getPeople().set("Email", email);
     } else {
       _dialogService.showDialog(
         title: 'Login Failure',

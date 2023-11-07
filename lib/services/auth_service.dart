@@ -5,10 +5,13 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 @lazySingleton
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final _mixpanelService = locator<MixpanelService>();
 
   // AuthenticationService() {
   //   _firebaseAuth.useAuthEmulator('localhost', 9104);
@@ -20,7 +23,6 @@ class AuthenticationService {
 
   Future<bool> signInWithEmailAndPassword(String email, String password) async {
     try {
-      print("Button clicked");
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       return true;
@@ -40,7 +42,7 @@ class AuthenticationService {
     }
   }
 
-  Future<bool> signInWithGoogle() async {
+  Future<String?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -52,14 +54,18 @@ class AuthenticationService {
           idToken: googleSignInAuthentication.idToken,
         );
         await _firebaseAuth.signInWithCredential(credential);
+        // Return the email after a successful sign-in
+        return googleSignInAccount.email;
       }
-      return true;
+      return null;
     } catch (e) {
-      return false;
+      // Optionally, handle or print the error here
+      print('Error signing in with Google: $e');
+      return null;
     }
   }
 
-  Future<bool> signInWithApple() async {
+  Future<String?> signInWithApple() async {
     try {
       final rawNonce = createNonce(32);
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -74,11 +80,11 @@ class AuthenticationService {
         rawNonce: rawNonce,
       );
       await _firebaseAuth.signInWithCredential(oauthCredential);
-      return true;
+      return appleCredential.email;
     } catch (error) {
       // Optionally, handle or print the error here
       print('Error signing in with Apple: $error');
-      return false;
+      return null;
     }
   }
 
@@ -105,6 +111,7 @@ class AuthenticationService {
     try {
       String? email = _firebaseAuth.currentUser!.email as String;
       await _firebaseAuth.sendPasswordResetEmail(email: email);
+      _mixpanelService.mixpanel.track("Changed Password");
     } catch (error) {
       print("Failed to send email: " + error.toString());
     }

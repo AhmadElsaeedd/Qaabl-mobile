@@ -4,15 +4,17 @@ import 'package:qaabl_mobile/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'dart:collection';
+// import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:collection';
 import 'package:qaabl_mobile/models/match_model.dart';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 class ChatsViewModel extends MultipleStreamViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   String? current_page;
 
@@ -58,6 +60,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
         username: user_name,
         userpic: user_pic,
         otheruser_id: other_user_id);
+    _mixpanelService.mixpanel.track("Directed to chat");
   }
 
   void go_to_profile() {

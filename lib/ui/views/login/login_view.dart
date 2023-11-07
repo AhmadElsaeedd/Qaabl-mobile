@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'dart:io' show Platform;
 import 'login_viewmodel.dart';
 
+// ignore: must_be_immutable
 class LoginView extends StackedView<LoginViewModel> {
   LoginView({Key? key}) : super(key: key);
 

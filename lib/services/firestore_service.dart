@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:injectable/injectable.dart';
 import 'package:qaabl_mobile/models/match_model.dart';
 import 'package:qaabl_mobile/models/message_model.dart';
@@ -8,11 +8,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/services/messaging_service.dart';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 @lazySingleton
 class FirestoreService {
   final _messagingService = locator<MessagingService>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final _mixpanelService = locator<MixpanelService>();
 
   // FirestoreService(){
   //   _firestore.settings = const Settings(
@@ -133,6 +135,7 @@ class FirestoreService {
       }),
       headers: {'Content-Type': 'application/json'},
     );
+    _mixpanelService.mixpanel.track("Sent Message");
     //Do something with response, Idk what yet
   }
 
@@ -151,32 +154,8 @@ class FirestoreService {
       }),
       headers: {'Content-Type': 'application/json'},
     );
+    _mixpanelService.mixpanel.track("Message reaction");
   }
-
-  // Stream<Pair<List<Message>, DocumentSnapshot?>> load_messages(String match_id,
-  //     [DocumentSnapshot? lastVisibleMessageSnapshot]) {
-  //   Query query = _firestore
-  //       .collection('Matches')
-  //       .doc(match_id)
-  //       .collection('Messages')
-  //       .orderBy('timestamp', descending: true)
-  //       .limit(10);
-
-  //   if (lastVisibleMessageSnapshot != null) {
-  //     query = query.startAfterDocument(lastVisibleMessageSnapshot);
-  //   }
-
-  //   return query.snapshots().map((snapshot) {
-  //     final messages = snapshot.docs.map((doc) {
-  //       final data = doc.data() as Map<String, dynamic>;
-  //       return Message.fromMap(data);
-  //     }).toList();
-
-  //     final lastDoc = snapshot.docs.isEmpty ? null : snapshot.docs.last;
-
-  //     return Pair(messages, lastDoc);
-  //   }).handleError((error) => print('Error loading messages: $error'));
-  // }
 
   Future<Pair<List<Message>, DocumentSnapshot?>> getMessagesBatch(
       String match_id,
@@ -202,24 +181,6 @@ class FirestoreService {
 
     return Pair(messages, lastDoc);
   }
-
-  // Stream<List<Message>> listenToNewMessages(String match_id) {
-  //   final query = _firestore
-  //       .collection('Matches')
-  //       .doc(match_id)
-  //       .collection('Messages')
-  //       .orderBy('timestamp', descending: true)
-  //       .where('timestamp', isGreaterThan: Timestamp.now())
-  //       .snapshots();
-
-  //   return query.map((snapshot) {
-  //     return snapshot.docChanges
-  //         .where((change) => change.type == DocumentChangeType.added)
-  //         .map((change) =>
-  //             Message.fromMap(change.doc.data() as Map<String, dynamic>))
-  //         .toList();
-  //   });
-  // }
 
   Stream<List<DocumentChange>> listenToMessages(String match_id) {
     final query = _firestore

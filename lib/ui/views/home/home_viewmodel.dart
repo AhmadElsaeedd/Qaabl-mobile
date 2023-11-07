@@ -12,12 +12,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:collection';
 import 'package:qaabl_mobile/services/firestore_service.dart';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   String? current_page;
 
@@ -74,13 +76,6 @@ class HomeViewModel extends BaseViewModel {
   //A function that sends an HTTP request to a cloud function getUsers()
   Future<void> getUsers() async {
     try {
-      // if (users_queue.isEmpty) {
-      //   print("I am here in the first load");
-      //   first_load = true;
-      // }
-      print("first load is: " + first_load.toString());
-      print("Calling the cloud");
-
       final response = await http.post(
         //production url
         Uri.parse(
@@ -122,7 +117,6 @@ class HomeViewModel extends BaseViewModel {
       // Rebuild UI in first load only, because with first load the data is not there yet
       if (first_load == true) {
         rebuildUi();
-        print("rebuilding");
       }
 
       // Stop it from reloading infinitely
@@ -138,9 +132,6 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
-    print("Get next user function call");
-    print("Length of users queue: " + users_queue.length.toString());
-    print("first load: " + first_load.toString());
     if ((no_more_users == true) ||
         (users_queue.length == 0 && first_load == false)) {
       no_more_users = true;
@@ -154,6 +145,7 @@ class HomeViewModel extends BaseViewModel {
     if (users_queue.isNotEmpty) {
       return users_queue.removeFirst();
     }
+    return null;
   }
 
   //function that likes a user, server-side
@@ -162,11 +154,9 @@ class HomeViewModel extends BaseViewModel {
     rebuildUi();
     dynamic response;
     if (potential_match == true) {
-      print("I am in the true place");
       //create a match between 2 users
       response = await both_like_each_other(liked_user_uid);
     } else {
-      print("I am in the false place");
       //call the cloud function that likes a user
       response = await like_user_in_cloud(liked_user_uid);
     }
@@ -175,7 +165,7 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(liked_user_uid);
-      print("liked user successfully");
+      _mixpanelService.mixpanel.track("Liked user");
     } else if (response.statusCode == 204) {
       try {
         await both_like_each_other(liked_user_uid);
@@ -185,9 +175,6 @@ class HomeViewModel extends BaseViewModel {
     } else {
       print("failed to go to cloud");
     }
-
-    // //rebuild ui, meaning next user will be fetched
-    // rebuildUi();
   }
 
   //ToDo: function that dislikes a user, server-side
@@ -214,19 +201,15 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(disliked_user_uid);
-      print("disliked user successfully");
+      _mixpanelService.mixpanel.track("Diliked user");
     } else {
       print("failed to go to cloud");
     }
-
-    // //rebuild ui, meaning next user will be fetched
-    // rebuildUi();
   }
 
   //function to skip user without performing any action
   void skip_user(String skipped_user_uid) {
     user_Ids_in_queue.remove(skipped_user_uid);
-    print("I am here");
     rebuildUi();
   }
 
@@ -248,6 +231,7 @@ class HomeViewModel extends BaseViewModel {
       }),
       headers: {'Content-Type': 'application/json'},
     );
+    _mixpanelService.mixpanel.track("Match Created");
     return response;
   }
 

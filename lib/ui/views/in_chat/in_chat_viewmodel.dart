@@ -10,11 +10,13 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:qaabl_mobile/models/message_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 class InChatViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   String? uid;
 
@@ -60,20 +62,6 @@ class InChatViewModel extends BaseViewModel {
 
   StreamSubscription? _newMessagesSubscription;
 
-  // void _listenToNewMessages() {
-  //   _newMessagesSubscription =
-  //       _firestoreService.listenToNewMessages(match_id).listen((newMessages) {
-  //     print("Subscribed and in function");
-  //     final filteredMessages =
-  //         newMessages.where((message) => message.sent_by != uid).toList();
-  //     if (filteredMessages.isNotEmpty) {
-  //       print("I am inserting");
-  //       displayed_messages.insertAll(0, filteredMessages);
-  //       rebuildUi();
-  //     }
-  //   });
-  // }
-
   void _listenToMessages() {
     _newMessagesSubscription =
         _firestoreService.listenToMessages(match_id).listen(
@@ -81,21 +69,17 @@ class InChatViewModel extends BaseViewModel {
         bool shouldRebuildUi = false;
 
         for (var change in documentChanges) {
-          print("some change happened");
           // Create a Message instance from the DocumentSnapshot
           Message message =
               Message.fromMap(change.doc.data() as Map<String, dynamic>);
-          print("the message is: " + message.toString());
           int index = displayed_messages
               .indexWhere((m) => m.content == message.content);
-          print("It's index is: " + index.toString());
 
           switch (change.type) {
             case DocumentChangeType.added:
               if (index == -1) {
                 //if it's a new message, and is not by the user add it
                 if (first_load != true && message.sent_by != uid) {
-                  print("I am inserting");
                   displayed_messages.insert(0, message);
                   shouldRebuildUi = true;
                 }
@@ -120,7 +104,7 @@ class InChatViewModel extends BaseViewModel {
 
         if (shouldRebuildUi) {
           // If there's any UI change, call a method to update the UI
-          rebuildUi(); // Or however you trigger a rebuild in your architecture
+          rebuildUi();
         }
       },
     );
@@ -219,5 +203,6 @@ class InChatViewModel extends BaseViewModel {
       }),
       headers: {'Content-Type': 'application/json'},
     );
+    _mixpanelService.mixpanel.track("Delete chat");
   }
 }

@@ -14,7 +14,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
     ProfileViewModel viewModel,
     Widget? child,
   ) {
-    late int image_index = 0;
+    // late int image_index = 0;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(

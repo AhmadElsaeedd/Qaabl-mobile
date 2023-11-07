@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
+// import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 import 'in_chat_viewmodel.dart';
 import 'package:intl/intl.dart';
-import 'dart:ui';
+// import 'dart:ui';
 import 'package:qaabl_mobile/models/message_model.dart';
 
 class InChatView extends StatefulWidget {

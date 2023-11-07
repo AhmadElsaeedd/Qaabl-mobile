@@ -8,10 +8,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:collection';
+// import 'dart:collection';
 
 class ProfileViewModel extends BaseViewModel {
-  final _dialogService = locator<DialogService>();
+  // final _dialogService = locator<DialogService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
 
