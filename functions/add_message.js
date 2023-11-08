@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors");
+const { sendNotification } = require("./notifs_handler");
 
 if (admin.apps.length === 0) {
   admin.initializeApp();
@@ -62,14 +63,26 @@ const AddMessage = functions.region("asia-east2").https.onRequest(async (req, re
 
     // Start Process 1: get_match_data => update_match_doc
     const process2 = get_match_data(chat_id)
-        .then((match_data) => update_match_doc(match_data, chat_id, new_message))
-        .catch((error) => console.error("Error in Process 1:", error));
+        .then((match_data) =>{
+          const other_user_uid = match_data.users.filter(uid => uid !== user_uid)[0];
+          update_match_doc(match_data, chat_id, new_message);
+          return other_user_uid;
+        }).catch((error) => console.error("Error in Process 2:", error));
 
     try {
       // Wait for both processes to complete
-      const [done, done2] = await Promise.all([process1, process2]);
+      const [done, other_user_uid] = await Promise.all([process1, process2]);
 
-      if (done && done2) {
+      const payload = {
+        notification: {
+          title: 'You have a new message!',
+          body: 'get on Qaabl and keep the convo going',
+        },
+      };
+
+      sendNotification(other_user_uid, payload);
+
+      if (done) {
         res.status(200).send("Message sent");
       }
     } catch (error) {

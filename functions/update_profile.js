@@ -29,8 +29,6 @@ function is_profile_pic_changed(old_pp_index, new_pp_index) {
 }
 
 function is_interests_changed(old_interests, new_interests) {
-  console.log("Old interests: ", old_interests);
-  console.log("New interests: ", new_interests);
   // Sort the arrays of interests by their 'name' property
   const sortInterests = (interests) => {
     return interests.sort((a, b) => a.name.localeCompare(b.name));
@@ -86,7 +84,6 @@ async function update_user(name = null, interests = null, uid, pp = null) {
       image_index: pp,
     });
   }
-  console.log("updated user");
 }
 
 const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (req, res) => {
@@ -95,11 +92,6 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     const name = req.body.name;
     const interests = req.body.interests;
     const profile_pic_index = req.body.image_index;
-
-    console.log("user uid: ", user_uid);
-    console.log("name is: ", name);
-    console.log("interests are: ", interests);
-    console.log("Profile picture is: ", profile_pic_index);
     // ToDo: get more input from the view model code
 
     // get the user's data first

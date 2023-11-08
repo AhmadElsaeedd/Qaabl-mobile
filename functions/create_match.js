@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const cors = require("cors");
 const admin = require("firebase-admin");
-
+const { sendNotification } = require("./notifs_handler");
 const {v4: uuidv4} = require("uuid");
 
 if (admin.apps.length === 0) {
@@ -119,6 +119,16 @@ const CreateMatch = functions.region("asia-east2").https.onRequest(async (req, r
 
     // update both with new arrays
     const done = await update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches, user1_uid, user2_uid);
+
+    const payload = {
+      notification: {
+        title: '😍😍You have a new match!',
+        body: 'get on Qaabl and meet a new friend!',
+      },
+    };
+
+    sendNotification(user1_uid, payload);
+    sendNotification(user2_uid, payload);
 
     if (done) {
       res.status(200).send("Match created");
