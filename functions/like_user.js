@@ -1,6 +1,11 @@
 const functions = require("firebase-functions");
 const cors = require("cors");
 const admin = require("firebase-admin");
+const { sendNotification } = require("./notifs_handler");
+
+if (admin.apps.length === 0) {
+  admin.initializeApp();
+}
 
 const db = admin.firestore();
 
@@ -49,21 +54,36 @@ async function check_if_user_likes_them(uid, liked_user_uid) {
 const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.user_uid;
-    // ToDo: notify this user that they've been liked
     const liked_user_uid = req.body.liked_user_uid;
 
     const user_likes_them = await check_if_user_likes_them(user_uid, liked_user_uid);
 
     if (user_likes_them) res.status(204).send("New match");
 
-    // ToDo: get the user's likes array
+    //get the user's likes array
     const user_likes = await get_user_likes(user_uid);
 
     // ToDo: Add liked_user_uid to the likes array of user_uid
     const user_likes_updated = add_liked_user(liked_user_uid, user_likes);
 
-    // ToDo: update the current user's document with the new array
+    //update the current user's document with the new array
     await update_user(user_uid, user_likes_updated);
+
+    //send a notif to the liked user
+    const payload = {
+      notification: {
+        title: '😍😍Someone likes you!',
+        body: 'Get on Qaabl and find out whooo',
+        sound: 'default'
+        // other notification options
+      },
+      // data: {
+      //   match_id: match_id,
+      //   // other data you want to send along
+      // },
+    };
+
+    sendNotification(liked_user_uid, payload);
 
     res.status(200).send("User liked successfully");
   });
