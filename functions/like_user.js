@@ -73,14 +73,8 @@ const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res)
     const payload = {
       notification: {
         title: '😍😍Someone likes you!',
-        body: 'Get on Qaabl and find out whooo',
-        sound: 'default'
-        // other notification options
+        body: 'get on Qaabl and find out whooo',
       },
-      // data: {
-      //   match_id: match_id,
-      //   // other data you want to send along
-      // },
     };
 
     sendNotification(liked_user_uid, payload);
