@@ -13,7 +13,6 @@ import 'package:http/http.dart' as http;
 import 'dart:collection';
 import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
-import 'package:qaabl_mobile/services/messaging_service.dart';
 
 class HomeViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
@@ -21,7 +20,6 @@ class HomeViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _firestoreService = locator<FirestoreService>();
   final _mixpanelService = locator<MixpanelService>();
-  final _messagingService = locator<MessagingService>();
 
   String? current_page;
 
@@ -45,35 +43,11 @@ class HomeViewModel extends BaseViewModel {
     no_more_users = false;
   }
 
-  // option to sign out (for testing purposes, will be removed from production)
-  Future signOut() async {
-    final success = await _authenticationService.signOut();
-    if (success) {
-      _navigationService.replaceWithLoginView();
-      _dialogService.showConfirmationDialog(
-        title: "Logout successful",
-        description: "Successfully logged out of Qaabl.",
-      );
-    } else {
-      _dialogService.showConfirmationDialog(
-        title: "Logout unsuccessful",
-        description: "Couldn't log out of Qaabl.",
-      );
-    }
-  }
-
-  void go_to_profile() {
-    _navigationService.replaceWithProfileView();
-  }
-
-  void go_to_chats() {
-    _navigationService.replaceWithChatsView();
-  }
-
   //data structure that will hold the users info
   Queue<Map<String, dynamic>> users_queue = Queue();
   //list of users id's for easy access
-  Set<String> user_Ids_in_queue = Set<String>();
+  Set<String> user_Ids_in_queue = <String>{};
+  Set<String> seen_users = <String>{};
 
   //A function that sends an HTTP request to a cloud function getUsers()
   Future<void> getUsers() async {
@@ -107,13 +81,14 @@ class HomeViewModel extends BaseViewModel {
       for (var user in users) {
         // if user already exists in queue, skip them
         String user_Id = user['id'];
-        if (user_Ids_in_queue.contains(user_Id)) {
-          print("skipping user");
+        if (user_Ids_in_queue.contains(user_Id) ||
+            seen_users.contains(user_Id)) {
           continue;
         }
         // add user to queue
         users_queue.add(user);
         user_Ids_in_queue.add(user_Id);
+        seen_users.add(user_Id);
       }
 
       // Rebuild UI in first load only, because with first load the data is not there yet
@@ -134,14 +109,16 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
+    //refill the queue when needed, we want to maintain having users in the queue
+    if (users_queue.length < 3 || first_load == true) {
+      getUsers();
+    }
+
+    //when the queue is empty after the first load or there is no more users
     if ((no_more_users == true) ||
         (users_queue.length == 0 && first_load == false)) {
       no_more_users = true;
       return null;
-    }
-    //refill the queue when needed, we want to maintain having users in the queue
-    if (users_queue.length < 2 || first_load == true) {
-      getUsers();
     }
     //when queue has users, show the first user and banish them from existence
     if (users_queue.isNotEmpty) {
@@ -258,10 +235,17 @@ class HomeViewModel extends BaseViewModel {
   Future<void> set_token_by_waiting_for_document() async {
     bool is_document_there = false;
     while (is_document_there != true) {
-      print("IN LOOP");
       await Future.delayed(Duration(seconds: 1));
       is_document_there = await _firestoreService.is_document_there(uid!);
     }
     _firestoreService.set_token(uid!);
+  }
+
+  void go_to_profile() {
+    _navigationService.replaceWithProfileView();
+  }
+
+  void go_to_chats() {
+    _navigationService.replaceWithChatsView();
   }
 }

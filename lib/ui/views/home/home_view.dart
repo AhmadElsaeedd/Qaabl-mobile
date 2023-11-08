@@ -58,7 +58,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
-        print("next user is: " + nextUser.toString());
 
         // Reset and start the animation for the new user
         _animationController.reset();
