@@ -5,9 +5,8 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i12;
+import 'package:flutter/material.dart' as _i13;
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart' as _i1;
 import 'package:qaabl_mobile/ui/views/chats/chats_view.dart' as _i10;
 import 'package:qaabl_mobile/ui/views/edit_profile/edit_profile_view.dart'
     as _i9;
@@ -15,11 +14,13 @@ import 'package:qaabl_mobile/ui/views/home/home_view.dart' as _i2;
 import 'package:qaabl_mobile/ui/views/in_chat/in_chat_view.dart' as _i11;
 import 'package:qaabl_mobile/ui/views/its_a_match/its_a_match_view.dart' as _i6;
 import 'package:qaabl_mobile/ui/views/login/login_view.dart' as _i4;
+import 'package:qaabl_mobile/ui/views/onboarding/onboarding_view.dart' as _i12;
 import 'package:qaabl_mobile/ui/views/profile/profile_view.dart' as _i7;
 import 'package:qaabl_mobile/ui/views/register/register_view.dart' as _i5;
 import 'package:qaabl_mobile/ui/views/settings/settings_view.dart' as _i8;
 import 'package:qaabl_mobile/ui/views/startup/startup_view.dart' as _i3;
-import 'package:stacked_services/stacked_services.dart' as _i13;
+import 'package:stacked/stacked.dart' as _i1;
+import 'package:stacked_services/stacked_services.dart' as _i14;
 
 class Routes {
   static const homeView = '/home-view';
@@ -42,6 +43,8 @@ class Routes {
 
   static const inChatView = '/in-chat-view';
 
+  static const onboardingView = '/onboarding-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -53,6 +56,7 @@ class Routes {
     editProfileView,
     chatsView,
     inChatView,
+    onboardingView,
   };
 }
 
@@ -98,17 +102,21 @@ class StackedRouter extends _i1.RouterBase {
       Routes.inChatView,
       page: _i11.InChatView,
     ),
+    _i1.RouteDef(
+      Routes.onboardingView,
+      page: _i12.OnboardingView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
@@ -117,7 +125,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<LoginViewArguments>(
         orElse: () => const LoginViewArguments(),
       );
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => _i4.LoginView(key: args.key),
         settings: data,
       );
@@ -126,25 +134,25 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<RegisterViewArguments>(
         orElse: () => const RegisterViewArguments(),
       );
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => _i5.RegisterView(key: args.key),
         settings: data,
       );
     },
     _i6.ItsAMatchView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ItsAMatchView(),
         settings: data,
       );
     },
     _i7.ProfileView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.ProfileView(),
         settings: data,
       );
     },
     _i8.SettingsView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.SettingsView(),
         settings: data,
       );
@@ -153,26 +161,32 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<EditProfileViewArguments>(
         orElse: () => const EditProfileViewArguments(),
       );
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.EditProfileView(key: args.key),
         settings: data,
       );
     },
     _i10.ChatsView: (data) {
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.ChatsView(),
         settings: data,
       );
     },
     _i11.InChatView: (data) {
       final args = data.getArgs<InChatViewArguments>(nullOk: false);
-      return _i12.MaterialPageRoute<dynamic>(
+      return _i13.MaterialPageRoute<dynamic>(
         builder: (context) => _i11.InChatView(
             key: args.key,
             match_id: args.matchid,
             user_name: args.username,
             user_pic: args.userpic,
             other_user_id: args.otheruser_id),
+        settings: data,
+      );
+    },
+    _i12.OnboardingView: (data) {
+      return _i13.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i12.OnboardingView(),
         settings: data,
       );
     },
@@ -187,7 +201,7 @@ class StackedRouter extends _i1.RouterBase {
 class LoginViewArguments {
   const LoginViewArguments({this.key});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
   @override
   String toString() {
@@ -209,7 +223,7 @@ class LoginViewArguments {
 class RegisterViewArguments {
   const RegisterViewArguments({this.key});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
   @override
   String toString() {
@@ -231,7 +245,7 @@ class RegisterViewArguments {
 class EditProfileViewArguments {
   const EditProfileViewArguments({this.key});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
   @override
   String toString() {
@@ -259,7 +273,7 @@ class InChatViewArguments {
     required this.otheruser_id,
   });
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
   final String matchid;
 
@@ -294,7 +308,7 @@ class InChatViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i13.NavigationService {
+extension NavigatorStateExtension on _i14.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -324,7 +338,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToLoginView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -340,7 +354,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToRegisterView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -398,7 +412,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToEditProfileView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -428,7 +442,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> navigateToInChatView({
-    _i12.Key? key,
+    _i13.Key? key,
     required String matchid,
     required String username,
     required int userpic,
@@ -446,6 +460,20 @@ extension NavigatorStateExtension on _i13.NavigationService {
             username: username,
             userpic: userpic,
             otheruser_id: otheruser_id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToOnboardingView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.onboardingView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -481,7 +509,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -497,7 +525,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithRegisterView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -555,7 +583,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithEditProfileView({
-    _i12.Key? key,
+    _i13.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -585,7 +613,7 @@ extension NavigatorStateExtension on _i13.NavigationService {
   }
 
   Future<dynamic> replaceWithInChatView({
-    _i12.Key? key,
+    _i13.Key? key,
     required String matchid,
     required String username,
     required int userpic,
@@ -603,6 +631,20 @@ extension NavigatorStateExtension on _i13.NavigationService {
             username: username,
             userpic: userpic,
             otheruser_id: otheruser_id),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithOnboardingView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.onboardingView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -12,14 +12,20 @@ class RegisterViewModel extends BaseViewModel {
   final _mixpanelService = locator<MixpanelService>();
 
   Future signInWithGoogle() async {
-    _mixpanelService.mixpanel.track('Sign up', properties: {
-      'Method': 'Google',
-    });
-    final email = await _authenticationService.signInWithGoogle();
-    if (email != null) {
-      _navigationService.replaceWithHomeView();
+    try {
+      _mixpanelService.mixpanel.track('Sign up', properties: {
+        'Method': 'Google',
+      });
+      final result = await _authenticationService.signInWithGoogle();
+      final email = result!['email'];
+      final isNewUser = result['isNewUser'];
       _mixpanelService.mixpanel.getPeople().set("Email", email);
-    } else {
+      if (!isNewUser) {
+        _navigationService.replaceWithHomeView();
+      } else {
+        _navigationService.replaceWithOnboardingView();
+      }
+    } catch (e) {
       //display error logging in using the dialog service
       _dialogService.showDialog(
         title: 'Login Failure',
@@ -38,7 +44,8 @@ class RegisterViewModel extends BaseViewModel {
 
     //check whether success or failure
     if (success) {
-      _navigationService.replaceWithHomeView();
+      // _navigationService.replaceWithHomeView();
+      _navigationService.replaceWithOnboardingView();
     } else {
       //error logging in
       _dialogService.showDialog(
@@ -49,14 +56,20 @@ class RegisterViewModel extends BaseViewModel {
   }
 
   Future signInWithApple() async {
-    _mixpanelService.mixpanel.track('Sign up', properties: {
-      'Method': 'Apple',
-    });
-    final email = await _authenticationService.signInWithApple();
-    if (email != null) {
-      _navigationService.replaceWithHomeView();
+    try {
+      _mixpanelService.mixpanel.track('Sign up', properties: {
+        'Method': 'Apple',
+      });
+      final result = await _authenticationService.signInWithApple();
+      final email = result!['email'];
+      final isNewUser = result['isNewUser'];
       _mixpanelService.mixpanel.getPeople().set("Email", email);
-    } else {
+      if (!isNewUser) {
+        _navigationService.replaceWithHomeView();
+      } else {
+        _navigationService.replaceWithOnboardingView();
+      }
+    } catch (e) {
       _dialogService.showDialog(
         title: 'Login Failure',
         description: 'Failed to sign in with Apple.',

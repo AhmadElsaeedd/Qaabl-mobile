@@ -12,14 +12,23 @@ class LoginViewModel extends BaseViewModel {
   final _mixpanelService = locator<MixpanelService>();
 
   Future signInWithGoogle() async {
-    _mixpanelService.mixpanel.track('Login', properties: {
-      'Method': 'Google',
-    });
-    final email = await _authenticationService.signInWithGoogle();
-    if (email != null) {
-      _navigationService.replaceWithHomeView();
+    try {
+      _mixpanelService.mixpanel.track('Login', properties: {
+        'Method': 'Google',
+      });
+      final result = await _authenticationService.signInWithGoogle();
+      final email = result!['email'];
+      final isNewUser = result['isNewUser'];
       _mixpanelService.mixpanel.getPeople().set("Email", email);
-    } else {
+      if (!isNewUser) {
+        _navigationService.replaceWithHomeView();
+      } else {
+        //Onboard the user here
+        print("I want to be onboarded!");
+        _navigationService.replaceWithOnboardingView();
+        //Redirect to onboarding view
+      }
+    } catch (e) {
       //display error logging in using the dialog service
       _dialogService.showDialog(
         title: 'Login Failure',
@@ -50,14 +59,20 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future signInWithApple() async {
-    _mixpanelService.mixpanel.track('Login', properties: {
-      'Method': 'Apple',
-    });
-    final email = await _authenticationService.signInWithApple();
-    if (email != null) {
-      _navigationService.replaceWithHomeView();
+    try {
+      _mixpanelService.mixpanel.track('Login', properties: {
+        'Method': 'Apple',
+      });
+      final result = await _authenticationService.signInWithApple();
+      final email = result!['email'];
+      final isNewUser = result['isNewUser'];
       _mixpanelService.mixpanel.getPeople().set("Email", email);
-    } else {
+      if (!isNewUser) {
+        _navigationService.replaceWithHomeView();
+      } else {
+        _navigationService.replaceWithOnboardingView();
+      }
+    } catch (e) {
       _dialogService.showDialog(
         title: 'Login Failure',
         description: 'Failed to sign in with Apple.',

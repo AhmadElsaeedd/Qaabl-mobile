@@ -42,7 +42,7 @@ class AuthenticationService {
     }
   }
 
-  Future<String?> signInWithGoogle() async {
+  Future<Map<String, dynamic>?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -53,9 +53,15 @@ class AuthenticationService {
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-        await _firebaseAuth.signInWithCredential(credential);
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        // Check if the user is new or existing
+        bool isNewUser = userCredential.additionalUserInfo!.isNewUser;
         // Return the email after a successful sign-in
-        return googleSignInAccount.email;
+        return {
+          'email': googleSignInAccount.email,
+          'isNewUser': isNewUser,
+        };
       }
       return null;
     } catch (e) {
@@ -65,7 +71,7 @@ class AuthenticationService {
     }
   }
 
-  Future<String?> signInWithApple() async {
+  Future<Map<String, dynamic>?> signInWithApple() async {
     try {
       final rawNonce = createNonce(32);
       final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -79,8 +85,14 @@ class AuthenticationService {
         idToken: appleCredential.identityToken,
         rawNonce: rawNonce,
       );
-      await _firebaseAuth.signInWithCredential(oauthCredential);
-      return appleCredential.email;
+      UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(oauthCredential);
+      // Check if the user is new or existing
+      bool isNewUser = userCredential.additionalUserInfo!.isNewUser;
+      return {
+        'email': appleCredential.email,
+        'isNewUser': isNewUser,
+      };
     } catch (error) {
       // Optionally, handle or print the error here
       print('Error signing in with Apple: $error');
