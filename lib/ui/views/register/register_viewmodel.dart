@@ -44,7 +44,6 @@ class RegisterViewModel extends BaseViewModel {
 
     //check whether success or failure
     if (success) {
-      // _navigationService.replaceWithHomeView();
       _navigationService.replaceWithOnboardingView();
     } else {
       //error logging in
