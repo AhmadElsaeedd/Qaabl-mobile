@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
 import 'chats_viewmodel.dart';
 import 'dart:ui';
+import 'package:shimmer/shimmer.dart';
 
 class ChatsView extends StackedView<ChatsViewModel> {
   const ChatsView({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class ChatsView extends StackedView<ChatsViewModel> {
     ChatsViewModel viewModel,
     Widget? child,
   ) {
+    final isLoading = viewModel.isLoading;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -42,71 +45,77 @@ class ChatsView extends StackedView<ChatsViewModel> {
                   ],
                 )),
             // Horizontal List for New Chats
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Container(
-                height: 100, // Adjust the height as needed
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: viewModel.new_matches.length,
-                  itemBuilder: (context, index) {
-                    final match = viewModel.new_matches[index];
+            if (isLoading)
+              _buildShimmerEffect(isHorizontal: true)
+            else ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  height: 100, // Adjust the height as needed
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: viewModel.new_matches.length,
+                    itemBuilder: (context, index) {
+                      final match = viewModel.new_matches[index];
 
-                    return Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 5), // Adjust as needed
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.grey), // Border color
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: InkWell(
-                            onTap: () => viewModel.go_to_chat(
-                                match.match_id,
-                                match.other_user_name,
-                                match.other_user_pic,
-                                match.other_user_id),
-                            child: Container(
-                              //constraints: BoxConstraints(minWidth: 80),
-                              width: 100,
-                              child: Card(
-                                child: Center(
-                                    child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    //Add the user's image here
-                                    CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                        'lib/assets/${match.other_user_pic}.png',
+                      return Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 5), // Adjust as needed
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.grey), // Border color
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: InkWell(
+                              onTap: () => viewModel.go_to_chat(
+                                  match.match_id,
+                                  match.other_user_name,
+                                  match.other_user_pic,
+                                  match.other_user_id),
+                              child: Container(
+                                //constraints: BoxConstraints(minWidth: 80),
+                                width: 100,
+                                child: Card(
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      //Add the user's image here
+                                      CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                          'lib/assets/${match.other_user_pic}.png',
+                                        ),
+                                        radius: 30,
+                                        backgroundColor:
+                                            const Color(0xFF3439AB),
                                       ),
-                                      radius: 30,
-                                      backgroundColor: const Color(0xFF3439AB),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: ImageFiltered(
-                                        imageFilter: ImageFilter.blur(
-                                            sigmaX: 4, sigmaY: 4),
-                                        child: FittedBox(
-                                          fit: BoxFit
-                                              .scaleDown, // Adjust the text to fit inside the available space
-                                          child: Text(
-                                            match.other_user_name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: ImageFiltered(
+                                          imageFilter: ImageFilter.blur(
+                                              sigmaX: 4, sigmaY: 4),
+                                          child: FittedBox(
+                                            fit: BoxFit
+                                                .scaleDown, // Adjust the text to fit inside the available space
+                                            child: Text(
+                                              match.other_user_name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                )),
-                              ),
-                            )));
-                  },
+                                      )
+                                    ],
+                                  )),
+                                ),
+                              )));
+                    },
+                  ),
                 ),
               ),
-            ),
+            ],
+
             // Messages Label
             const Padding(
                 padding: EdgeInsets.only(top: 25),
@@ -129,6 +138,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     ),
                   ],
                 )),
+            if (isLoading) _buildShimmerEffect(isHorizontal: false) else ...[],
             // Vertical List for Old Chats
             Expanded(
               child: ListView.builder(
@@ -196,9 +206,68 @@ class ChatsView extends StackedView<ChatsViewModel> {
     );
   }
 
+  Widget _buildShimmerEffect({required bool isHorizontal}) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: isHorizontal ? _buildHorizontalShimmer() : _buildVerticalShimmer(),
+    );
+  }
+
+  Widget _buildHorizontalShimmer() {
+    return Container(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 2, // Show 2 items for shimmer effect
+        itemBuilder: (context, index) => Container(
+          width: 100,
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVerticalShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        children: List.generate(
+          2,
+          (index) => // Generate 2 placeholder items
+              Container(
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey,
+              ),
+              title: Container(
+                height: 10,
+                color: Colors.grey,
+              ),
+              subtitle: Container(
+                height: 10,
+                color: Colors.grey,
+                margin: EdgeInsets.only(top: 5),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   String formattedTimestamp(DateTime timestamp) {
-    return DateFormat('hh:mm a')
-        .format(timestamp); // This will give a format like "12:15 PM"
+    return DateFormat('hh:mm a').format(timestamp);
   }
 
   @override

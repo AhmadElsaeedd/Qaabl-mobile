@@ -24,6 +24,8 @@ class ChatsViewModel extends MultipleStreamViewModel {
   List<ChatMatch> new_matches = [];
   List<ChatMatch> old_matches = [];
 
+  bool isLoading = true;
+
   @override
   void onData(String key, data) {
     switch (key) {
@@ -34,6 +36,7 @@ class ChatsViewModel extends MultipleStreamViewModel {
         old_matches = data;
         break;
     }
+    isLoading = false;
     rebuildUi();
   }
 
