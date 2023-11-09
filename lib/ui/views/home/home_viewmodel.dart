@@ -109,8 +109,9 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
-    //refill the queue when needed, we want to maintain having users in the queue
-    if (users_queue.length < 3 || first_load == true) {
+    // //refill the queue when needed, we want to maintain having users in the queue
+    if ((users_queue.length < 3 || first_load == true) &&
+        (no_more_users != true)) {
       getUsers();
     }
 
@@ -120,6 +121,7 @@ class HomeViewModel extends BaseViewModel {
       no_more_users = true;
       return null;
     }
+
     //when queue has users, show the first user and banish them from existence
     if (users_queue.isNotEmpty) {
       return users_queue.removeFirst();
