@@ -85,29 +85,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 nextUser, viewModel, context),
                           ),
                         ),
-                      ] else if (nextUser == null &&
-                          viewModel.no_more_users == false) ...[
-                        Container(
-                          margin: const EdgeInsets.only(top: 200),
-                          child: const Column(
-                            children: [
-                              Text(
-                                'Finding people!',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              Text(
-                                "give us a sec :)",
-                                style: TextStyle(
-                                  fontSize: 14, // Adjust the size as needed
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
                       ] else if (viewModel.user_continues == false) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
@@ -139,7 +116,30 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                             ],
                           ),
                         )
-                      ] else ...[
+                      ] else if (nextUser == null &&
+                          viewModel.no_more_users == false) ...[
+                        Container(
+                          margin: const EdgeInsets.only(top: 200),
+                          child: const Column(
+                            children: [
+                              Text(
+                                'Finding people!',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              Text(
+                                "give us a sec :)",
+                                style: TextStyle(
+                                  fontSize: 14, // Adjust the size as needed
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ] else if (viewModel.no_more_users == true) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
                           child: const Column(
@@ -353,13 +353,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
         // , matchEngineCompleter.future),
         likeAction: () {
-          //skip for now
-          print("I am in like");
           // viewModel.skip_user(nextUser['id']);
           viewModel.like_user(nextUser['id'], nextUser['potential_match']);
         },
         nopeAction: () {
-          print("I am in dislike");
           // viewModel.skip_user(nextUser['id']);
           viewModel.dislike_user(nextUser['id']);
         },

@@ -30,6 +30,7 @@ class HomeViewModel extends BaseViewModel {
   bool? first_load;
   bool no_more_users = false;
   bool user_continues = true;
+  bool last_user = false;
 
   // Map<String, dynamic>? nextUser;
 
@@ -46,7 +47,6 @@ class HomeViewModel extends BaseViewModel {
     no_more_users = false;
     user_continues = true;
     set_token_by_waiting_for_document();
-    // nextUser = get_next_user();
   }
 
   //data structure that will hold the users info
@@ -66,6 +66,7 @@ class HomeViewModel extends BaseViewModel {
         // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
           'uid': uid,
+          'users_queue_uids': user_Ids_in_queue.toList(),
         }),
         headers: {'Content-Type': 'application/json'},
       );
@@ -77,14 +78,11 @@ class HomeViewModel extends BaseViewModel {
           response.statusCode == 205))
         print("failed to go to cloud");
       else if (response.statusCode == 204) {
-        //tell the ui that there are no more users
-        no_more_users = true;
-        rebuildUi();
-        // return;
+        // last_user = true;
+        // rebuildUi();
       } else if (response.statusCode == 205) {
         user_continues = false;
         rebuildUi();
-        // return;
       } else if (response.statusCode == 200) {
         List<dynamic> users = jsonDecode(response.body);
         for (var user in users) {
@@ -92,18 +90,19 @@ class HomeViewModel extends BaseViewModel {
           String user_Id = user['id'];
           if (!(user_Ids_in_queue.contains(user_Id) ||
               seen_users.contains(user_Id))) {
+            print("Adding user to queue");
             users_queue.add(user);
             user_Ids_in_queue.add(user_Id);
             seen_users.add(user_Id);
           }
-          print(
-              "length of users queue: " + user_Ids_in_queue.length.toString());
-          if (user_Ids_in_queue.isEmpty) {
-            print("here");
-            no_more_users = true;
-            rebuildUi();
-          }
         }
+      }
+      print("length of users queue: " + users_queue.length.toString());
+
+      if (users_queue.isEmpty) {
+        print("here");
+        no_more_users = true;
+        rebuildUi();
       }
 
       // Rebuild UI in first load only
@@ -124,32 +123,38 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
-    // print("Users queue length: " + user_Ids_in_queue.length.toString());
-    // print("No more users: " + no_more_users.toString());
-    // print("First load: " + first_load.toString());
-    // print("User continues: " + user_continues.toString());
+    if (users_queue.length == 1) {
+      print("Down to last user");
+      last_user = true;
+      no_more_users = true;
+      return users_queue.removeFirst();
+    }
+    print("Users queue length: " + users_queue.length.toString());
     //when the queue is empty after the first load or there is no more users or user shouldnt continue
     if ((no_more_users == true) ||
         (users_queue.length == 0 && first_load == false) ||
         (user_continues == false)) {
+      print("Users queue length: " + users_queue.length.toString());
+      print("No more users: " + no_more_users.toString());
+      print("First load: " + first_load.toString());
+      print("User continues: " + user_continues.toString());
       print("I am here");
+      no_more_users == true;
       return null;
     }
     // //refill the queue when needed, we want to maintain having users in the queue
-    if ((users_queue.length < 4 || first_load == true) &&
-        (no_more_users == false)) {
+    if ((users_queue.length < 10 || first_load == true) &&
+        (no_more_users == false) &&
+        (last_user == false)) {
       print("I am here trying to get users");
       getUsers();
-      return users_queue.removeFirst();
     }
 
-    //OKAY I AM HERE
-
     //when queue has users, show the first user and banish them from existence
-    // if (users_queue.isNotEmpty) {
-    //   print("I AM RETURNING A USER");
-    //   return users_queue.removeFirst();
-    // }
+    if (users_queue.isNotEmpty && user_continues == true) {
+      print("I AM RETURNING A USER");
+      return users_queue.removeFirst();
+    }
     return null;
   }
 

@@ -44,19 +44,18 @@ async function get_user_likes_dislikes_matches(uid) {
 
 function should_user_continue(likes,dislikes,interests){
   const likes_and_dislikes = likes.length + dislikes.length;
-  if(likes_and_dislikes>=1 && interests.length == 0) return false;
+  if(likes_and_dislikes>0 && interests.length == 0) return false;
   else return true;
 }
 
 // function that gets filtered users
-async function get_other_users(uid, likes, dislikes, matched_users) {
+async function get_other_users(uid, likes, dislikes, matched_users, users_in_queue) {
   let filter_out_those = [];
-  filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
+  filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, ...users_in_queue, uid])];
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
   const users = [];
   if (filter_out_those.length <= 10) {
-    console.log("here");
     // If 10 or fewer items to filter out, use 'not-in'
     const users_snapshot = await db.collection("Users")
         .where("id", "not-in", filter_out_those)
@@ -125,6 +124,7 @@ async function structure_users(user_uid, users) {
 const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.uid;
+    const users_in_queue = req.body.users_queue_uids;
 
     // get likes, dislikes, and matched users
     const {likes, dislikes, matched_users, interests} = await get_user_likes_dislikes_matches(user_uid);
@@ -137,8 +137,8 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
       return res.status(205).send("User can't continue");
     }
 
-    // query to return 3 users
-    const filtered_users = await get_other_users(user_uid, likes, dislikes, matched_users);
+    // query to return 1 user (worst case) and up to 5 (best case)
+    const filtered_users = await get_other_users(user_uid, likes, dislikes, matched_users, users_in_queue);
 
     if (filtered_users.length === 0) {
       // No more users to send
