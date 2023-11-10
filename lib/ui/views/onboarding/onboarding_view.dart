@@ -220,7 +220,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 ],
               )),
           Image.asset(
-            'lib/assets/onboarding1.PNG',
+            'lib/assets/onboarding1.png',
             height: 400,
           ),
         ];
@@ -240,7 +240,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 ],
               )),
           Image.asset(
-            'lib/assets/onboarding2.PNG',
+            'lib/assets/onboarding2.png',
             height: 400,
           ),
         ];
@@ -260,7 +260,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 ],
               )),
           Image.asset(
-            'lib/assets/onboarding3.PNG',
+            'lib/assets/onboarding3.png',
             height: 400,
           ),
         ];

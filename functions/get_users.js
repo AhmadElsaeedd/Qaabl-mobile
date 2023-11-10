@@ -37,25 +37,30 @@ async function get_user_likes_dislikes_matches(uid) {
   const likes = user_data.likes;
   const dislikes = user_data.dislikes;
   const matched_users = user_data.matched_users;
+  const interests = user_data.interests;
 
-  return {likes, dislikes, matched_users};
+  return {likes, dislikes, matched_users, interests};
+}
+
+function should_user_continue(likes,dislikes,interests){
+  const likes_and_dislikes = likes.length + dislikes.length;
+  if(likes_and_dislikes>=1 && interests.length == 0) return false;
+  else return true;
 }
 
 // function that gets filtered users
 async function get_other_users(uid, likes, dislikes, matched_users) {
   let filter_out_those = [];
   filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
-  console.log("Filtered users:", filter_out_those);
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
-  // let users_snapshot;
   const users = [];
   if (filter_out_those.length <= 10) {
     console.log("here");
     // If 10 or fewer items to filter out, use 'not-in'
     const users_snapshot = await db.collection("Users")
         .where("id", "not-in", filter_out_those)
-        .limit(3)
+        .limit(5)
         .get();
 
     users_snapshot.forEach((doc) => {
@@ -122,7 +127,15 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
     const user_uid = req.body.uid;
 
     // get likes, dislikes, and matched users
-    const {likes, dislikes, matched_users} = await get_user_likes_dislikes_matches(user_uid);
+    const {likes, dislikes, matched_users, interests} = await get_user_likes_dislikes_matches(user_uid);
+
+    //check if the user can continue
+    const user_continues = should_user_continue(likes,dislikes,interests);
+
+    if(user_continues == false) {
+      console.log("User can't continue");
+      return res.status(205).send("User can't continue");
+    }
 
     // query to return 3 users
     const filtered_users = await get_other_users(user_uid, likes, dislikes, matched_users);

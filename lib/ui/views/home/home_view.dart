@@ -1,5 +1,6 @@
 // import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 // import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 // import 'package:qaabl_mobile/ui/common/app_colors.dart';
@@ -26,12 +27,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500), // Duration of the slide animation
+      duration:
+          const Duration(milliseconds: 500), // Duration of the slide animation
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: Offset(0, -20), // Start position (from the top)
-      end: Offset(0, 0), // End position (final position)
+      begin: const Offset(0, -20), // Start position (from the top)
+      end: const Offset(0, 0), // End position (final position)
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeOut,
@@ -51,11 +53,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      onViewModelReady: (model) {
-        //model.getUsers();
-        //uncomment when implementing notifs
-        model.set_token_by_waiting_for_document();
-      },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
 
@@ -82,7 +79,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 0),
+                          margin: const EdgeInsets.only(top: 0),
                           child: Center(
                             child: check_profile_button(
                                 nextUser, viewModel, context),
@@ -91,10 +88,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ] else if (nextUser == null &&
                           viewModel.no_more_users == false) ...[
                         Container(
-                          margin: EdgeInsets.only(top: 200),
-                          child: Column(
+                          margin: const EdgeInsets.only(top: 200),
+                          child: const Column(
                             children: [
-                              const Text(
+                              Text(
                                 'Finding people!',
                                 style: TextStyle(
                                   fontSize: 25,
@@ -111,12 +108,43 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                             ],
                           ),
                         )
+                      ] else if (viewModel.user_continues == false) ...[
+                        Container(
+                          margin: const EdgeInsets.only(top: 200),
+                          child: const Column(
+                            children: [
+                              Text(
+                                'fill your profile!',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "why?",
+                                style: TextStyle(
+                                  fontSize: 18, // Adjust the size as needed
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "rn ur not visible, less chances of meeting ppl :(",
+                                style: TextStyle(
+                                  fontSize: 14, // Adjust the size as needed
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       ] else ...[
                         Container(
-                          margin: EdgeInsets.only(top: 200),
-                          child: Column(
+                          margin: const EdgeInsets.only(top: 200),
+                          child: const Column(
                             children: [
-                              const Text(
+                              Text(
                                 'No more users',
                                 style: TextStyle(
                                   fontFamily: 'Switzer',
@@ -135,9 +163,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           ),
                         )
                       ],
-                      Spacer(),
+                      const Spacer(),
                       Container(
-                        margin: EdgeInsets.only(bottom: 0), // Adjust as needed
+                        margin: const EdgeInsets.only(
+                            bottom: 0), // Adjust as needed
                         child: _bottomNavigationBar(viewModel),
                       ),
                     ],
@@ -150,6 +179,153 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       },
     );
   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ViewModelBuilder<HomeViewModel>.reactive(
+//       viewModelBuilder: () => HomeViewModel(),
+//       onViewModelReady: (model) {
+//         model.set_token_by_waiting_for_document();
+//         // Trigger the animation when the view model is ready
+//         _animationController.reset();
+//         _animationController.forward();
+//       },
+//       builder: (context, viewModel, child) {
+//         // Use FutureBuilder to handle the async operation
+//         return Scaffold(
+//           backgroundColor: Colors.white,
+//           body: SafeArea(
+//             child: Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 25.0),
+//               child: Stack(
+//                 children: [
+//                   Column(
+//                     children: [
+//                       _helloText(),
+//                       FutureBuilder<Map<String, dynamic>?>(
+//                         future:
+//                             viewModel.get_next_user(), // Call the async method
+//                         builder: (context, snapshot) {
+//                           if (snapshot.connectionState ==
+//                               ConnectionState.waiting) {
+//                             // Show loading indicator while waiting for data
+//                             return const Center(
+//                               child: Row(
+//                                 mainAxisSize: MainAxisSize.min,
+//                                 children: [
+//                                   Text('Loading ...',
+//                                       style: TextStyle(fontSize: 16)),
+//                                   horizontalSpaceSmall,
+//                                   SizedBox(
+//                                     width: 16,
+//                                     height: 16,
+//                                     child: CircularProgressIndicator(
+//                                       color: Colors.black,
+//                                       strokeWidth: 6,
+//                                     ),
+//                                   )
+//                                 ],
+//                               ),
+//                             );
+//                           } else if (snapshot.hasError) {
+//                             // Handle error state
+//                             return Text('Error: ${snapshot.error}');
+//                           } else if (snapshot.hasData) {
+//                             // Data is available, build the user details widget
+//                             Map<String, dynamic>? nextUser = snapshot.data;
+//                             return _userDetails(
+//                                 nextUser, viewModel, context, _slideAnimation);
+//                           } else {
+//                             // Handle when no more users are available
+//                             print("I am here");
+//                             return _noMoreUsersWidget(viewModel);
+//                           }
+//                         },
+//                       ),
+//                       Spacer(),
+//                       Container(
+//                         margin: EdgeInsets.only(bottom: 0), // Adjust as needed
+//                         child: _bottomNavigationBar(viewModel),
+//                       ),
+//                     ],
+//                   )
+//                 ],
+//               ),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+
+// // Helper method to create the "No more users" widget
+//   Widget _noMoreUsersWidget(HomeViewModel viewModel) {
+//     if (viewModel.no_more_users) {
+//       return _noMoreUsersAvailable();
+//     } else if (!viewModel.user_continues) {
+//       return _fillYourProfile();
+//     } else {
+//       return Text('');
+//     }
+//   }
+
+//   Widget _noMoreUsersAvailable() {
+//     return Container(
+//       margin: EdgeInsets.only(top: 200),
+//       child: Column(
+//         children: [
+//           const Text(
+//             'No more users',
+//             style: TextStyle(
+//               fontFamily: 'Switzer',
+//               fontSize: 25,
+//               fontWeight: FontWeight.w900,
+//             ),
+//           ),
+//           Text(
+//             "come back in a bit, see u :*",
+//             style: TextStyle(
+//               fontSize: 14, // Adjust the size as needed
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _fillYourProfile() {
+//     return Container(
+//       margin: EdgeInsets.only(top: 200),
+//       child: Column(
+//         children: [
+//           const Text(
+//             'fill your profile!',
+//             style: TextStyle(
+//               fontSize: 25,
+//               fontWeight: FontWeight.w900,
+//             ),
+//           ),
+//           SizedBox(height: 10),
+//           Text(
+//             "why?",
+//             style: TextStyle(
+//               fontSize: 18, // Adjust the size as needed
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//           SizedBox(height: 10),
+//           Text(
+//             "rn ur not visible, less chances of meeting ppl :(",
+//             style: TextStyle(
+//               fontSize: 14, // Adjust the size as needed
+//               fontWeight: FontWeight.w500,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
   Widget _userDetails(
       nextUser, viewModel, context, Animation<Offset> slideAnimation) {
@@ -220,11 +396,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 }
 
 Widget _helloText() {
-  return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
+  return const Padding(
+      padding: EdgeInsets.only(top: 50.0),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Hello, in Qaabl!',
             style: TextStyle(
               fontSize: 25,
@@ -263,7 +439,7 @@ class _UserInterestsWidgetState extends State<UserInterestsWidget> {
           ListView.builder(
             shrinkWrap: true, // This will size the ListView to its content
             physics:
-                ClampingScrollPhysics(), // This will enable scrolling in the ListView
+                const ClampingScrollPhysics(), // This will enable scrolling in the ListView
             itemCount: widget.interests.length,
             itemBuilder: (context, index) {
               final interest = widget.interests[index];
@@ -301,10 +477,10 @@ class UserProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF3439AB),
-        title: Text('More about me...'),
+        backgroundColor: const Color(0xFF3439AB),
+        title: const Text('More about me...'),
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -317,11 +493,11 @@ Widget _bottomNavigationBar(viewModel) {
   Color profileColor = (viewModel.current_page == "profile" ||
           viewModel.current_page == "edit_profile" ||
           viewModel.current_page == "settings")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   Color chatColor = (viewModel.current_page == "chats")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   return Stack(
@@ -331,7 +507,7 @@ Widget _bottomNavigationBar(viewModel) {
       Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 239, 239, 239),
+          color: const Color.fromARGB(255, 239, 239, 239),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -339,14 +515,14 @@ Widget _bottomNavigationBar(viewModel) {
           children: [
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               color: profileColor,
               onPressed: viewModel.go_to_profile,
             ),
-            SizedBox(width: 50), // Leave space for the logo
+            const SizedBox(width: 50), // Leave space for the logo
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
               color: chatColor,
               onPressed: viewModel.go_to_chats,
             ),
@@ -363,11 +539,12 @@ Widget _bottomNavigationBar(viewModel) {
               width: 70, // Adjust the width and height as needed
               height: 70,
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF3439AB)), // Border color
+                border:
+                    Border.all(color: const Color(0xFF3439AB)), // Border color
                 borderRadius:
                     BorderRadius.circular(40), // Rounded corner radius
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.black26, // Shadow color
                     offset: Offset(0, 3), // Vertical offset
                     blurRadius: 5.0, // Blur value
@@ -375,7 +552,7 @@ Widget _bottomNavigationBar(viewModel) {
                   ),
                 ],
               ),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage('lib/assets/logo.png'),
                 backgroundColor: Colors.white,
               )),
@@ -460,13 +637,13 @@ class _UserCardState extends State<UserCard> {
       position: widget.slideAnimation,
       child: Stack(children: [
         Card(
-            color: Color.fromARGB(255, 239, 239, 239),
+            color: const Color.fromARGB(255, 239, 239, 239),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
             elevation: 5,
             child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -474,8 +651,8 @@ class _UserCardState extends State<UserCard> {
                         // Center the interests area
                         child: Column(
                           children: [
-                            Padding(padding: EdgeInsets.only(top: 25)),
-                            Text(
+                            const Padding(padding: EdgeInsets.only(top: 25)),
+                            const Text(
                               "One of my interests is:",
                               style: TextStyle(
                                 fontSize: 22, // Adjust the size as needed
@@ -484,7 +661,7 @@ class _UserCardState extends State<UserCard> {
                             ),
                             Text(
                               "${widget.nextUser['interests'][0]['name']}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 25, // Adjust the size as needed
                                 fontWeight: FontWeight.w700,
                               ),
@@ -493,8 +670,8 @@ class _UserCardState extends State<UserCard> {
                               'lib/assets/${widget.nextUser['image_index']}.png',
                               height: 200,
                             ),
-                            Padding(padding: EdgeInsets.only(top: 5)),
-                            Text(
+                            const Padding(padding: EdgeInsets.only(top: 5)),
+                            const Text(
                               "And that's what I like about it:",
                               style: TextStyle(
                                 fontSize: 14, // Adjust the size as needed
@@ -503,7 +680,7 @@ class _UserCardState extends State<UserCard> {
                             ),
                             Text(
                               "${widget.nextUser['interests'][0]['description']}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 18, // Adjust the size as needed
                                 fontWeight: FontWeight.w700,
                               ),
@@ -519,7 +696,7 @@ class _UserCardState extends State<UserCard> {
                                     onPressed: () async {
                                       showFeedback("Dislike");
                                       await Future.delayed(
-                                          Duration(milliseconds: 400));
+                                          const Duration(milliseconds: 400));
                                       widget.viewModel
                                           .dislike_user(widget.nextUser['id']);
                                     },
@@ -530,14 +707,14 @@ class _UserCardState extends State<UserCard> {
                                       ),
                                       backgroundColor: Colors.white,
                                     ),
-                                    child: Icon(Icons.thumb_down,
+                                    child: const Icon(Icons.thumb_down,
                                         color: Colors.black), // Close icon
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Like");
                                       await Future.delayed(
-                                          Duration(milliseconds: 400));
+                                          const Duration(milliseconds: 400));
                                       widget.viewModel.like_user(
                                           widget.nextUser['id'],
                                           widget.nextUser['potential_match']);
@@ -547,9 +724,9 @@ class _UserCardState extends State<UserCard> {
                                         borderRadius: BorderRadius.circular(
                                             30), // Rounded button
                                       ),
-                                      backgroundColor: Color(0xFF3439AB),
+                                      backgroundColor: const Color(0xFF3439AB),
                                     ),
-                                    child: Icon(Icons.thumb_up,
+                                    child: const Icon(Icons.thumb_up,
                                         color: Colors.white), // Check icon
                                   ),
                                 ],
@@ -569,7 +746,7 @@ class _UserCardState extends State<UserCard> {
                 ? 20
                 : null, // 20px from right if "Dislike"
             child: Container(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 color: feedbackColor!.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(30.0), // rounded corners
@@ -590,7 +767,7 @@ class _UserCardState extends State<UserCard> {
     setState(() {
       feedback = feedbackText;
       if (feedbackText == "Like") {
-        feedbackColor = Color(0xFF3439AB);
+        feedbackColor = const Color(0xFF3439AB);
         feedbackIcon = Icons.thumb_up; // change this to your "like" icon
       } else if (feedbackText == "Dislike") {
         feedbackColor = Colors.black;
@@ -614,7 +791,7 @@ Widget check_profile_button(nextUser, viewModel, context) {
       children: [
         Text(
           "I have ${nextUser['interests'].length} interests, check me out",
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14, // Adjust the size as needed
           ),
         ),
@@ -637,16 +814,16 @@ Widget check_profile_button(nextUser, viewModel, context) {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF3439AB), // Background color
+            backgroundColor: const Color(0xFF3439AB), // Background color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30), // Rounded button
             ),
           ),
-          child: Text("View Profile"),
+          child: const Text("View Profile"),
         ),
       ],
     );
   } else {
-    return Text("No more users to display.");
+    return const Text("No more users to display.");
   }
 }

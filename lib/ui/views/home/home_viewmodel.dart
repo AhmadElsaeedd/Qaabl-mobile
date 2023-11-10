@@ -28,7 +28,10 @@ class HomeViewModel extends BaseViewModel {
 
   //logic flags
   bool? first_load;
-  bool? no_more_users;
+  bool no_more_users = false;
+  bool user_continues = true;
+
+  // Map<String, dynamic>? nextUser;
 
   // constructor runs whenever the page is loaded or reloaded
   HomeViewModel() {
@@ -41,6 +44,9 @@ class HomeViewModel extends BaseViewModel {
     //logic flags
     first_load = true;
     no_more_users = false;
+    user_continues = true;
+    set_token_by_waiting_for_document();
+    // nextUser = get_next_user();
   }
 
   //data structure that will hold the users info
@@ -63,35 +69,44 @@ class HomeViewModel extends BaseViewModel {
         }),
         headers: {'Content-Type': 'application/json'},
       );
-      print(
-          "Cloud called with response code: " + response.statusCode.toString());
-
+      print("Went to cloud with response code: " +
+          response.statusCode.toString());
       //response of the function should contain 3 users with their UIDs and interests
-      if (!(response.statusCode == 200 || response.statusCode == 204))
+      if (!(response.statusCode == 200 ||
+          response.statusCode == 204 ||
+          response.statusCode == 205))
         print("failed to go to cloud");
       else if (response.statusCode == 204) {
         //tell the ui that there are no more users
         no_more_users = true;
         rebuildUi();
-        return;
-      }
-
-      // Parse the JSON response and add it to the queue
-      List<dynamic> users = jsonDecode(response.body);
-      for (var user in users) {
-        // if user already exists in queue, skip them
-        String user_Id = user['id'];
-        if (user_Ids_in_queue.contains(user_Id) ||
-            seen_users.contains(user_Id)) {
-          continue;
+        // return;
+      } else if (response.statusCode == 205) {
+        user_continues = false;
+        rebuildUi();
+        // return;
+      } else if (response.statusCode == 200) {
+        List<dynamic> users = jsonDecode(response.body);
+        for (var user in users) {
+          // if user already exists in queue, skip them
+          String user_Id = user['id'];
+          if (!(user_Ids_in_queue.contains(user_Id) ||
+              seen_users.contains(user_Id))) {
+            users_queue.add(user);
+            user_Ids_in_queue.add(user_Id);
+            seen_users.add(user_Id);
+          }
+          print(
+              "length of users queue: " + user_Ids_in_queue.length.toString());
+          if (user_Ids_in_queue.isEmpty) {
+            print("here");
+            no_more_users = true;
+            rebuildUi();
+          }
         }
-        // add user to queue
-        users_queue.add(user);
-        user_Ids_in_queue.add(user_Id);
-        seen_users.add(user_Id);
       }
 
-      // Rebuild UI in first load only, because with first load the data is not there yet
+      // Rebuild UI in first load only
       if (first_load == true) {
         rebuildUi();
       }
@@ -109,23 +124,32 @@ class HomeViewModel extends BaseViewModel {
 
   // function to get next user
   Map<String, dynamic>? get_next_user() {
-    // //refill the queue when needed, we want to maintain having users in the queue
-    if ((users_queue.length < 3 || first_load == true) &&
-        (no_more_users != true)) {
-      getUsers();
-    }
-
-    //when the queue is empty after the first load or there is no more users
+    // print("Users queue length: " + user_Ids_in_queue.length.toString());
+    // print("No more users: " + no_more_users.toString());
+    // print("First load: " + first_load.toString());
+    // print("User continues: " + user_continues.toString());
+    //when the queue is empty after the first load or there is no more users or user shouldnt continue
     if ((no_more_users == true) ||
-        (users_queue.length == 0 && first_load == false)) {
-      no_more_users = true;
+        (users_queue.length == 0 && first_load == false) ||
+        (user_continues == false)) {
+      print("I am here");
       return null;
     }
-
-    //when queue has users, show the first user and banish them from existence
-    if (users_queue.isNotEmpty) {
+    // //refill the queue when needed, we want to maintain having users in the queue
+    if ((users_queue.length < 4 || first_load == true) &&
+        (no_more_users == false)) {
+      print("I am here trying to get users");
+      getUsers();
       return users_queue.removeFirst();
     }
+
+    //OKAY I AM HERE
+
+    //when queue has users, show the first user and banish them from existence
+    // if (users_queue.isNotEmpty) {
+    //   print("I AM RETURNING A USER");
+    //   return users_queue.removeFirst();
+    // }
     return null;
   }
 
@@ -182,7 +206,7 @@ class HomeViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       //remove user from queue (already removed from the other queue when displaying)
       user_Ids_in_queue.remove(disliked_user_uid);
-      _mixpanelService.mixpanel.track("Diliked user");
+      _mixpanelService.mixpanel.track("Disliked user");
     } else {
       print("failed to go to cloud");
     }
