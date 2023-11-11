@@ -795,7 +795,6 @@ Widget check_profile_button(nextUser, viewModel, context) {
         ElevatedButton(
           onPressed: () {
 			viewModel.trackProfileViewEvent(nextUser['id']);
-			other
             showModalBottomSheet(
               context: context,
               builder: (context) => GestureDetector(
