@@ -72,7 +72,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       _helloText(),
                       if (nextUser != null) ...[
                         Container(
-                          //margin: EdgeInsets.only(top: 20),
                           child: Center(
                             child: _userDetails(
                                 nextUser, viewModel, context, _slideAnimation),
@@ -179,153 +178,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       },
     );
   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ViewModelBuilder<HomeViewModel>.reactive(
-//       viewModelBuilder: () => HomeViewModel(),
-//       onViewModelReady: (model) {
-//         model.set_token_by_waiting_for_document();
-//         // Trigger the animation when the view model is ready
-//         _animationController.reset();
-//         _animationController.forward();
-//       },
-//       builder: (context, viewModel, child) {
-//         // Use FutureBuilder to handle the async operation
-//         return Scaffold(
-//           backgroundColor: Colors.white,
-//           body: SafeArea(
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//               child: Stack(
-//                 children: [
-//                   Column(
-//                     children: [
-//                       _helloText(),
-//                       FutureBuilder<Map<String, dynamic>?>(
-//                         future:
-//                             viewModel.get_next_user(), // Call the async method
-//                         builder: (context, snapshot) {
-//                           if (snapshot.connectionState ==
-//                               ConnectionState.waiting) {
-//                             // Show loading indicator while waiting for data
-//                             return const Center(
-//                               child: Row(
-//                                 mainAxisSize: MainAxisSize.min,
-//                                 children: [
-//                                   Text('Loading ...',
-//                                       style: TextStyle(fontSize: 16)),
-//                                   horizontalSpaceSmall,
-//                                   SizedBox(
-//                                     width: 16,
-//                                     height: 16,
-//                                     child: CircularProgressIndicator(
-//                                       color: Colors.black,
-//                                       strokeWidth: 6,
-//                                     ),
-//                                   )
-//                                 ],
-//                               ),
-//                             );
-//                           } else if (snapshot.hasError) {
-//                             // Handle error state
-//                             return Text('Error: ${snapshot.error}');
-//                           } else if (snapshot.hasData) {
-//                             // Data is available, build the user details widget
-//                             Map<String, dynamic>? nextUser = snapshot.data;
-//                             return _userDetails(
-//                                 nextUser, viewModel, context, _slideAnimation);
-//                           } else {
-//                             // Handle when no more users are available
-//                             print("I am here");
-//                             return _noMoreUsersWidget(viewModel);
-//                           }
-//                         },
-//                       ),
-//                       Spacer(),
-//                       Container(
-//                         margin: EdgeInsets.only(bottom: 0), // Adjust as needed
-//                         child: _bottomNavigationBar(viewModel),
-//                       ),
-//                     ],
-//                   )
-//                 ],
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-
-// // Helper method to create the "No more users" widget
-//   Widget _noMoreUsersWidget(HomeViewModel viewModel) {
-//     if (viewModel.no_more_users) {
-//       return _noMoreUsersAvailable();
-//     } else if (!viewModel.user_continues) {
-//       return _fillYourProfile();
-//     } else {
-//       return Text('');
-//     }
-//   }
-
-//   Widget _noMoreUsersAvailable() {
-//     return Container(
-//       margin: EdgeInsets.only(top: 200),
-//       child: Column(
-//         children: [
-//           const Text(
-//             'No more users',
-//             style: TextStyle(
-//               fontFamily: 'Switzer',
-//               fontSize: 25,
-//               fontWeight: FontWeight.w900,
-//             ),
-//           ),
-//           Text(
-//             "come back in a bit, see u :*",
-//             style: TextStyle(
-//               fontSize: 14, // Adjust the size as needed
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _fillYourProfile() {
-//     return Container(
-//       margin: EdgeInsets.only(top: 200),
-//       child: Column(
-//         children: [
-//           const Text(
-//             'fill your profile!',
-//             style: TextStyle(
-//               fontSize: 25,
-//               fontWeight: FontWeight.w900,
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//           Text(
-//             "why?",
-//             style: TextStyle(
-//               fontSize: 18, // Adjust the size as needed
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//           Text(
-//             "rn ur not visible, less chances of meeting ppl :(",
-//             style: TextStyle(
-//               fontSize: 14, // Adjust the size as needed
-//               fontWeight: FontWeight.w500,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
 
   Widget _userDetails(
       nextUser, viewModel, context, Animation<Offset> slideAnimation) {
@@ -467,8 +319,11 @@ class _UserInterestsWidgetState extends State<UserInterestsWidget> {
 
 class UserProfileView extends StatelessWidget {
   final List<Map<String, dynamic>> interests;
+  final String aspiration;
 
-  const UserProfileView({Key? key, required this.interests}) : super(key: key);
+  const UserProfileView(
+      {Key? key, required this.interests, required this.aspiration})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -481,7 +336,28 @@ class UserProfileView extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: UserInterestsWidget(interests: interests),
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'I aspire to be a: $aspiration',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            'And my interests are:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          UserInterestsWidget(interests: interests),
+        ],
+      )),
     );
   }
 }
@@ -645,40 +521,40 @@ class _UserCardState extends State<UserCard> {
                   child: Column(
                     children: [
                       Center(
-                        // Center the interests area
                         child: Column(
                           children: [
                             const Padding(padding: EdgeInsets.only(top: 25)),
                             const Text(
                               "One of my interests is:",
                               style: TextStyle(
-                                fontSize: 22, // Adjust the size as needed
+                                fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               "${widget.nextUser['interests'][0]['name']}",
                               style: const TextStyle(
-                                fontSize: 25, // Adjust the size as needed
-                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                             Image.asset(
                               'lib/assets/${widget.nextUser['image_index']}.png',
-                              height: 200,
+                              height: 170,
                             ),
                             const Padding(padding: EdgeInsets.only(top: 5)),
                             const Text(
-                              "And that's what I like about it:",
+                              "And I aspire to be a:",
                               style: TextStyle(
-                                fontSize: 14, // Adjust the size as needed
+                                fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              "${widget.nextUser['interests'][0]['description']}",
+                              // "${widget.nextUser['interests'][0]['description']}",
+                              "${widget.nextUser['aspiration']}",
                               style: const TextStyle(
-                                fontSize: 18, // Adjust the size as needed
+                                fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -804,6 +680,7 @@ Widget check_profile_button(nextUser, viewModel, context) {
                   child: UserProfileView(
                     interests:
                         List<Map<String, dynamic>>.from(nextUser['interests']),
+                    aspiration: nextUser['aspiration'],
                   ),
                 ),
               ),

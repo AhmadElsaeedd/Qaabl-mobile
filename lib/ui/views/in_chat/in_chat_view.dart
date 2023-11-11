@@ -71,6 +71,8 @@ class _InChatViewState extends State<InChatView> {
                                                 viewModel.user_data?[
                                                         'interests'] ??
                                                     []),
+                                        aspiration:
+                                            viewModel.user_data!['aspiration'],
                                       ),
                                     ),
                                   ),
@@ -121,6 +123,8 @@ class _InChatViewState extends State<InChatView> {
                                               viewModel.user_data?[
                                                       'interests'] ??
                                                   []),
+                                      aspiration:
+                                          viewModel.user_data!['aspiration'],
                                     ),
                                   ),
                                 ),
@@ -415,8 +419,11 @@ class _InChatViewState extends State<InChatView> {
 
 class UserProfileView extends StatelessWidget {
   final List<Map<String, dynamic>> interests;
+  final String aspiration;
 
-  const UserProfileView({Key? key, required this.interests}) : super(key: key);
+  const UserProfileView(
+      {Key? key, required this.interests, required this.aspiration})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -429,7 +436,28 @@ class UserProfileView extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: UserInterestsWidget(interests: interests),
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'I aspire to be a: $aspiration',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            'And my interests are:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          UserInterestsWidget(interests: interests),
+        ],
+      )),
     );
   }
 }
