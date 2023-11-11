@@ -28,6 +28,10 @@ function is_profile_pic_changed(old_pp_index, new_pp_index) {
   if (old_pp_index != new_pp_index) return true;
 }
 
+function is_aspiration_changed(old_aspiration, new_aspiration){
+  if(old_aspiration != new_aspiration) return true;
+}
+
 function is_interests_changed(old_interests, new_interests) {
   // Sort the arrays of interests by their 'name' property
   const sortInterests = (interests) => {
@@ -91,6 +95,8 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     const user_uid = req.body.uid;
     const name = req.body.name;
     const interests = req.body.interests;
+    //get the aspiration from the request here
+    const aspiration = req.body.aspiration;
     const profile_pic_index = req.body.image_index;
     // ToDo: get more input from the view model code
 
@@ -104,6 +110,8 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     const interests_changed = is_interests_changed(user_data.interests, interests);
 
     const profile_pic_changed = is_profile_pic_changed(user_data.image_index, profile_pic_index);
+
+    const aspiration_changed = is_aspiration_changed(user_data.aspiration, )
 
     if (name_changed && interests_changed && profile_pic_changed) {
       update_user(name, interests, user_uid, profile_pic_index);

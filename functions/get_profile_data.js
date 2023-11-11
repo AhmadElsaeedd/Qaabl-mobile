@@ -31,6 +31,9 @@ const GetProfileData = functions.region("asia-east2").https.onRequest(async (req
     // interests
     const user_interests = user_data.interests;
 
+    // aspiration
+    const user_aspiration = user_data.aspiration;
+
     // name
     const user_name = user_data.name;
 
@@ -41,6 +44,7 @@ const GetProfileData = functions.region("asia-east2").https.onRequest(async (req
     const response_data = {
       name: user_name,
       interests: user_interests,
+      aspiration: user_aspiration,
       image_index: image_index,
     };
 

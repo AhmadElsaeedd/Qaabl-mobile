@@ -16,6 +16,7 @@ class EditProfileView extends StatefulWidget {
 
 class _EditProfileViewState extends State<EditProfileView> {
   late TextEditingController nameController;
+  late TextEditingController aspirationController;
   late List<TextEditingController> interestControllers;
   late List<TextEditingController> interestNameControllers;
   late ValueNotifier<int> selectedImageNotifier;
@@ -26,6 +27,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     super.initState();
     selectedImageNotifier = ValueNotifier<int>(0);
     nameController = TextEditingController();
+    aspirationController = TextEditingController();
     interestControllers = <TextEditingController>[];
     interestNameControllers = <TextEditingController>[];
   }
@@ -33,8 +35,13 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   void dispose() {
     nameController.dispose();
-    interestControllers.forEach((controller) => controller.dispose());
-    interestNameControllers.forEach((controller) => controller.dispose());
+    aspirationController.dispose();
+    for (var controller in interestControllers) {
+      controller.dispose();
+    }
+    for (var controller in interestNameControllers) {
+      controller.dispose();
+    }
     selectedImageNotifier.dispose();
     super.dispose();
   }
@@ -44,9 +51,9 @@ class _EditProfileViewState extends State<EditProfileView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Column(
+          title: const Column(
             children: [
-              const Text(
+              Text(
                 'Choose your interests',
                 style: TextStyle(
                   fontSize: 20,
@@ -80,8 +87,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   .black, // Change text color based on selection.
                         ),
                       ),
-                      tileColor:
-                          isSelected ? Color(0xFF3439AB) : Colors.transparent,
+                      tileColor: isSelected
+                          ? const Color(0xFF3439AB)
+                          : Colors.transparent,
                       onTap: () {
                         model.toggleInterestSelection(interest);
                         setState(() {});
@@ -95,7 +103,79 @@ class _EditProfileViewState extends State<EditProfileView> {
           actions: [
             // This is the check mark button
             IconButton(
-              icon: Icon(
+              icon: const Icon(
+                Icons.check,
+                color: Color(0xFF3439AB),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAspirationDialog(EditProfileViewModel model) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Column(
+            children: [
+              Text(
+                'Choose your aspiration',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Text(
+                "show us what ur all about!",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: model.predefined_aspirations.map((aspiration) {
+                    bool isSelected =
+                        model.user_data['aspiration'] == aspiration;
+                    return ListTile(
+                      title: Text(
+                        aspiration,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isSelected
+                              ? Colors.white
+                              : Colors
+                                  .black, // Change text color based on selection.
+                        ),
+                      ),
+                      tileColor: isSelected
+                          ? const Color(0xFF3439AB)
+                          : Colors.transparent,
+                      onTap: () {
+                        print("aspiration clicked: " + aspiration);
+                        model.toggleAspirationSelection(aspiration);
+                        setState(() {});
+                      },
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          ),
+          actions: [
+            // This is the check mark button
+            IconButton(
+              icon: const Icon(
                 Icons.check,
                 color: Color(0xFF3439AB),
               ),
@@ -158,7 +238,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             "Your Profile",
                             style: TextStyle(
                               fontSize: 25,
@@ -185,7 +265,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     'lib/assets/$value.png',
                                     height: 200,
                                   ), // Use the value
-                                  Text(
+                                  const Text(
                                     'edit your avatar',
                                     style: TextStyle(
                                       color: Color(0xFF3439AB),
@@ -198,13 +278,63 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ),
                           TextField(
                             controller: nameController,
-                            decoration: InputDecoration(labelText: 'Name'),
+                            decoration:
+                                const InputDecoration(labelText: 'Name'),
                             onChanged: (text) {
                               model.update_name(text);
                             },
                           ),
-                          Padding(padding: EdgeInsets.only(top: 10)),
+                          const Padding(padding: EdgeInsets.only(top: 10)),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Your Aspiration",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 5)),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "what do u aspire to be?",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 10)),
                           Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              userData.containsKey('aspiration') &&
+                                      userData['aspiration'].isNotEmpty
+                                  ? "I aspire to be a: ${userData['aspiration']}"
+                                  : "No aspiration chosen",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ),
+                          CupertinoButton(
+                            onPressed: () {
+                              _showAspirationDialog(model);
+                            },
+                            child: const Text(
+                              'choose your aspiration ⚔️',
+                              style: TextStyle(
+                                color: Color(0xFF3439AB),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const Padding(padding: EdgeInsets.only(top: 10)),
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Your Interests",
@@ -214,8 +344,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                               ),
                             ),
                           ),
-                          Padding(padding: EdgeInsets.only(top: 5)),
-                          Align(
+                          const Padding(padding: EdgeInsets.only(top: 5)),
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "tell us what really interests u!",
@@ -242,7 +372,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             onPressed: () {
                               _showInterestsDialog(model);
                             },
-                            child: Text(
+                            child: const Text(
                               'edit your interests',
                               style: TextStyle(
                                 color: Color(0xFF3439AB),
@@ -250,9 +380,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           CupertinoButton(
-                            color: Color(0xFF3439AB),
+                            color: const Color(0xFF3439AB),
                             onPressed: () async {
                               setState(() {
                                 isSaving =
@@ -269,17 +399,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                                       interestControllers[index].text,
                                 },
                               );
-                              await model.save_and_back(
-                                  name, interests, selectedImageNotifier.value);
+                              String aspiration = aspirationController.text;
+                              await model.save_and_back(name, interests,
+                                  aspiration, selectedImageNotifier.value);
                               //show a circular progress bar while this await is done
                               setState(() {
                                 isSaving =
                                     false; // Reset isSaving to false when the await is done
                               });
                             },
-                            child: Text('Save and back',
+                            child: const Text('Save and back',
                                 style: TextStyle(color: Colors.white)),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                           ),
                         ],
@@ -287,7 +418,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     ),
                   ),
                   if (isSaving)
-                    Positioned.fill(
+                    const Positioned.fill(
                       child: Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -313,7 +444,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           );
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -342,11 +473,11 @@ Widget _bottomNavigationBar(viewModel) {
   Color profileColor = (viewModel.current_page == "profile" ||
           viewModel.current_page == "edit_profile" ||
           viewModel.current_page == "settings")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   Color chatColor = (viewModel.current_page == "chats")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   return Stack(
@@ -356,7 +487,7 @@ Widget _bottomNavigationBar(viewModel) {
       Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 239, 239, 239),
+          color: const Color.fromARGB(255, 239, 239, 239),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -364,14 +495,14 @@ Widget _bottomNavigationBar(viewModel) {
           children: [
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               color: profileColor,
               onPressed: viewModel.go_to_profile,
             ),
-            SizedBox(width: 50), // Leave space for the logo
+            const SizedBox(width: 50), // Leave space for the logo
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
               color: chatColor,
               onPressed: viewModel.go_to_chats,
             ),
@@ -388,11 +519,12 @@ Widget _bottomNavigationBar(viewModel) {
               width: 70, // Adjust the width and height as needed
               height: 70,
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF3439AB)), // Border color
+                border:
+                    Border.all(color: const Color(0xFF3439AB)), // Border color
                 borderRadius:
                     BorderRadius.circular(40), // Rounded corner radius
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.black26, // Shadow color
                     offset: Offset(0, 3), // Vertical offset
                     blurRadius: 5.0, // Blur value
@@ -400,7 +532,7 @@ Widget _bottomNavigationBar(viewModel) {
                   ),
                 ],
               ),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage('lib/assets/logo.png'),
                 backgroundColor: Colors.white,
               )),
@@ -417,7 +549,7 @@ class ImageChooserDialog extends StatelessWidget {
       child: Container(
         width: double.maxFinite, // Take the maximum width available
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Put them in 2 columns next to each other
           ),
           itemCount: 10, // As you have images from 0.png to 11.png

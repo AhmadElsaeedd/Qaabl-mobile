@@ -109,10 +109,15 @@ async function structure_users(user_uid, users) {
     if (user.image_index) image_index = user.image_index;
     else image_index = 0;
 
+    let aspiration;
+    if (user.aspiration) aspiration = user.aspiration;
+    else aspiration = ""
+
     // return the transformed user object
     return {
       id,
       interests,
+      aspiration,
       potential_match,
       image_index,
     };

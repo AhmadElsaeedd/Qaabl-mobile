@@ -36,8 +36,8 @@ class EditProfileViewModel extends BaseViewModel {
   }
 
   //function that gets the inputted values, updates the user document, and navigates back to profile page
-  Future<void> save_and_back(
-      String name, List<Map<String, String>> interests, int image_index) async {
+  Future<void> save_and_back(String name, List<Map<String, String>> interests,
+      String aspiration, int image_index) async {
     //get the values from the input fields and go update the values in the cloud
     final response = await http.post(
       //production url
@@ -50,6 +50,7 @@ class EditProfileViewModel extends BaseViewModel {
         'uid': uid,
         'name': name,
         'interests': interests,
+        'aspiration': aspiration,
         'image_index': image_index,
       }),
       headers: {'Content-Type': 'application/json'},
@@ -121,32 +122,12 @@ class EditProfileViewModel extends BaseViewModel {
       return jsonResponse;
     } else {
       // If the server returns an error, throw an exception
-      throw Exception('Failed to get percentage');
+      throw Exception('Failed to get user data');
     }
   }
 
   //predefined interests to show users:
   final List<String> predefined_interests = [
-    // 'Performing & Visual Arts 🎭🎨',
-    // 'Sports & Fitness 🏋️‍♂️',
-    // 'Outdoor & Adventure 🚴🧗‍♀️',
-    // 'Arts & Crafts 🎨🧶',
-    // 'STEM & Academics 🔬📖',
-    // 'Games & Leisure ♟️🎲',
-    // 'Music & Instruments 🎵🎤',
-    // 'Tech & Gaming 💻🕹️',
-    // 'Fashion & Personal Care 👠💄',
-    // 'Travel & Nature 🌍⛺',
-    // 'Culinary Arts & Food 🍳🍽️',
-    // 'Business & Entrepreneurship 💼💸',
-    // 'Wellness & Spirituality 🧘‍♀️🌅',
-    // 'Cars & Motors 🚗🔧',
-    // 'Communication & Social Media 💬📱',
-    // 'Linguistics & Literature 🗣️📚',
-    // 'Pets & Nature 🐕🍃',
-    // 'Collectibles & Lifestyle 🛍️👟',
-    // 'Strategy & Intellectual Pursuits 🧠♟️',
-    // 'DIY & Home Activities 🧱🔨',
     'Performing and Visual Arts',
     'Sports and Fitness',
     'Outdoor and Adventure',
@@ -169,8 +150,13 @@ class EditProfileViewModel extends BaseViewModel {
     'DIY and Home Activities',
   ];
 
+  final List<String> predefined_aspirations = [
+    'Writer',
+    'Professor',
+    'Entrepreneur',
+  ];
+
   void toggleInterestSelection(String interest) {
-    print("User name is: " + user_data['name'].toString());
     if (user_data['interests'].any((map) => map['name'] == interest)) {
       // Find and remove the map that has 'interest' in the name field
       user_data['interests'].removeWhere((map) => map['name'] == interest);
@@ -179,7 +165,17 @@ class EditProfileViewModel extends BaseViewModel {
       Map<String, String> interestMap = {'name': interest, 'description': ''};
       user_data['interests'].add(interestMap);
     }
-    rebuildUi(); // Notify the view to rebuild
+    rebuildUi();
+  }
+
+  void toggleAspirationSelection(String aspiration) {
+    if (user_data['aspiration'] == aspiration) {
+      user_data['aspiration'] = "";
+    } else {
+      user_data['aspiration'] = aspiration;
+    }
+    print("user data aspiration is currently: " + user_data['aspiration']);
+    rebuildUi();
   }
 
   void update_name(String name) {
