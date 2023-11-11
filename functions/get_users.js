@@ -51,7 +51,14 @@ function should_user_continue(likes,dislikes,interests){
 // function that gets filtered users
 async function get_other_users(uid, likes, dislikes, matched_users, users_in_queue) {
   let filter_out_those = [];
-  filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, ...users_in_queue, uid])];
+  console.log("users queue: ", users_in_queue);
+  if(users_in_queue) {
+    filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, ...users_in_queue, uid])];
+  }
+  else{
+    filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
+  }
+  
 
   // there is a problem here, when this array has more than 10 values, the query stops supporting that
   const users = [];

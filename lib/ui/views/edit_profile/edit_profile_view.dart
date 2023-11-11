@@ -314,7 +314,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                       userData['aspiration'].isNotEmpty
                                   ? "I aspire to be a: ${userData['aspiration']}"
                                   : "No aspiration chosen",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black54,
