@@ -151,9 +151,23 @@ class EditProfileViewModel extends BaseViewModel {
   ];
 
   final List<String> predefined_aspirations = [
-    'Writer',
-    'Professor',
+    'Software Developer',
+    'Teacher or Professor',
     'Entrepreneur',
+    'Scientist',
+    'Designer',
+    'Environmental Activist',
+    'Musician',
+    'Doctor',
+    'Lawyer',
+    'Writer',
+    'Film Director',
+    'Athlete',
+    'Architect',
+    'Social Worker',
+    'Chef',
+    'Astronaut',
+    'Politician',
   ];
 
   void toggleInterestSelection(String interest) {
@@ -174,7 +188,6 @@ class EditProfileViewModel extends BaseViewModel {
     } else {
       user_data['aspiration'] = aspiration;
     }
-    print("user data aspiration is currently: " + user_data['aspiration']);
     rebuildUi();
   }
 
