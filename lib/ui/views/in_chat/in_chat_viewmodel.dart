@@ -130,6 +130,13 @@ class InChatViewModel extends BaseViewModel {
     }
   }
 
+  void trackProfileViewEvent(String matchId, String otherUserId) {
+    // Track the event with Mixpanel
+    _mixpanelService.track('Profile Viewed', properties: {
+      'matchId': matchId,
+      'otherUserId': otherUserId
+    });
+
   //function that adds a message to the chat
   void send_message(String content) {
     //pass a "fake" message to the UI so the UI is updated immediately

@@ -56,6 +56,10 @@ class _InChatViewState extends State<InChatView> {
                           children: [
                             InkWell(
                               onTap: () {
+								viewModel.trackProfileViewEvent(
+									widget.match_id,
+									widget.other_user_id
+								);
                                 showModalBottomSheet(
                                   context: context,
                                   builder: (context) => GestureDetector(
