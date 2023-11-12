@@ -399,7 +399,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                       interestControllers[index].text,
                                 },
                               );
-                              String aspiration = aspirationController.text;
+                              String aspiration = userData['aspiration'];
                               await model.save_and_back(name, interests,
                                   aspiration, selectedImageNotifier.value);
                               //show a circular progress bar while this await is done

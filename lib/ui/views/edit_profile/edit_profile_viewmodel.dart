@@ -38,6 +38,7 @@ class EditProfileViewModel extends BaseViewModel {
   //function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(String name, List<Map<String, String>> interests,
       String aspiration, int image_index) async {
+    print("aspiration is: " + aspiration.toString());
     //get the values from the input fields and go update the values in the cloud
     final response = await http.post(
       //production url
@@ -188,6 +189,7 @@ class EditProfileViewModel extends BaseViewModel {
     } else {
       user_data['aspiration'] = aspiration;
     }
+    // user_data['aspiration'] = aspiration;
     rebuildUi();
   }
 

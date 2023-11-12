@@ -50,44 +50,14 @@ function is_interests_changed(old_interests, new_interests) {
 }
 
 
-async function update_user(name = null, interests = null, uid, pp = null) {
-// in the case of name and interests change
-  if (name && interests && pp) {
-    await db.collection("Users").doc(uid).update({
-      name: name,
-      interests: interests,
-      image_index: pp,
-    });
-  } else if (name && interests) {
-    await db.collection("Users").doc(uid).update({
-      name: name,
-      interests: interests,
-    });
-  } else if (name && pp) {
-    await db.collection("Users").doc(uid).update({
-      name: name,
-      image_index: pp,
-    });
-  } else if (interests && pp) {
-    await db.collection("Users").doc(uid).update({
-      interests: interests,
-      image_index: pp,
-    });
-  } else if (name) {
-    // in the case of name change only
-    await db.collection("Users").doc(uid).update({
-      name: name,
-    });
-  } else if (interests) {
-    // in the case of interests change only
-    await db.collection("Users").doc(uid).update({
-      interests: interests,
-    });
-  } else if (pp) {
-    await db.collection("Users").doc(uid).update({
-      image_index: pp,
-    });
-  }
+async function update_user(name = null, interests = null, uid, pp = null, aspiration = null) {
+  let updateData = {};
+  if (name) updateData.name = name;
+  if (interests) updateData.interests = interests;
+  if (pp) updateData.image_index = pp;
+  if (aspiration) updateData.aspiration = aspiration;
+
+  await db.collection("Users").doc(uid).update(updateData);
 }
 
 const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (req, res) => {
@@ -95,7 +65,6 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     const user_uid = req.body.uid;
     const name = req.body.name;
     const interests = req.body.interests;
-    //get the aspiration from the request here
     const aspiration = req.body.aspiration;
     const profile_pic_index = req.body.image_index;
     // ToDo: get more input from the view model code
@@ -106,28 +75,21 @@ const UpdateProfileData = functions.region("asia-east2").https.onRequest(async (
     // function that checks that name has changed
     const name_changed = is_name_changed(user_data.name, name);
 
-    // function that checks that interests have changed
     const interests_changed = is_interests_changed(user_data.interests, interests);
 
     const profile_pic_changed = is_profile_pic_changed(user_data.image_index, profile_pic_index);
 
-    const aspiration_changed = is_aspiration_changed(user_data.aspiration, )
+    const aspiration_changed = is_aspiration_changed(user_data.aspiration, aspiration);
 
-    if (name_changed && interests_changed && profile_pic_changed) {
-      update_user(name, interests, user_uid, profile_pic_index);
-    } else if (name_changed && interests_changed) {
-      update_user(name, interests, user_uid, null);
-    } else if (name_changed && profile_pic_changed) {
-      update_user(name, null, user_uid, profile_pic_index);
-    } else if (interests_changed && profile_pic_changed) {
-      update_user(null, interests_changed, user_uid, profile_pic_index);
-    } else if (name_changed) {
-      update_user(name, null, user_uid, null);
-    } else if (interests_changed) {
-      update_user(null, interests, user_uid, null);
-    } else if (profile_pic_changed) {
-      update_user(null, null, user_uid, profile_pic_index);
-    }
+    if (name_changed || interests_changed || profile_pic_changed || aspiration_changed) {
+      update_user(
+          name_changed ? name : null, 
+          interests_changed ? interests : null, 
+          user_uid, 
+          profile_pic_changed ? profile_pic_index : null, 
+          aspiration_changed ? aspiration : null
+      );
+  }
 
     // if success
     if (user_data) {
