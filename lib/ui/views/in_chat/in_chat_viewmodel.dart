@@ -132,7 +132,7 @@ class InChatViewModel extends BaseViewModel {
 
   void trackProfileViewEvent(String matchId, String otherUserId) {
     // Track the event with Mixpanel
-    _mixpanelService.track('Profile Viewed', properties: {
+    _mixpanelService.mixpanel.track('Profile Viewed', properties: {
       'matchId': matchId,
       'otherUserId': otherUserId
     });
