@@ -65,7 +65,6 @@ const AddMessage = functions.region("asia-east2").https.onRequest(async (req, re
     const timestamp = new Date();
 
     const encrypted_message = encrypt_message(content);
-    console.log("Encrypted message is: ", encrypt_message);
 
     const new_message = {
       sent_by: user_uid,

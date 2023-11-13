@@ -197,6 +197,14 @@ class _InChatViewState extends State<InChatView> {
           ),
           body: Column(
             children: [
+              Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
+                child: const Text(
+                    "messages are encrypted, only u & ur friend can see them :)",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 106, 106, 106),
+                        fontSize: 12)),
+              ),
               // Messages List
               Expanded(
                 child: NotificationListener<ScrollEndNotification>(

@@ -1,6 +1,8 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors");
+const crypto = require("crypto");
+require('dotenv').config();
 
 if (admin.apps.length === 0) {
   admin.initializeApp();
@@ -12,10 +14,23 @@ const corsOptions = {
   origin: true,
 };
 
+const algorithm = 'aes-256-cbc'; 
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+const iv = Buffer.from(process.env.ENCRYPTION_IV, 'hex');
+
+function encrypt_message(message_content) {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(message_content);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+}
+
 async function react_to_message(chat_id,reaction,content) {
+    const encrypted_message = encrypt_message(content);
+
     let done = false;
     // Fetch the documents that match your query
-    const snapshot = await db.collection("Matches").doc(chat_id).collection("Messages").where('content', "==", content).get();
+    const snapshot = await db.collection("Matches").doc(chat_id).collection("Messages").where('content.encryptedData', "==", encrypted_message.encryptedData).get();
     
     // If no documents match the query, return false
     if (snapshot.empty) {

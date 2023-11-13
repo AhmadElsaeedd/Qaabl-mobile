@@ -48,6 +48,7 @@ class FirestoreService {
       //using futures to fetch in parallel
       final futures = <Future<ChatMatch>>[];
       for (final doc in snapshot.docs) {
+        print("I am here");
         final match = ChatMatch.fromDocument(doc, uid);
         final otherUserId = match.other_user_id;
         final future = get_user_info(otherUserId).then((userInfo) {
