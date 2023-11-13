@@ -32,6 +32,7 @@ const LoadMessages = require("./load_messages");
 const DeleteAccount = require("./delete_account");
 const DeleteMatch = require("./delete_match");
 const MessageReaction = require("./message_reaction");
+const CreateMatchWMe = require("./create_match_w_me");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -49,4 +50,5 @@ exports.LoadMessages = LoadMessages;
 exports.DeleteAccount = DeleteAccount;
 exports.DeleteMatch = DeleteMatch;
 exports.MessageReaction = MessageReaction;
+exports.CreateMatchWMe = CreateMatchWMe;
 
