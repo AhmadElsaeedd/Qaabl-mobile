@@ -92,17 +92,6 @@ class _InChatViewState extends State<InChatView> {
                                 child: ImageFiltered(
                                   imageFilter:
                                       ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                                  // child: FittedBox(
-                                  //   fit: BoxFit.scaleDown,
-                                  //   child: Text(
-                                  //     widget.user_name,
-                                  //     style: const TextStyle(
-                                  //         fontWeight: FontWeight.bold,
-                                  //         color: Colors.white),
-                                  //     overflow: TextOverflow.ellipsis,
-                                  //     maxLines: 1,
-                                  //   ),
-                                  // ),
                                   child: Text(
                                     widget.user_name,
                                     style: const TextStyle(
