@@ -1,11 +1,11 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:stacked_app/app/app.locator.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:stacked_app/services/auth_service.dart';
-import 'package:stacked_app/services/firestore_service.dart';
-import 'package:stacked_app/services/messaging_service.dart';
-import 'package:stacked_app/services/mixpanel_service.dart';
+import 'package:qaabl_mobile/services/auth_service.dart';
+import 'package:qaabl_mobile/services/firestore_service.dart';
+import 'package:qaabl_mobile/services/messaging_service.dart';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
