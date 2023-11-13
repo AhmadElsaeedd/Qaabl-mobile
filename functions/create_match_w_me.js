@@ -97,7 +97,7 @@ const CreateMatchWMe = functions.region("asia-east2").firestore
 
         if(done) console.log("Match created for user:", user_uid);
 
-        const intro_msg_content = "yo, im ahmad. im the one who developed this app, im a senior at nyuad. ask me anything, talk to me. im probably bored behind a screen. lets be friends!";
+        const intro_msg_content = "yo, im ahmad. i developed this app, im a senior at nyuad. ask me anything, talk to me. im probably bored behind a screen. lets be friends!";
         const functionUrl = 'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage';
 
         // Data to send, if any

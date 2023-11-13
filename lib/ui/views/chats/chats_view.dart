@@ -142,18 +142,16 @@ class ChatsView extends StackedView<ChatsViewModel> {
             // Vertical List for Old Chats
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 itemCount: viewModel.old_matches.length,
                 itemBuilder: (context, index) {
                   final match = viewModel.old_matches[index];
                   bool? is_sent_by_user = match.last_message_sent_by_user;
                   return Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 5), // Adjust as needed
+                    margin: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey), // Border color
-                      borderRadius:
-                          BorderRadius.circular(10), // Rounded corner radius
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: InkWell(
                         onTap: () => viewModel.go_to_chat(
@@ -175,6 +173,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                               match.other_user_name,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           subtitle: Text(
@@ -188,6 +187,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                   ? const Color.fromARGB(255, 115, 115, 115)
                                   : Colors.black,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                           trailing: Text(formattedTimestamp(
                               match.last_message!.timestamp)),

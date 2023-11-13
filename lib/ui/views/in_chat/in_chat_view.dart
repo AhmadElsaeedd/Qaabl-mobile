@@ -51,57 +51,70 @@ class _InChatViewState extends State<InChatView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => GestureDetector(
-                                    onTap: () => Navigator.of(context).pop(),
-                                    behavior: HitTestBehavior.opaque,
-                                    child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.35,
-                                      child: UserProfileView(
-                                        interests:
-                                            List<Map<String, dynamic>>.from(
-                                                viewModel.user_data?[
-                                                        'interests'] ??
-                                                    []),
-                                        aspiration:
-                                            viewModel.user_data!['aspiration'],
+                      Expanded(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => GestureDetector(
+                                      onTap: () => Navigator.of(context).pop(),
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.35,
+                                        child: UserProfileView(
+                                          interests:
+                                              List<Map<String, dynamic>>.from(
+                                                  viewModel.user_data?[
+                                                          'interests'] ??
+                                                      []),
+                                          aspiration: viewModel
+                                              .user_data!['aspiration'],
+                                        ),
                                       ),
                                     ),
+                                    isScrollControlled: true,
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                    'lib/assets/${widget.user_pic}.png',
                                   ),
-                                  isScrollControlled: true,
-                                );
-                              },
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  'lib/assets/${widget.user_pic}.png',
-                                ),
-                                radius: 30,
-                                backgroundColor: const Color(0xFF3439AB),
-                              ),
-                            ),
-                            ImageFiltered(
-                              imageFilter:
-                                  ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                              child: FittedBox(
-                                fit: BoxFit
-                                    .scaleDown, // Adjust the text to fit inside the available space
-                                child: Text(
-                                  widget.user_name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                  radius: 30,
+                                  backgroundColor: const Color(0xFF3439AB),
                                 ),
                               ),
-                            ),
-                          ],
+                              Flexible(
+                                child: ImageFiltered(
+                                  imageFilter:
+                                      ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                                  // child: FittedBox(
+                                  //   fit: BoxFit.scaleDown,
+                                  //   child: Text(
+                                  //     widget.user_name,
+                                  //     style: const TextStyle(
+                                  //         fontWeight: FontWeight.bold,
+                                  //         color: Colors.white),
+                                  //     overflow: TextOverflow.ellipsis,
+                                  //     maxLines: 1,
+                                  //   ),
+                                  // ),
+                                  child: Text(
+                                    widget.user_name,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                    // maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       PopupMenuButton<String>(
