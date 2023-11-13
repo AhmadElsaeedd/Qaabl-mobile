@@ -108,16 +108,11 @@ class FirestoreService {
   // ignore: non_constant_identifier_names
   Future<Map<String, dynamic>> get_user_info(String uid) async {
     try {
-      print("here 1");
       final doc = await _firestore.collection('Users').doc(uid).get();
-      print("here 2");
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
-        print("here 3");
         String name = data['name'] ?? 'No Name';
-        print("here 4");
         int imageIndex = data['image_index'];
-        print("here 5");
         return {'name': name, 'image_index': imageIndex};
       } else {
         String name = "No Name";

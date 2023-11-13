@@ -2,6 +2,8 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors");
 const { sendNotification } = require("./notifs_handler");
+const crypto = require("crypto");
+require('dotenv').config();
 
 if (admin.apps.length === 0) {
   admin.initializeApp();
@@ -43,6 +45,17 @@ async function update_match_doc(match_data, chat_id, new_message) {
   return done2;
 }
 
+const algorithm = 'aes-256-cbc'; 
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
+const iv = Buffer.from(process.env.ENCRYPTION_IV, 'hex');
+
+function encrypt_message(message_content) {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(message_content);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+}
+
 const AddMessage = functions.region("asia-east2").https.onRequest(async (req, res) => {
   cors(corsOptions)(req, res, async () => {
     const user_uid = req.body.uid;
@@ -51,9 +64,12 @@ const AddMessage = functions.region("asia-east2").https.onRequest(async (req, re
 
     const timestamp = new Date();
 
+    const encrypted_message = encrypt_message(content);
+    console.log("Encrypted message is: ", encrypt_message);
+
     const new_message = {
       sent_by: user_uid,
-      content: content,
+      content: encrypted_message,
       timestamp: timestamp,
       reaction: "",
     };
