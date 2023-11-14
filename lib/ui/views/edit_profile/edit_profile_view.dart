@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
@@ -91,6 +92,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ? const Color(0xFF3439AB)
                           : Colors.transparent,
                       onTap: () {
+                        print('interest');
                         model.toggleInterestSelection(interest);
                         setState(() {});
                       },
@@ -108,6 +110,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                 color: Color(0xFF3439AB),
               ),
               onPressed: () {
+                print('Selected Interests: ${model.user_data['interests']}');
+                model.chose_interests(model.user_data['interests']);
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
@@ -180,6 +184,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                 color: Color(0xFF3439AB),
               ),
               onPressed: () {
+                print('chose aspiration');
+                model.chose_aspiration(model.user_data['aspiration']);
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
@@ -193,6 +199,9 @@ class _EditProfileViewState extends State<EditProfileView> {
   Widget build(BuildContext context) {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
       viewModelBuilder: () => EditProfileViewModel(),
+      onViewModelReady: (viewModel) {
+        viewModel.trackEditProfilePage(); // Call the tracking method when the model is ready
+      },
       builder: (context, model, child) {
         Map<String, dynamic>? userData = model.user_data;
 
@@ -257,6 +266,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   selectedImageNotifier.value =
                                       chosenIndex; // Set the new value
                                   model.user_data['image_index'] = chosenIndex;
+                                  model.chose_avatar(model.user_data['image_index']);
                                 }
                               },
                               child: Column(

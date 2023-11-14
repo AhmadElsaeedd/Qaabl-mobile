@@ -38,6 +38,7 @@ class _InChatViewState extends State<InChatView> {
           widget.user_pic, widget.other_user_id),
       onViewModelReady: (viewModel) async {
         await viewModel.view_profile_data(widget.other_user_id);
+        viewModel.trackInChatPageVisit();
       },
       builder: (context, viewModel, child) {
         return Scaffold(
@@ -111,6 +112,7 @@ class _InChatViewState extends State<InChatView> {
                         onSelected: (value) {
                           switch (value) {
                             case 'Profile':
+                              viewModel.trackProfileViewEvent(widget.other_user_id);
                               showModalBottomSheet(
                                 context: context,
                                 builder: (context) => GestureDetector(

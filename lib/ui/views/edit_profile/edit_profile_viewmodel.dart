@@ -188,6 +188,10 @@ class EditProfileViewModel extends BaseViewModel {
       user_data['aspiration'] = "";
     } else {
       user_data['aspiration'] = aspiration;
+       _mixpanelService.mixpanel.track('Chose Aspirations', properties: {
+      'selectedAspiration(s)': aspiration,
+    });
+
     }
     // user_data['aspiration'] = aspiration;
     rebuildUi();
@@ -204,5 +208,41 @@ class EditProfileViewModel extends BaseViewModel {
         break;
       }
     }
+  }
+
+  void chose_interests(List<dynamic> interests) {
+    // Extract interest names
+    List<String> interestNames = interests
+        .map<String>((interest) => interest['name'].toString())
+        .toList();
+
+    print(interestNames);
+
+    // Track the event with Mixpanel
+    _mixpanelService.mixpanel.track('Chose Interests', properties: {
+      'selectedInterests': interestNames,
+    });
+  }
+
+  void chose_aspiration(String aspiration) {
+    // Extract interest names
+    print(aspiration);
+    // Track the event with Mixpanel
+    _mixpanelService.mixpanel.track('Chose Aspiration', properties: {
+      'selectedAspiration': aspiration,
+    });
+  }
+
+  void chose_avatar(String avatar) {
+    // Extract interest names
+    print(avatar);
+    // Track the event with Mixpanel
+    _mixpanelService.mixpanel.track('Chose Avatar', properties: {
+      'selectedAvatar': avatar,
+    });
+  }
+
+  void trackEditProfilePage() {
+    _mixpanelService.mixpanel.track('Visited edit profile page');
   }
 }

@@ -53,6 +53,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
+      onViewModelReady: (viewModel) {
+        viewModel.trackHomePageVisit(); // Call the tracking method when the model is ready
+      },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
 
@@ -670,6 +673,8 @@ Widget check_profile_button(nextUser, viewModel, context) {
         ),
         ElevatedButton(
           onPressed: () {
+            viewModel.trackProfileViewEvent(nextUser['id']);
+            print('tracked profile view');
             showModalBottomSheet(
               context: context,
               builder: (context) => GestureDetector(

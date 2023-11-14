@@ -279,4 +279,18 @@ class HomeViewModel extends BaseViewModel {
   void go_to_chats() {
     _navigationService.replaceWithChatsView();
   }
+
+  void trackProfileViewEvent(String viewedID) {
+    // Track the event with Mixpanel
+    print('it went through');
+    _mixpanelService.mixpanel.track('Profile Viewed', properties: {
+      'viewedID': viewedID
+      // Add other relevant properties here
+    });
+
+  }
+
+  void trackHomePageVisit() {
+    _mixpanelService.mixpanel.track('Visited home page');
+  }
 }

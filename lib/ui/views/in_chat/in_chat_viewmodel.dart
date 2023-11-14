@@ -205,4 +205,18 @@ class InChatViewModel extends BaseViewModel {
     );
     _mixpanelService.mixpanel.track("Delete chat");
   }
+
+  void trackProfileViewEvent(String viewedID) {
+    // Track the event with Mixpanel
+    print('it went through');
+    _mixpanelService.mixpanel.track('Profile Viewed', properties: {
+      'viewedID': viewedID
+      // Add other relevant properties here
+    });
+
+  }
+
+  void trackInChatPageVisit() {
+    _mixpanelService.mixpanel.track('Visited in-chat page');
+  }
 }
