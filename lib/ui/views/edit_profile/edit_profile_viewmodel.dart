@@ -245,4 +245,9 @@ class EditProfileViewModel extends BaseViewModel {
   void trackEditProfilePage() {
     _mixpanelService.mixpanel.track('Visited edit profile page');
   }
+
+  void profileCompleted() {
+    print('Profile completed');
+    _mixpanelService.mixpanel.track('Profile Completed');
+  }
 }

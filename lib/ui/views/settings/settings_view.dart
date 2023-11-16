@@ -128,6 +128,20 @@ class SettingsView extends StackedView<SettingsViewModel> {
                     },
                   ),
                   Divider(),
+                  // ListTile(
+                  //   title: Text('feedback', style: TextStyle(fontFamily: 'Switzer')),
+                  //   trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                  //   onTap: () {
+                  //     // Show the feedback form dialog
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext context) {
+                  //         return FeedbackFormDialog();
+                  //       },
+                  //     );
+                  //   },
+                  // ),
+                  // Divider(),
                   ListTile(
                     title: Text('logout', style: TextStyle()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
@@ -228,6 +242,59 @@ class SettingsView extends StackedView<SettingsViewModel> {
   ) =>
       SettingsViewModel();
 }
+
+// class FeedbackFormDialog extends StatefulWidget {
+//   @override
+//   _FeedbackFormDialogState createState() => _FeedbackFormDialogState();
+// }
+
+// class _FeedbackFormDialogState extends State<FeedbackFormDialog> {
+//   final TextEditingController feedbackController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: Text("feedback"),
+//       content: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           TextField(
+//             controller: feedbackController,
+//             maxLines: 4,
+//             decoration: InputDecoration(
+//               labelText: 'enter your feedback',
+//             ),
+//           ),
+//         ],
+//       ),
+//       actions: [
+//         TextButton(
+//           child: Text("cancel"),
+//           onPressed: () {
+//             Navigator.of(context).pop(); // Close the feedback form dialog
+//           },
+//         ),
+//         TextButton(
+//           child: Text("submit"),
+//           onPressed: () {
+//             String feedback = feedbackController.text;
+//             // You can process the feedback here, e.g., send it to a server or save it locally.
+//             // Optionally, you can call a function in your view model to handle the feedback submission.
+//             // viewModel.submitFeedback(feedback);
+//             feedbackController.clear(); // Clear the feedback text field
+//             Navigator.of(context).pop(); // Close the feedback form dialog
+//           },
+//         ),
+//       ],
+//     );
+//   }
+
+//   @override
+//   void dispose() {
+//     feedbackController.dispose();
+//     super.dispose();
+//   }
+// }
 
 Widget _bottomNavigationBar(viewModel) {
   Color profileColor = (viewModel.current_page == "profile" ||

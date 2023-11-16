@@ -9,11 +9,13 @@ import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 // import 'dart:collection';
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
 
 class ProfileViewModel extends BaseViewModel {
   // final _dialogService = locator<DialogService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   String? current_page;
 
@@ -122,4 +124,6 @@ class ProfileViewModel extends BaseViewModel {
   void go_to_home() {
     _navigationService.replaceWithHomeView();
   }
+
+  
 }

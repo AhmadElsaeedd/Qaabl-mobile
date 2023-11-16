@@ -394,6 +394,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           CupertinoButton(
                             color: const Color(0xFF3439AB),
                             onPressed: () async {
+                              model.profileCompleted();
                               setState(() {
                                 isSaving =
                                     true; // Set isSaving to true when the button is pressed

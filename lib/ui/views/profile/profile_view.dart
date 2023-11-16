@@ -15,6 +15,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
     Widget? child,
   ) {
     // late int image_index = 0;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -101,6 +102,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                       ),
                     ],
                   )
+
                 else
                   const Center(
                     child: Row(

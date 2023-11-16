@@ -77,4 +77,9 @@ class ChatsViewModel extends MultipleStreamViewModel {
   void go_to_chats() {
     _navigationService.replaceWithChatsView();
   }
+
+  void viewedChatPage() {
+    print('visited chat page');
+    _mixpanelService.mixpanel.track("Visited chat page");
+  }
 }

@@ -15,7 +15,6 @@ class ChatsView extends StackedView<ChatsViewModel> {
     Widget? child,
   ) {
     final isLoading = viewModel.isLoading;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -204,6 +203,13 @@ class ChatsView extends StackedView<ChatsViewModel> {
         ),
       ),
     );
+
+  }
+
+  @override
+  void onViewModelReady(ChatsViewModel viewModel) {
+    super.onViewModelReady(viewModel);
+    viewModel.viewedChatPage();
   }
 
   Widget _buildShimmerEffect({required bool isHorizontal}) {
