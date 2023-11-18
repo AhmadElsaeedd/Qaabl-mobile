@@ -5,6 +5,8 @@ import 'package:qaabl_mobile/services/auth_service.dart';
 // import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:http/http.dart' as http;
+import 'package:qaabl_mobile/services/mixpanel_service.dart';
+
 import 'dart:convert';
 
 class SettingsViewModel extends BaseViewModel {
@@ -12,6 +14,7 @@ class SettingsViewModel extends BaseViewModel {
   //final _bottomSheetService = locator<BottomSheetService>();
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
+  final _mixpanelService = locator<MixpanelService>();
 
   String? current_page;
 
@@ -76,5 +79,12 @@ class SettingsViewModel extends BaseViewModel {
     //the function to send an automatic email for password reset is a client-side function
     //write it in the authentication service
     _authenticationService.edit_password_email();
+  }
+
+  void submitFeedback(String feedback) {
+    print('feedback works');
+    _mixpanelService.mixpanel.track('Submitted feedback', properties: {
+        'Feedback': feedback,
+      });
   }
 }
