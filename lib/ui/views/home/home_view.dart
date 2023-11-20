@@ -1,5 +1,6 @@
 // import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:share_plus/share_plus.dart';
 // import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 // import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
@@ -158,7 +159,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ] else if (viewModel.no_more_users == true) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'No more users',
@@ -169,9 +170,31 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 ),
                               ),
                               Text(
-                                "come back in a bit, see u :*",
+                                "appreciate u using qaabl btw",
                                 style: TextStyle(
                                   fontSize: 14, // Adjust the size as needed
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              CupertinoButton(
+                                color: Color(0xFF3439AB),
+                                child: Text('Share Qaabl'),
+                                onPressed: () {
+                                  // Implement sharing functionality
+                                  Share.share(
+                                      'im on qaabl, join me! https://testflight.apple.com/join/syEy5gAZ');
+                                },
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "help us spread the word and share it with ur friends!",
+                                style: TextStyle(
+                                  fontSize: 10, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
