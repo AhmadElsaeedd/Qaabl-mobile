@@ -47,6 +47,10 @@ class _InChatViewState extends State<InChatView> {
             preferredSize: Size.fromHeight(65),
             child: AppBar(
               backgroundColor: Color(0xFF3439AB),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
               title: Stack(
                 children: [
                   Row(
@@ -99,7 +103,6 @@ class _InChatViewState extends State<InChatView> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
                                     overflow: TextOverflow.ellipsis,
-                                    // maxLines: 1,
                                   ),
                                 ),
                               ),
@@ -108,7 +111,7 @@ class _InChatViewState extends State<InChatView> {
                         ),
                       ),
                       PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert),
+                        icon: Icon(Icons.more_vert,color: Colors.white,),
                         onSelected: (value) {
                           switch (value) {
                             case 'Profile':
@@ -444,7 +447,7 @@ class UserProfileView extends StatelessWidget {
         backgroundColor: Color(0xFF3439AB),
         //title:
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

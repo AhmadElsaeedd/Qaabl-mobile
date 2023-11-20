@@ -698,7 +698,7 @@ Widget check_profile_button(nextUser, viewModel, context) {
               borderRadius: BorderRadius.circular(30), // Rounded button
             ),
           ),
-          child: const Text("View Profile"),
+          child: const Text("View Profile", style: TextStyle(color:Colors.white)),
         ),
       ],
     );
