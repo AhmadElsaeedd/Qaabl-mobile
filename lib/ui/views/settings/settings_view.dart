@@ -142,7 +142,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('logout', style: TextStyle()),
+                    title: Text('logout'),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -250,12 +250,12 @@ class FeedbackFormDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("feedback"),
+      title: Text("we'd love to know what u think we could add, edit, or remove", style: TextStyle(fontSize: 14)),
       content: TextField(
         controller: feedbackController,
         maxLines: 4,
         decoration: InputDecoration(
-          labelText: 'enter your feedback',
+          labelText: 'let us know here',
           border: OutlineInputBorder(),
         ),
       ),
