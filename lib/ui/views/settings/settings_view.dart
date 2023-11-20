@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 
 import 'settings_viewmodel.dart';
@@ -129,7 +130,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('feedback', style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('feedback',
+                        style: TextStyle(fontFamily: 'Switzer')),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -138,6 +140,16 @@ class SettingsView extends StackedView<SettingsViewModel> {
                           return FeedbackFormDialog(viewModel: viewModel);
                         },
                       );
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text('share qaabl',
+                        style: TextStyle(fontFamily: 'Switzer')),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
+                    onTap: () {
+                      Share.share(
+                          'im on qaabl, join me! https://testflight.apple.com/join/syEy5gAZ');
                     },
                   ),
                   Divider(),
@@ -250,7 +262,9 @@ class FeedbackFormDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("we'd love to know what u think we could add, edit, or remove", style: TextStyle(fontSize: 14)),
+      title: Text(
+          "we'd love to know what u think we could add, edit, or remove",
+          style: TextStyle(fontSize: 14)),
       content: TextField(
         controller: feedbackController,
         maxLines: 4,
@@ -273,7 +287,8 @@ class FeedbackFormDialog extends StatelessWidget {
             // For example, you could call a function that sends the feedback to a server or database
             String feedback = feedbackController.text;
             if (feedback.isNotEmpty) {
-              viewModel.submitFeedback(feedback); // Uncomment and implement this function
+              viewModel.submitFeedback(
+                  feedback); // Uncomment and implement this function
               feedbackController.clear();
               Navigator.of(context).pop();
             }
