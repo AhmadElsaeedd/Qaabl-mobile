@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/app/app.router.dart';
@@ -213,7 +214,6 @@ class InChatViewModel extends BaseViewModel {
       'viewedID': viewedID
       // Add other relevant properties here
     });
-
   }
 
   void trackInChatPageVisit() {

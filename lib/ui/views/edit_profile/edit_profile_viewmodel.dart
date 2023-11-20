@@ -38,7 +38,7 @@ class EditProfileViewModel extends BaseViewModel {
   //function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(String name, List<Map<String, String>> interests,
       String aspiration, int image_index) async {
-    print("aspiration is: " + aspiration.toString());
+    print("image index: " + image_index.toString());
     //get the values from the input fields and go update the values in the cloud
     final response = await http.post(
       //production url
@@ -188,10 +188,9 @@ class EditProfileViewModel extends BaseViewModel {
       user_data['aspiration'] = "";
     } else {
       user_data['aspiration'] = aspiration;
-       _mixpanelService.mixpanel.track('Chose Aspirations', properties: {
-      'selectedAspiration(s)': aspiration,
-    });
-
+      _mixpanelService.mixpanel.track('Chose Aspirations', properties: {
+        'selectedAspiration(s)': aspiration,
+      });
     }
     // user_data['aspiration'] = aspiration;
     rebuildUi();
@@ -233,7 +232,7 @@ class EditProfileViewModel extends BaseViewModel {
     });
   }
 
-  void chose_avatar(String avatar) {
+  void chose_avatar(int avatar) {
     // Extract interest names
     print(avatar);
     // Track the event with Mixpanel

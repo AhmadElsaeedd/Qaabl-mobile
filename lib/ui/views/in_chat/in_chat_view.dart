@@ -111,11 +111,15 @@ class _InChatViewState extends State<InChatView> {
                         ),
                       ),
                       PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert,color: Colors.white,),
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                        ),
                         onSelected: (value) {
                           switch (value) {
                             case 'Profile':
-                              viewModel.trackProfileViewEvent(widget.other_user_id);
+                              viewModel
+                                  .trackProfileViewEvent(widget.other_user_id);
                               showModalBottomSheet(
                                 context: context,
                                 builder: (context) => GestureDetector(
@@ -234,6 +238,24 @@ class _InChatViewState extends State<InChatView> {
                       messageKeys[timestampString] =
                           messageKeys[timestampString] ?? GlobalKey();
                       final key = messageKeys[timestampString] ?? GlobalKey();
+                      // final DateTime? previousMessageDate = index <
+                      //         viewModel.displayed_messages.length - 1
+                      //     ? viewModel.displayed_messages[index + 1].timestamp
+                      //     : null;
+
+                      // final dateTag = viewModel.getDateTag(
+                      //     message.timestamp, previousMessageDate!);
+                      // return Column(
+                      //   children: [
+                      //   Padding(
+                      //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      //     child: Text(
+                      //       dateTag!,
+                      //       style: const TextStyle(
+                      //           // Style the date tag as needed
+                      //           ),
+                      //     ),
+                      //   ),
                       return GestureDetector(
                         onLongPress: isCurrentUser
                             ? null // Disable long press for the current user's messages.
@@ -305,6 +327,8 @@ class _InChatViewState extends State<InChatView> {
                           ),
                         ),
                       );
+                      // ]
+                      // );
                     },
                   ),
                 ),

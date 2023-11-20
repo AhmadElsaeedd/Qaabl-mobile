@@ -54,7 +54,7 @@ async function update_user(name = null, interests = null, uid, pp = null, aspira
   let updateData = {};
   if (name) updateData.name = name;
   if (interests) updateData.interests = interests;
-  if (pp) updateData.image_index = pp;
+  if (pp != null) updateData.image_index = pp;
   if (aspiration) updateData.aspiration = aspiration;
 
   await db.collection("Users").doc(uid).update(updateData);

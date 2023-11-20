@@ -30,7 +30,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                     Text(
                       'New Chats',
                       style: TextStyle(
-                        fontSize: 26, // Adjust the size as needed
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
