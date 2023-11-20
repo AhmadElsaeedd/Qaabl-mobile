@@ -19,11 +19,11 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
           padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 300),
           child: Column(
             children: [
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+              const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'its a match!',
                         style: TextStyle(
                           fontFamily: 'Switzer',
@@ -48,17 +48,18 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                 children: [
                   Flexible(
                       child: CupertinoButton(
-                    color: Color.fromARGB(255, 239, 239, 239),
+                    color: const Color.fromARGB(255, 239, 239, 239),
                     onPressed: () {
                       // "Keep swiping" button action here
                       viewModel.go_to_swiping();
                     },
-                    child: Text(
+                    child: const Text(
                       "Keep Swiping",
                       style:
                           TextStyle(color: Colors.black, fontFamily: "Switzer"),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                   )
                       // style: ElevatedButton.styleFrom(
                       //   shape: RoundedRectangleBorder(
@@ -70,16 +71,17 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                       ),
                   Flexible(
                       child: CupertinoButton(
-                    color: Color(0xFF3439AB),
+                    color: const Color(0xFF3439AB),
                     onPressed: () {
                       // "Go to chats" button action here
                       viewModel.go_to_chats();
                     },
-                    child: Text(
+                    child: const Text(
                       "Chats",
                       style: TextStyle(color: Colors.white),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                   )
                       // style: ElevatedButton.styleFrom(
                       //   shape: RoundedRectangleBorder(
@@ -91,9 +93,9 @@ class ItsAMatchView extends StackedView<ItsAMatchViewModel> {
                       ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Container(
-                margin: EdgeInsets.only(bottom: 25), // Adjust as needed
+                margin: const EdgeInsets.only(bottom: 25), // Adjust as needed
                 child: _bottomNavigationBar(viewModel),
               ),
             ],
@@ -112,11 +114,11 @@ Widget _bottomNavigationBar(viewModel) {
   Color profileColor = (viewModel.current_page == "profile" ||
           viewModel.current_page == "edit_profile" ||
           viewModel.current_page == "settings")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   Color chatColor = (viewModel.current_page == "chats")
-      ? Color(0xFF3439AB)
+      ? const Color(0xFF3439AB)
       : const Color.fromARGB(255, 104, 104, 104);
 
   return Stack(
@@ -126,7 +128,7 @@ Widget _bottomNavigationBar(viewModel) {
       Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 239, 239, 239),
+          color: const Color.fromARGB(255, 239, 239, 239),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -134,14 +136,14 @@ Widget _bottomNavigationBar(viewModel) {
           children: [
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               color: profileColor,
               onPressed: viewModel.go_to_profile,
             ),
-            SizedBox(width: 50), // Leave space for the logo
+            const SizedBox(width: 50), // Leave space for the logo
             IconButton(
               iconSize: 30,
-              icon: Icon(Icons.chat),
+              icon: const Icon(Icons.chat),
               color: chatColor,
               onPressed: viewModel.go_to_chats,
             ),
@@ -158,11 +160,12 @@ Widget _bottomNavigationBar(viewModel) {
               width: 70, // Adjust the width and height as needed
               height: 70,
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF3439AB)), // Border color
+                border:
+                    Border.all(color: const Color(0xFF3439AB)), // Border color
                 borderRadius:
                     BorderRadius.circular(40), // Rounded corner radius
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.black26, // Shadow color
                     offset: Offset(0, 3), // Vertical offset
                     blurRadius: 5.0, // Blur value
@@ -170,7 +173,7 @@ Widget _bottomNavigationBar(viewModel) {
                   ),
                 ],
               ),
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage('lib/assets/logo.png'),
                 backgroundColor: Colors.white,
               )),

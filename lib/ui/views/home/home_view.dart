@@ -54,7 +54,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     return ViewModelBuilder<HomeViewModel>.reactive(
       viewModelBuilder: () => HomeViewModel(),
       onViewModelReady: (viewModel) {
-        viewModel.trackHomePageVisit(); // Call the tracking method when the model is ready
+        viewModel
+            .trackHomePageVisit(); // Call the tracking method when the model is ready
       },
       builder: (context, viewModel, child) {
         Map<String, dynamic>? nextUser = viewModel.get_next_user();
@@ -90,29 +91,42 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ] else if (viewModel.user_continues == false) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
-                          child: const Column(
+                          child: Column(
                             children: [
-                              Text(
+                              const Text(
                                 'fill your profile!',
                                 style: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              Text(
+                              const SizedBox(height: 10),
+                              const Text(
                                 "why?",
                                 style: TextStyle(
                                   fontSize: 18, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              Text(
+                              const SizedBox(height: 10),
+                              const Text(
                                 "rn ur not visible, less chances of meeting ppl :(",
                                 style: TextStyle(
                                   fontSize: 14, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              CupertinoButton(
+                                color: const Color.fromARGB(255, 239, 239, 239),
+                                onPressed: viewModel.go_to_profile,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: const Text(
+                                  "Go to profile",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Switzer"),
                                 ),
                               ),
                             ],
@@ -698,7 +712,8 @@ Widget check_profile_button(nextUser, viewModel, context) {
               borderRadius: BorderRadius.circular(30), // Rounded button
             ),
           ),
-          child: const Text("View Profile", style: TextStyle(color:Colors.white)),
+          child:
+              const Text("View Profile", style: TextStyle(color: Colors.white)),
         ),
       ],
     );
