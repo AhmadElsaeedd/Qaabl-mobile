@@ -35,8 +35,8 @@ class FirestoreService {
         .collection('Matches')
         .where('users', arrayContains: uid)
         .where('has_message', isEqualTo: true)
-        .orderBy('timestamp', descending: true)
-        .limit(5)
+        .orderBy('last_message_timestamp', descending: true)
+        .limit(10)
         .snapshots()
         .asyncMap((snapshot) async {
       if (snapshot.docs.isEmpty) {

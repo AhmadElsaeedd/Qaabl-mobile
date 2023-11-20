@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCjI2wtZ4cEbA29SYutMRZteLMYoo02gVE',
-    appId: '1:503928826320:android:e49ea7601089f600a0f1d5',
+    appId: '1:503928826320:android:3758d60632573cc0a0f1d5',
     messagingSenderId: '503928826320',
     projectId: 'qaabl-mobile-dev',
     storageBucket: 'qaabl-mobile-dev.appspot.com',
@@ -59,14 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAHILkz5xplHZcCgIWmEl4Vy6_bUmuel4s',
-    appId: '1:503928826320:ios:042e86478ab4cf97a0f1d5',
+    appId: '1:503928826320:ios:953f60390db392c7a0f1d5',
     messagingSenderId: '503928826320',
     projectId: 'qaabl-mobile-dev',
     storageBucket: 'qaabl-mobile-dev.appspot.com',
-    androidClientId:
-        '503928826320-un15kb3kcn4dmrolgeodhurcjgbspmsc.apps.googleusercontent.com',
-    iosClientId:
-        '503928826320-j0c9g3d09hn432jauapsvm07bc6tgmpj.apps.googleusercontent.com',
-    iosBundleId: 'com.example.stackedApp',
+    androidClientId: '503928826320-un15kb3kcn4dmrolgeodhurcjgbspmsc.apps.googleusercontent.com',
+    iosClientId: '503928826320-eoba3uml5valie6ur5emu0q3dq8l8mhb.apps.googleusercontent.com',
+    iosBundleId: 'com.example.qaablMobile',
   );
 }

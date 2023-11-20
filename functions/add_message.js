@@ -33,12 +33,14 @@ async function update_match_doc(match_data, chat_id, new_message) {
     // make has_message true and update the last message
     await db.collection("Matches").doc(chat_id).update({
       last_message: new_message,
+      last_message_timestamp: new_message.timestamp
     });
   } else {
     // has_message is already true, update the last message
     await db.collection("Matches").doc(chat_id).update({
       has_message: true,
       last_message: new_message,
+      last_message_timestamp: new_message.timestamp
     });
   }
   done2 = true;
