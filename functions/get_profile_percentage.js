@@ -56,14 +56,14 @@ const GetProfilePercentage = functions.region("asia-east2").https.onRequest(asyn
     let there_is_aspiration;
     there_is_aspiration = is_there_aspiration(user_data.aspiration, percentage);
     if(there_is_aspiration) percentage += 15;
-    else missing_stuff.push("Aspiration");
+    else missing_stuff.push("aspiration");
 
     // give a score depending on how many interests
     let interests_count;
     interests_count = how_many_interests(user_data.interests);
     if (interests_count === 0){
       percentage += 0;
-      missing_stuff.push("Interests");
+      missing_stuff.push("interests");
     }
     else if (interests_count === 1) percentage +=15;
     else if (interests_count === 2) percentage +=30;
@@ -73,12 +73,12 @@ const GetProfilePercentage = functions.region("asia-east2").https.onRequest(asyn
     let there_is_name;
     there_is_name = is_there_a_name(user_data.name);
     if (there_is_name) percentage += 20;
-    else missing_stuff.push("Name");
+    else missing_stuff.push("name");
 
     let there_is_pp;
     there_is_pp = is_there_a_pp(user_data.image_index);
     if (there_is_pp != 0) percentage += 15;
-    else missing_stuff.push("Avatar");
+    else missing_stuff.push("avatar");
 
     // ToDo: add more fields as necessary
 

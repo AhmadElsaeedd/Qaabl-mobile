@@ -33,7 +33,17 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         'lib/assets/${viewModel.image_index}.png',
                         height: 200,
                       ),
-                      //Padding(padding: const EdgeInsets.only(bottom: 10)),
+                      if (viewModel.missing.isEmpty) ...[
+                        SizedBox.shrink()
+                      ] else ...[
+                        Text(
+                          'u r missing: ${viewModel.missing.join(', ')}',
+                          style: TextStyle(
+                            fontSize: 14, // Adjust the size as needed
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                       // Progress Bar and Percentage
                       Stack(
                         children: [
@@ -59,16 +69,8 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      //Put the missing things here
                       const Text(
-                        "the more u add, the better :)",
-                        style: TextStyle(
-                          fontSize: 14, // Adjust the size as needed
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Text(
-                        "the more u add, the better :)",
+                        "btw the more u add, the better :)",
                         style: TextStyle(
                           fontSize: 14, // Adjust the size as needed
                           fontWeight: FontWeight.w500,
