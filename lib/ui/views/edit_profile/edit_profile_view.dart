@@ -68,6 +68,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              SizedBox(height: 5),
+              Text(
+                "we recommend 3 interests, but u can add up to 7",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
           content: StatefulBuilder(
@@ -200,7 +208,8 @@ class _EditProfileViewState extends State<EditProfileView> {
     return ViewModelBuilder<EditProfileViewModel>.reactive(
       viewModelBuilder: () => EditProfileViewModel(),
       onViewModelReady: (viewModel) {
-        viewModel.trackEditProfilePage(); // Call the tracking method when the model is ready
+        viewModel
+            .trackEditProfilePage(); // Call the tracking method when the model is ready
       },
       builder: (context, model, child) {
         Map<String, dynamic>? userData = model.user_data;
@@ -266,7 +275,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   selectedImageNotifier.value =
                                       chosenIndex; // Set the new value
                                   model.user_data['image_index'] = chosenIndex;
-                                  model.chose_avatar(model.user_data['image_index']);
+                                  model.chose_avatar(
+                                      model.user_data['image_index']);
                                 }
                               },
                               child: Column(

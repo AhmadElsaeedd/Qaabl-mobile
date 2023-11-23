@@ -59,8 +59,16 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         ],
                       ),
                       const SizedBox(height: 10),
+                      //Put the missing things here
                       const Text(
-                        "add more stuff to ur profile, much better :)",
+                        "the more u add, the better :)",
+                        style: TextStyle(
+                          fontSize: 14, // Adjust the size as needed
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Text(
+                        "the more u add, the better :)",
                         style: TextStyle(
                           fontSize: 14, // Adjust the size as needed
                           fontWeight: FontWeight.w500,
@@ -102,7 +110,6 @@ class ProfileView extends StackedView<ProfileViewModel> {
                       ),
                     ],
                   )
-
                 else
                   const Center(
                     child: Row(

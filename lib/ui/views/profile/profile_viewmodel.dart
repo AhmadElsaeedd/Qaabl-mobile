@@ -24,6 +24,8 @@ class ProfileViewModel extends BaseViewModel {
 
   //percentage to be passed to the view
   int? percentage;
+  Object? return_from_func;
+  List missing = [];
 
   int? image_index;
 
@@ -53,8 +55,13 @@ class ProfileViewModel extends BaseViewModel {
         get_percentage(),
         get_profile_pic_index(),
       ]);
-      percentage = results[0];
-      image_index = results[1];
+      // percentage = results[0];
+      return_from_func = results[0];
+      // percentage = return_from_func?['percentage'];
+      image_index = results[1] as int?;
+      print("This returned from the function: " + return_from_func.toString());
+      print("Image index is: " + image_index.toString());
+      //ToDo: get an array of the strings
 
       rebuildUi();
     } catch (e) {
@@ -63,7 +70,7 @@ class ProfileViewModel extends BaseViewModel {
   }
 
   //function to return how complete the profile is
-  Future<int> get_percentage() async {
+  Future<Map<String, dynamic>> get_percentage() async {
     //call function that gets how full the profile is
     final response = await http.post(
       //production url
@@ -81,7 +88,10 @@ class ProfileViewModel extends BaseViewModel {
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse['percentage'] as int;
+      percentage = jsonResponse['percentage'];
+      missing = jsonResponse['missing'];
+      // return jsonResponse['percentage'] as int;
+      return jsonResponse;
     } else {
       // If the server returns an error, throw an exception
       throw Exception('Failed to get percentage');
@@ -124,6 +134,4 @@ class ProfileViewModel extends BaseViewModel {
   void go_to_home() {
     _navigationService.replaceWithHomeView();
   }
-
-  
 }
