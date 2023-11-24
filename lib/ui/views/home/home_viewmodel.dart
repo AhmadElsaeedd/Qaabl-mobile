@@ -155,7 +155,8 @@ class HomeViewModel extends BaseViewModel {
   }
 
   //function that likes a user, server-side
-  Future<void> like_user(String liked_user_uid, bool potential_match) async {
+  Future<void> like_user(String liked_user_uid, bool potential_match,
+      String like_or_super_like) async {
     if (liked_user_uid == users_queue.first['id']) users_queue.removeFirst();
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
@@ -165,7 +166,7 @@ class HomeViewModel extends BaseViewModel {
       response = await both_like_each_other(liked_user_uid);
     } else {
       //call the cloud function that likes a user
-      response = await like_user_in_cloud(liked_user_uid);
+      response = await like_user_in_cloud(liked_user_uid, like_or_super_like);
     }
 
     //response of the function should contain true, that's it
@@ -243,7 +244,8 @@ class HomeViewModel extends BaseViewModel {
     return response;
   }
 
-  Future<http.Response> like_user_in_cloud(liked_user_uid) async {
+  Future<http.Response> like_user_in_cloud(
+      liked_user_uid, String like_or_super_like) async {
     //function that likes the other user
     final response = await http.post(
       //add the url of the function here
@@ -255,6 +257,7 @@ class HomeViewModel extends BaseViewModel {
       body: jsonEncode({
         'user_uid': uid,
         'liked_user_uid': liked_user_uid,
+        'like_or_super_like': like_or_super_like,
       }),
       headers: {'Content-Type': 'application/json'},
     );

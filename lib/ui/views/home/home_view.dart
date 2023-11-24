@@ -235,6 +235,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       } else if (region.toString() == "SlideRegion.inLikeRegion") {
         // show like feedback
         userCardKey.currentState!.showFeedback("Like");
+      } else if (region.toString() == "SlideRegion.inSuperLikeRegion") {
+        // show like feedback
+        userCardKey.currentState!.showFeedback("Superlike");
       } else {
         // hide feedback for other cases
         userCardKey.currentState!.hideFeedback();
@@ -245,10 +248,16 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         content:
             UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
         likeAction: () {
-          viewModel.like_user(nextUser['id'], nextUser['potential_match']);
+          viewModel.like_user(
+              nextUser['id'], nextUser['potential_match'], "like");
         },
         nopeAction: () {
           viewModel.dislike_user(nextUser['id']);
+        },
+        superlikeAction: () {
+          print("super like here");
+          viewModel.like_user(
+              nextUser['id'], nextUser['potential_match'], "super_like");
         },
         onSlideUpdate: onSlideUpdateCallback
         // Include other actions like superLike if you have them
@@ -271,6 +280,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         onStackFinished: () {
           // Load more users or any action when all cards are swiped
         },
+        upSwipeAllowed: true,
+        fillSpace: true,
       ),
     );
   }
@@ -519,7 +530,6 @@ class _UserCardState extends State<UserCard> {
 
   @override
   Widget build(BuildContext context) {
-    // code for _userCard, but wrapped inside a stateful widget
     return SlideTransition(
       position: widget.slideAnimation,
       child: Stack(children: [
@@ -577,15 +587,13 @@ class _UserCardState extends State<UserCard> {
                               child: Row(
                                 // Align Like and Dislike buttons horizontally
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Repeat");
                                       await Future.delayed(
                                           const Duration(milliseconds: 400));
-                                      // widget.viewModel
-                                      //     .dislike_user(widget.nextUser['id']);
                                       widget.viewModel.replay_user();
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -623,7 +631,8 @@ class _UserCardState extends State<UserCard> {
                                           const Duration(milliseconds: 400));
                                       widget.viewModel.like_user(
                                           widget.nextUser['id'],
-                                          widget.nextUser['potential_match']);
+                                          widget.nextUser['potential_match'],
+                                          "like");
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -634,6 +643,27 @@ class _UserCardState extends State<UserCard> {
                                     ),
                                     child: const Icon(Icons.thumb_up,
                                         color: Colors.white), // Check icon
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      showFeedback("Superlike");
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 400));
+                                      //ToDo: function that superlikes the other user
+                                      widget.viewModel.like_user(
+                                          widget.nextUser['id'],
+                                          widget.nextUser['potential_match'],
+                                          "super_like");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), // Rounded button
+                                      ),
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    child: const Icon(Icons.star,
+                                        color: Colors.blue), // Close icon
                                   ),
                                 ],
                               ),
@@ -678,8 +708,11 @@ class _UserCardState extends State<UserCard> {
         feedbackColor = Colors.black;
         feedbackIcon = Icons.thumb_down; // change this to your "dislike" icon
       } else if (feedbackText == "Repeat") {
-        feedbackColor = Colors.black;
+        feedbackColor = Colors.yellow;
         feedbackIcon = Icons.repeat_rounded;
+      } else if (feedbackText == "Superlike") {
+        feedbackColor = Colors.blue;
+        feedbackIcon = Icons.star;
       }
     });
   }

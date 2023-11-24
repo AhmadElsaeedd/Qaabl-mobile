@@ -109,7 +109,7 @@ async function structure_users(user_uid, users) {
     const {id, interests} = user;
 
     // check if the user is a potential match
-    const potential_match = (user.likes || []).includes(user_uid);
+    const potential_match = (user.likes || []).includes(user_uid) || (user.super_likes || []).includes(user_uid);
 
     let image_index;
     if (user.image_index) image_index = user.image_index;
