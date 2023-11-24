@@ -36,6 +36,8 @@ class HomeViewModel extends BaseViewModel {
   Map<String, dynamic>? previous_user;
   Map<String, dynamic>? nextUser;
 
+  List<Map<String, dynamic>>? user_notes;
+
   // constructor runs whenever the page is loaded or reloaded
   HomeViewModel() {
     // get the uid of the user
@@ -78,8 +80,6 @@ class HomeViewModel extends BaseViewModel {
           response.statusCode == 205))
         print("failed to go to cloud");
       else if (response.statusCode == 204) {
-        // last_user = true;
-        // rebuildUi();
       } else if (response.statusCode == 205) {
         user_continues = false;
         rebuildUi();
@@ -123,7 +123,6 @@ class HomeViewModel extends BaseViewModel {
     if (users_queue.length == 1) {
       last_user = true;
       no_more_users = true;
-      // return users_queue.removeFirst();
       return users_queue.first;
     }
     //when the queue is empty after the first load or there is no more users or user shouldnt continue
@@ -142,7 +141,6 @@ class HomeViewModel extends BaseViewModel {
 
     //when queue has users, show the first user and banish them from existence
     if (users_queue.isNotEmpty && user_continues == true) {
-      // return users_queue.removeFirst();
       return users_queue.first;
     }
     return null;
@@ -157,7 +155,10 @@ class HomeViewModel extends BaseViewModel {
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match,
       String like_or_super_like) async {
-    if (liked_user_uid == users_queue.first['id']) users_queue.removeFirst();
+    if (liked_user_uid == users_queue.first['id']) {
+      previous_user = users_queue.first;
+      users_queue.removeFirst();
+    }
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
     dynamic response;
@@ -213,6 +214,49 @@ class HomeViewModel extends BaseViewModel {
       _mixpanelService.mixpanel.track("Disliked user");
     } else {
       print("failed to go to cloud");
+    }
+  }
+
+  Future<void> leave_note(String liked_user_uid, String text) async {
+    //Implement the calling of the cloud function here
+    final response = await http.post(
+      //add the url of the function here
+      //production URL
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LeaveNote'),
+      //testing URL
+      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
+      body: jsonEncode({
+        'note': text,
+        'liked_user_uid': liked_user_uid,
+        'uid': uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) print("Note added");
+  }
+
+  Future<void> get_notes() async {
+    final response = await http.post(
+      //production url
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetNotes'),
+      //testing url
+      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
+      body: jsonEncode({
+        'uid': uid,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      var decodedResponse = jsonDecode(response.body);
+      if (decodedResponse is List) {
+        user_notes = decodedResponse.map<Map<String, dynamic>>((item) {
+          return item as Map<String, dynamic>;
+        }).toList();
+      }
+    } else {
+      user_notes = null;
     }
   }
 

@@ -12,6 +12,10 @@ import 'package:swipe_cards/swipe_cards.dart';
 import 'home_viewmodel.dart';
 import 'dart:async';
 
+typedef ShowNoteDialogCallback = void Function(
+    BuildContext, String, HomeViewModel);
+GlobalKey _iconKey = GlobalKey();
+
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -63,6 +67,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           viewModel.nextUser = viewModel.get_next_user();
         }
         viewModel.replaying = false;
+        viewModel.get_notes();
 
         // Reset and start the animation for the new user
         _animationController.reset();
@@ -212,7 +217,12 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                         child: _bottomNavigationBar(viewModel),
                       ),
                     ],
-                  )
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: notification_icon(context, viewModel),
+                  ),
                 ],
               ),
             ),
@@ -245,8 +255,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     }
 
     swipeItem = SwipeItem(
-        content:
-            UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
+        content: UserCard(nextUser, viewModel, context, _slideAnimation,
+            userCardKey, showNoteDialog),
         likeAction: () {
           viewModel.like_user(
               nextUser['id'], nextUser['potential_match'], "like");
@@ -255,9 +265,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           viewModel.dislike_user(nextUser['id']);
         },
         superlikeAction: () {
-          print("super like here");
+          showNoteDialog(context, nextUser['id'], viewModel);
           viewModel.like_user(
               nextUser['id'], nextUser['potential_match'], "super_like");
+          //ToDo: implement leaving them a note here
         },
         onSlideUpdate: onSlideUpdateCallback
         // Include other actions like superLike if you have them
@@ -272,10 +283,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         matchEngine: matchEngine,
         itemBuilder: (BuildContext context, int index) {
           return Container(
-              alignment: Alignment.center,
-              child: swipeItem!
-                  .content // This displays the content of the SwipeItem
-              );
+              alignment: Alignment.center, child: swipeItem!.content);
         },
         onStackFinished: () {
           // Load more users or any action when all cards are swiped
@@ -285,11 +293,42 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       ),
     );
   }
+
+  void showNoteDialog(
+      BuildContext context, String liked_user_uid, HomeViewModel viewModel) {
+    TextEditingController noteController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'tell them why u super liked them',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+          content: TextField(
+            controller: noteController,
+            decoration:
+                const InputDecoration(hintText: "leave them a note here..."),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('send'),
+              onPressed: () {
+                String note = noteController.text;
+                viewModel.leave_note(viewModel.previous_user!['id'], note);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 Widget _helloText() {
   return const Padding(
-      padding: EdgeInsets.only(top: 50.0),
+      padding: EdgeInsets.only(top: 10.0),
       child: Column(
         children: [
           Text(
@@ -308,6 +347,104 @@ Widget _helloText() {
           ),
         ],
       ));
+}
+
+Widget notification_icon(BuildContext context, HomeViewModel viewModel) {
+  Widget iconContent;
+  if (viewModel.user_notes != null) {
+    iconContent = Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Icon(Icons.notifications),
+        Container(
+          width: 8.0,
+          height: 8.0,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            shape: BoxShape.circle,
+          ),
+        ),
+      ],
+    );
+  } else {
+    iconContent = Icon(Icons.notifications);
+  }
+
+  return InkWell(
+    key: _iconKey, // Assign the global key to your InkWell
+    onTap: () => _showDropDown(context),
+    child: iconContent,
+  );
+}
+
+void _showDropDown(BuildContext context) {
+  final RenderBox renderBox =
+      _iconKey.currentContext!.findRenderObject() as RenderBox;
+  final Offset offset = renderBox.localToGlobal(Offset.zero);
+  final double dropdownWidth =
+      MediaQuery.of(context).size.width * 0.8; // Example: 80% of screen width
+  final double iconWidth = renderBox.size.width;
+
+  // Calculate the left position by subtracting the width of the dropdown from the right edge of the icon.
+  final double leftPosition = offset.dx + iconWidth - dropdownWidth;
+
+  late OverlayEntry overlayEntry;
+
+  overlayEntry = OverlayEntry(
+    builder: (context) => GestureDetector(
+      onTap: () {
+        // This empty onTap handler is necessary to detect taps outside the dropdown.
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () {
+                overlayEntry
+                    .remove(); // Remove the overlay when you tap outside the dropdown.
+              },
+            ),
+          ),
+          Positioned(
+            left: leftPosition, // Updated left position
+            top: offset.dy + renderBox.size.height,
+            width: dropdownWidth, // Set the width of the dropdown.
+            child: Material(
+              elevation: 4.0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight:
+                      200, // Set the max height for the dropdown content.
+                ),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text("Notification 1"),
+                      onTap: () {
+                        overlayEntry.remove();
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Notification 2"),
+                      onTap: () {
+                        overlayEntry.remove();
+                      },
+                    ),
+                    // ... other list tiles
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Overlay.of(context)!.insert(overlayEntry);
 }
 
 class UserInterestsWidget extends StatefulWidget {
@@ -373,9 +510,15 @@ class UserProfileView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF3439AB),
-        title: const Text('More about me...'),
+        title: const Text(
+          'More about me...',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -478,45 +621,16 @@ Widget _bottomNavigationBar(viewModel) {
   );
 }
 
-class LinearProgressPainter extends CustomPainter {
-  final Color color;
-  final double percentage;
-
-  LinearProgressPainter({required this.color, required this.percentage});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 10.0
-      ..style = PaintingStyle.fill;
-
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(size.width * percentage, size.height)
-      ..lineTo(size.width * percentage, 0)
-      ..lineTo(0, 0)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
 class UserCard extends StatefulWidget {
   final nextUser;
   final viewModel;
   final context;
   final slideAnimation;
   final key;
+  final ShowNoteDialogCallback showNoteDialog;
 
   UserCard(this.nextUser, this.viewModel, this.context, this.slideAnimation,
-      this.key)
-      // , this.setMatchEngine)
+      this.key, this.showNoteDialog)
       : super(key: key);
 
   @override
@@ -536,11 +650,11 @@ class _UserCardState extends State<UserCard> {
         Card(
             color: const Color.fromARGB(255, 239, 239, 239),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(20.0),
             ),
-            elevation: 5,
+            elevation: 2,
             child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -575,7 +689,6 @@ class _UserCardState extends State<UserCard> {
                               ),
                             ),
                             Text(
-                              // "${widget.nextUser['interests'][0]['description']}",
                               "${widget.nextUser['aspiration']}",
                               style: const TextStyle(
                                 fontSize: 16,
@@ -583,7 +696,8 @@ class _UserCardState extends State<UserCard> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
                               child: Row(
                                 // Align Like and Dislike buttons horizontally
                                 mainAxisAlignment:
@@ -649,11 +763,16 @@ class _UserCardState extends State<UserCard> {
                                       showFeedback("Superlike");
                                       await Future.delayed(
                                           const Duration(milliseconds: 400));
-                                      //ToDo: function that superlikes the other user
+                                      //show the dialog here
+                                      showNoteDialog(
+                                          context,
+                                          widget.nextUser['id'],
+                                          widget.viewModel);
                                       widget.viewModel.like_user(
                                           widget.nextUser['id'],
                                           widget.nextUser['potential_match'],
                                           "super_like");
+                                      //ToDo: implement leaving them a note here
                                     },
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
@@ -695,6 +814,37 @@ class _UserCardState extends State<UserCard> {
             ),
           )
       ]),
+    );
+  }
+
+  void showNoteDialog(
+      BuildContext context, String liked_user_uid, HomeViewModel viewModel) {
+    TextEditingController noteController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'tell them why u super liked them',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+          ),
+          content: TextField(
+            controller: noteController,
+            decoration:
+                const InputDecoration(hintText: "leave them a note here..."),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('send'),
+              onPressed: () {
+                String note = noteController.text;
+                viewModel.leave_note(viewModel.previous_user!['id'], note);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

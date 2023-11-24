@@ -99,12 +99,23 @@ const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res)
     await update_user(user_uid, user_likes_updated,user_dislikes_updated, user_super_likes_updated);
 
     //send a notif to the liked user
-    const payload = {
-      notification: {
-        title: '😍😍Someone likes you!',
-        body: 'get on Qaabl and find out whooo',
-      },
-    };
+    if(like_or_super_like === "like"){
+      const payload = {
+        notification: {
+          title: '😍😍Someone likes you!',
+          body: 'get on Qaabl and find out whooo',
+        },
+      };
+    }
+    else if(like_or_super_like === "super_like"){
+      const payload = {
+        notification: {
+          title: '😍😍Someone super likes you!',
+          body: 'get on Qaabl and find out whooo',
+        },
+      };
+    }
+    
 
     sendNotification(liked_user_uid, payload);
 

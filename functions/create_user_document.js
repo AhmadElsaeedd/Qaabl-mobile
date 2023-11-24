@@ -13,6 +13,7 @@ const CreateUserRecord = functions.region("asia-east2").auth.user().onCreate((us
     aspiration: "",
     image_index: 0,
     super_likes: [],
+    notes: [],
   });
 });
 

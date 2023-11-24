@@ -14,7 +14,7 @@ const corsOptions = {
 };
 
 // function that gets likes, dislikes, and matches of user
-async function get_user_likes_dislikes_matches(uid) {
+async function get_user_info(uid) {
   let user_doc;
   // get the user document
   while (true) {
@@ -38,24 +38,25 @@ async function get_user_likes_dislikes_matches(uid) {
   const dislikes = user_data.dislikes;
   const matched_users = user_data.matched_users;
   const interests = user_data.interests;
+  const super_likes = user_data.super_likes;
 
-  return {likes, dislikes, matched_users, interests};
+  return {likes, dislikes, matched_users, interests, super_likes};
 }
 
-function should_user_continue(likes,dislikes,interests){
-  const likes_and_dislikes = likes.length + dislikes.length;
+function should_user_continue(likes,dislikes,super_likes,interests){
+  const likes_and_dislikes = likes.length + dislikes.length + super_likes.length;
   if(likes_and_dislikes>0 && interests.length == 0) return false;
   else return true;
 }
 
 // function that gets filtered users
-async function get_other_users(uid, likes, dislikes, matched_users, users_in_queue) {
+async function get_other_users(uid, likes, dislikes,super_likes, matched_users, users_in_queue) {
   let filter_out_those = [];
   if(users_in_queue) {
-    filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, ...users_in_queue, uid])];
+    filter_out_those = [...new Set([...likes, ...dislikes,...super_likes, ...matched_users, ...users_in_queue, uid])];
   }
   else{
-    filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, uid])];
+    filter_out_those = [...new Set([...likes, ...dislikes,...super_likes ,...matched_users, uid])];
   }
   
 
@@ -138,18 +139,17 @@ const GetUsers = functions.region("asia-east2").https.onRequest(async (req, res)
     const users_in_queue = req.body.users_queue_uids;
 
     // get likes, dislikes, and matched users
-    const {likes, dislikes, matched_users, interests} = await get_user_likes_dislikes_matches(user_uid);
+    const {likes, dislikes, matched_users, interests, super_likes} = await get_user_info(user_uid);
 
     //check if the user can continue
-    const user_continues = should_user_continue(likes,dislikes,interests);
+    const user_continues = should_user_continue(likes,dislikes, super_likes,interests);
 
     if(user_continues == false) {
-      console.log("User can't continue");
       return res.status(205).send("User can't continue");
     }
 
     // query to return 1 user (worst case) and up to 5 (best case)
-    const filtered_users = await get_other_users(user_uid, likes, dislikes, matched_users, users_in_queue);
+    const filtered_users = await get_other_users(user_uid, likes, dislikes,super_likes, matched_users, users_in_queue);
 
     if (filtered_users.length === 0) {
       // No more users to send
