@@ -13,14 +13,23 @@ const corsOptions = {
   origin: true,
 };
 
-async function get_user_likes(uid) {
-  const user_doc = await (db.collection("Users").doc(uid)).get();
-
+async function get_user_likes_and_dislikes(uid) {
+  const user_doc = await db.collection("Users").doc(uid).get();
   const user_data = user_doc.data();
 
-  const user_likes = user_data.likes;
+  return {
+    user_likes: user_data.likes,
+    user_dislikes: user_data.dislikes
+  };
+}
 
-  return user_likes;
+
+function remove_from_dislikes(liked_user_uid, user_dislikes){
+  if(user_dislikes.includes(liked_user_uid)) {
+    user_dislikes = user_dislikes.filter(uid => uid !== liked_user_uid);
+  }
+
+  return user_dislikes;
 }
 
 function add_liked_user(liked_user_uid, user_likes) {
@@ -29,12 +38,11 @@ function add_liked_user(liked_user_uid, user_likes) {
   return user_likes;
 }
 
-async function update_user(uid, user_likes_updated) {
-  // Question: Should we get the user document again? Isn't that too many reads? How can we streamline this process?
+async function update_user(uid, user_likes_updated,user_dislikes_updated) {
   await db.collection("Users").doc(uid).update({
     likes: user_likes_updated,
+    dislikes: user_dislikes_updated,
   });
-  console.log("done");
 }
 
 async function check_if_user_likes_them(uid, liked_user_uid) {
@@ -61,13 +69,16 @@ const LikeUser = functions.region("asia-east2").https.onRequest(async (req, res)
     if (user_likes_them) res.status(204).send("New match");
 
     //get the user's likes array
-    const user_likes = await get_user_likes(user_uid);
+    const { user_likes, user_dislikes } = await get_user_likes_and_dislikes(user_uid);
+    
+    //get the user's dislikes array
+    const user_dislikes_updated = remove_from_dislikes(liked_user_uid,user_dislikes);
 
     // ToDo: Add liked_user_uid to the likes array of user_uid
     const user_likes_updated = add_liked_user(liked_user_uid, user_likes);
 
     //update the current user's document with the new array
-    await update_user(user_uid, user_likes_updated);
+    await update_user(user_uid, user_likes_updated,user_dislikes_updated);
 
     //send a notif to the liked user
     const payload = {

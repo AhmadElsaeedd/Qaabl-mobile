@@ -168,11 +168,11 @@ class InChatViewModel extends BaseViewModel {
   Future<Map<String, dynamic>> get_user_data(String uid) async {
     final response = await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
-      //testing url
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -192,11 +192,11 @@ class InChatViewModel extends BaseViewModel {
   Future<void> delete_chat(String match_id, String other_user_id) async {
     await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DeleteMatch'),
-      //testing url
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DeleteMatch'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
       body: jsonEncode({
         'match_id': match_id,
         'user1_id': uid,

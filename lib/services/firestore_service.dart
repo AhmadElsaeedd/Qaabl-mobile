@@ -25,10 +25,9 @@ class FirestoreService {
   //   print("Firestore settings: " + _firestore.settings.toString());
   // }
 
-  // FirestoreService() {
-  //   _firestore.useFirestoreEmulator('localhost', 8085);
-  //   print("I am using the emulator: " + _firestore.settings.toString());
-  // }
+  FirestoreService() {
+    _firestore.useFirestoreEmulator('localhost', 8085);
+  }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
     return _firestore
@@ -131,10 +130,10 @@ class FirestoreService {
     //final response =
     await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
       //testing url
-      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
+      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
       body: jsonEncode({
         'uid': uid,
         'chat_id': chat_id,

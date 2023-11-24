@@ -59,7 +59,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             .trackHomePageVisit(); // Call the tracking method when the model is ready
       },
       builder: (context, viewModel, child) {
-        Map<String, dynamic>? nextUser = viewModel.get_next_user();
+        if (viewModel.replaying == false) {
+          viewModel.nextUser = viewModel.get_next_user();
+        }
+        viewModel.replaying = false;
 
         // Reset and start the animation for the new user
         _animationController.reset();
@@ -75,18 +78,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                   Column(
                     children: [
                       _helloText(),
-                      if (nextUser != null) ...[
+                      if (viewModel.nextUser != null) ...[
                         Container(
                           child: Center(
-                            child: _userDetails(
-                                nextUser, viewModel, context, _slideAnimation),
+                            child: _userDetails(viewModel.nextUser, viewModel,
+                                context, _slideAnimation),
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 0),
                           child: Center(
                             child: check_profile_button(
-                                nextUser, viewModel, context),
+                                viewModel.nextUser, viewModel, context),
                           ),
                         ),
                       ] else if (viewModel.user_continues == false) ...[
@@ -133,7 +136,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                             ],
                           ),
                         )
-                      ] else if (nextUser == null &&
+                      ] else if (viewModel.nextUser == null &&
                           viewModel.no_more_users == false) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
@@ -222,8 +225,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget _userDetails(
       nextUser, viewModel, context, Animation<Offset> slideAnimation) {
     SwipeItem? swipeItem; // Declare swipeItem as nullable
-    // final Completer<MatchEngine> matchEngineCompleter =
-    //     Completer<MatchEngine>(); //completer to set it later
     final GlobalKey<_UserCardState> userCardKey = GlobalKey<_UserCardState>();
 
     // Define the callback outside of swipeItem
@@ -243,13 +244,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     swipeItem = SwipeItem(
         content:
             UserCard(nextUser, viewModel, context, slideAnimation, userCardKey),
-        // , matchEngineCompleter.future),
         likeAction: () {
-          // viewModel.skip_user(nextUser['id']);
           viewModel.like_user(nextUser['id'], nextUser['potential_match']);
         },
         nopeAction: () {
-          // viewModel.skip_user(nextUser['id']);
           viewModel.dislike_user(nextUser['id']);
         },
         onSlideUpdate: onSlideUpdateCallback
@@ -257,12 +255,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         );
 
     MatchEngine matchEngine = MatchEngine(swipeItems: [swipeItem]);
-    // matchEngineCompleter.complete(_matchEngine);
-    // print("MatchEngine Completed with Swipe Item: ${_matchEngine.currentItem}");
-
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   (userCardKey.currentState as _UserCardState).setMatchEngine(_matchEngine);
-    // });
 
     return Container(
       key: ValueKey(DateTime.now().millisecondsSinceEpoch),
@@ -446,7 +438,7 @@ Widget _bottomNavigationBar(viewModel) {
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
           onTap: () {
-            // viewModel.signOut();
+            viewModel.signOut();
           }, // Add your home action here
           child: Container(
               width: 70, // Adjust the width and height as needed
@@ -458,10 +450,10 @@ Widget _bottomNavigationBar(viewModel) {
                     BorderRadius.circular(40), // Rounded corner radius
                 boxShadow: [
                   const BoxShadow(
-                    color: Colors.black26, // Shadow color
-                    offset: Offset(0, 3), // Vertical offset
-                    blurRadius: 5.0, // Blur value
-                    spreadRadius: 1.0, // Spread value
+                    color: Colors.black26,
+                    offset: Offset(0, 3),
+                    blurRadius: 5.0,
+                    spreadRadius: 1.0,
                   ),
                 ],
               ),
@@ -510,7 +502,6 @@ class UserCard extends StatefulWidget {
   final context;
   final slideAnimation;
   final key;
-  //final Future<MatchEngine> setMatchEngine;
 
   UserCard(this.nextUser, this.viewModel, this.context, this.slideAnimation,
       this.key)
@@ -525,23 +516,6 @@ class _UserCardState extends State<UserCard> {
   String? feedback; // this variable will store the feedback "Like" or "Dislike"
   Color? feedbackColor;
   IconData? feedbackIcon;
-
-  // MatchEngine? matchEngine;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   widget.setMatchEngine.then((engine) {
-  //     setMatchEngine(engine);
-  //   });
-  // }
-
-  // void setMatchEngine(MatchEngine engine) {
-  //   print("Setting Match Engine: $engine");
-  //   setState(() {
-  //     matchEngine = engine;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -605,6 +579,25 @@ class _UserCardState extends State<UserCard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      showFeedback("Repeat");
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 400));
+                                      // widget.viewModel
+                                      //     .dislike_user(widget.nextUser['id']);
+                                      widget.viewModel.replay_user();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), // Rounded button
+                                      ),
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    child: const Icon(Icons.repeat_rounded,
+                                        color: Colors.yellow), // Close icon
+                                  ),
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Dislike");
@@ -676,7 +669,6 @@ class _UserCardState extends State<UserCard> {
   }
 
   void showFeedback(String feedbackText) {
-    print("I am showing feedback");
     setState(() {
       feedback = feedbackText;
       if (feedbackText == "Like") {
@@ -685,6 +677,9 @@ class _UserCardState extends State<UserCard> {
       } else if (feedbackText == "Dislike") {
         feedbackColor = Colors.black;
         feedbackIcon = Icons.thumb_down; // change this to your "dislike" icon
+      } else if (feedbackText == "Repeat") {
+        feedbackColor = Colors.black;
+        feedbackIcon = Icons.repeat_rounded;
       }
     });
   }

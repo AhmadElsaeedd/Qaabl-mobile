@@ -16,7 +16,7 @@
   ],
   "emulators": {
     "auth": {
-      "port": 9104
+      "port": 9106
     },
     "functions": {
       "port": 5003

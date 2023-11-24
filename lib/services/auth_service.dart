@@ -13,9 +13,9 @@ class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final _mixpanelService = locator<MixpanelService>();
 
-  // AuthenticationService() {
-  //   _firebaseAuth.useAuthEmulator('localhost', 9104);
-  // }
+  AuthenticationService() {
+    _firebaseAuth.useAuthEmulator('localhost', 9106);
+  }
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
 

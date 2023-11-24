@@ -31,8 +31,10 @@ class HomeViewModel extends BaseViewModel {
   bool no_more_users = false;
   bool user_continues = true;
   bool last_user = false;
+  bool replaying = false;
 
-  // Map<String, dynamic>? nextUser;
+  Map<String, dynamic>? previous_user;
+  Map<String, dynamic>? nextUser;
 
   // constructor runs whenever the page is loaded or reloaded
   HomeViewModel() {
@@ -60,18 +62,16 @@ class HomeViewModel extends BaseViewModel {
     try {
       final response = await http.post(
         //production url
-        Uri.parse(
-            'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
+        // Uri.parse(
+        //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
         //testing url
-        // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
+        Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
           'uid': uid,
           'users_queue_uids': user_Ids_in_queue.toList(),
         }),
         headers: {'Content-Type': 'application/json'},
       );
-      print("Went to cloud with response code: " +
-          response.statusCode.toString());
       //response of the function should contain 3 users with their UIDs and interests
       if (!(response.statusCode == 200 ||
           response.statusCode == 204 ||
@@ -90,17 +90,14 @@ class HomeViewModel extends BaseViewModel {
           String user_Id = user['id'];
           if (!(user_Ids_in_queue.contains(user_Id) ||
               seen_users.contains(user_Id))) {
-            print("Adding user to queue");
             users_queue.add(user);
             user_Ids_in_queue.add(user_Id);
             seen_users.add(user_Id);
           }
         }
       }
-      print("length of users queue: " + users_queue.length.toString());
 
       if (users_queue.isEmpty) {
-        print("here");
         no_more_users = true;
         rebuildUi();
       }
@@ -124,21 +121,15 @@ class HomeViewModel extends BaseViewModel {
   // function to get next user
   Map<String, dynamic>? get_next_user() {
     if (users_queue.length == 1) {
-      print("Down to last user");
       last_user = true;
       no_more_users = true;
-      return users_queue.removeFirst();
+      // return users_queue.removeFirst();
+      return users_queue.first;
     }
-    print("Users queue length: " + users_queue.length.toString());
     //when the queue is empty after the first load or there is no more users or user shouldnt continue
     if ((no_more_users == true) ||
         (users_queue.length == 0 && first_load == false) ||
         (user_continues == false)) {
-      print("Users queue length: " + users_queue.length.toString());
-      print("No more users: " + no_more_users.toString());
-      print("First load: " + first_load.toString());
-      print("User continues: " + user_continues.toString());
-      print("I am here");
       no_more_users == true;
       return null;
     }
@@ -146,20 +137,26 @@ class HomeViewModel extends BaseViewModel {
     if ((users_queue.length < 10 || first_load == true) &&
         (no_more_users == false) &&
         (last_user == false)) {
-      print("I am here trying to get users");
       getUsers();
     }
 
     //when queue has users, show the first user and banish them from existence
     if (users_queue.isNotEmpty && user_continues == true) {
-      print("I AM RETURNING A USER");
-      return users_queue.removeFirst();
+      // return users_queue.removeFirst();
+      return users_queue.first;
     }
     return null;
   }
 
+  void replay_user() {
+    replaying = true;
+    nextUser = previous_user;
+    rebuildUi();
+  }
+
   //function that likes a user, server-side
   Future<void> like_user(String liked_user_uid, bool potential_match) async {
+    if (liked_user_uid == users_queue.first['id']) users_queue.removeFirst();
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
     dynamic response;
@@ -189,17 +186,18 @@ class HomeViewModel extends BaseViewModel {
 
   //ToDo: function that dislikes a user, server-side
   Future<void> dislike_user(String disliked_user_uid) async {
+    previous_user = users_queue.removeFirst();
     //rebuild ui, meaning next user will be fetched
     rebuildUi();
     //call the cloud function that dislikes a user
     final response = await http.post(
       //add the url of the function here
       //production URL
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
-      //testing URL
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
+      //testing URL
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'disliked_user_uid': disliked_user_uid,
@@ -230,11 +228,11 @@ class HomeViewModel extends BaseViewModel {
     //function that creates a match between the 2 users, server-side
     final response = await http.post(
       //production URL
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
-      //testing URL
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
+      //testing URL
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
         'user1_uid': uid,
         'user2_uid': liked_user_uid,
@@ -250,10 +248,10 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
       //testing URL
-      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
+      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'liked_user_uid': liked_user_uid,
@@ -287,10 +285,25 @@ class HomeViewModel extends BaseViewModel {
       'viewedID': viewedID
       // Add other relevant properties here
     });
-
   }
 
   void trackHomePageVisit() {
     _mixpanelService.mixpanel.track('Visited home page');
+  }
+
+  Future signOut() async {
+    final success = await _authenticationService.signOut();
+    if (success) {
+      _navigationService.replaceWithLoginView();
+      _dialogService.showConfirmationDialog(
+        title: "Successful",
+        description: "Success.",
+      );
+    } else {
+      _dialogService.showConfirmationDialog(
+        title: "Unsuccessful",
+        description: "Unsuccessful.",
+      );
+    }
   }
 }

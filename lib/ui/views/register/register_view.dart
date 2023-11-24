@@ -44,7 +44,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
+                        padding: const EdgeInsets.symmetric(vertical: 0.0),
                         child: Column(
                           children: [
                             Text(

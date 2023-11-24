@@ -51,7 +51,6 @@ function should_user_continue(likes,dislikes,interests){
 // function that gets filtered users
 async function get_other_users(uid, likes, dislikes, matched_users, users_in_queue) {
   let filter_out_those = [];
-  console.log("users queue: ", users_in_queue);
   if(users_in_queue) {
     filter_out_those = [...new Set([...likes, ...dislikes, ...matched_users, ...users_in_queue, uid])];
   }
