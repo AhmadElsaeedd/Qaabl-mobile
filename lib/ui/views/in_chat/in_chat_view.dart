@@ -257,6 +257,12 @@ class _InChatViewState extends State<InChatView> {
                       //     ),
                       //   ),
                       return GestureDetector(
+                        onDoubleTap: isCurrentUser
+                            ? null // Disable long press for the current user's messages.
+                            : () {
+                                _showEmojiOptions(
+                                    viewModel, message, timestampString);
+                              },
                         onLongPress: isCurrentUser
                             ? null // Disable long press for the current user's messages.
                             : () {
@@ -296,7 +302,7 @@ class _InChatViewState extends State<InChatView> {
                                       ),
                                       SizedBox(height: 5.0),
                                       Text(
-                                        DateFormat('hh:mm a')
+                                        DateFormat('MM/dd/yyyy hh:mm a')
                                             .format(message.timestamp),
                                         style: TextStyle(
                                           fontSize: 10.0,

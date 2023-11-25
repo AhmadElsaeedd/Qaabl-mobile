@@ -420,6 +420,7 @@ void _showDropDown(BuildContext context, HomeViewModel viewModel) {
                   maxHeight: 200,
                 ),
                 child: ListView(
+                  reverse: true,
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   children: viewModel.user_notes?.map((note) {
@@ -430,7 +431,7 @@ void _showDropDown(BuildContext context, HomeViewModel viewModel) {
                           trailing: Text(
                             viewModel.formatTimestamp(note['timestamp']),
                             style: TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
                               color: Colors.grey,
                             ),
                           ),
@@ -605,7 +606,7 @@ Widget _bottomNavigationBar(viewModel) {
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
           onTap: () {
-            viewModel.signOut();
+            // viewModel.signOut();
           }, // Add your home action here
           child: Container(
               width: 70, // Adjust the width and height as needed
