@@ -16,18 +16,9 @@ class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _mixpanelService = locator<MixpanelService>();
 
-  // FirestoreService(){
-  //   _firestore.settings = const Settings(
-  //     host: 'localhost:8084',
-  //     sslEnabled: true,
-  //     persistenceEnabled: false,
-  //   );
-  //   print("Firestore settings: " + _firestore.settings.toString());
+  // FirestoreService() {
+  //   _firestore.useFirestoreEmulator('localhost', 8085);
   // }
-
-  FirestoreService() {
-    _firestore.useFirestoreEmulator('localhost', 8085);
-  }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
     return _firestore
