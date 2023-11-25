@@ -2,6 +2,7 @@
 
 //import 'package:stacked_app/app/app.bottomsheets.dart';
 //import 'package:stacked_app/app/app.dialogs.dart';
+import 'package:intl/intl.dart';
 import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/app/app.router.dart';
 import 'package:qaabl_mobile/services/auth_service.dart';
@@ -351,6 +352,18 @@ class HomeViewModel extends BaseViewModel {
         title: "Unsuccessful",
         description: "Unsuccessful.",
       );
+    }
+  }
+
+  String formatTimestamp(Map<String, dynamic> timestampMap) {
+    if (timestampMap.containsKey('_seconds')) {
+      var seconds = timestampMap['_seconds'];
+      var nanoseconds = timestampMap['_nanoseconds'] ?? 0;
+      var date = DateTime.fromMillisecondsSinceEpoch(seconds * 1000)
+          .add(Duration(microseconds: nanoseconds ~/ 1000));
+      return DateFormat('yyyy-MM-dd – HH:mm').format(date);
+    } else {
+      return 'Invalid Timestamp';
     }
   }
 }

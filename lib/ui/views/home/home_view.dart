@@ -11,6 +11,7 @@ import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'home_viewmodel.dart';
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 typedef ShowNoteDialogCallback = void Function(
     BuildContext, String, HomeViewModel);
@@ -372,12 +373,12 @@ Widget notification_icon(BuildContext context, HomeViewModel viewModel) {
 
   return InkWell(
     key: _iconKey, // Assign the global key to your InkWell
-    onTap: () => _showDropDown(context),
+    onTap: () => _showDropDown(context, viewModel),
     child: iconContent,
   );
 }
 
-void _showDropDown(BuildContext context) {
+void _showDropDown(BuildContext context, HomeViewModel viewModel) {
   final RenderBox renderBox =
       _iconKey.currentContext!.findRenderObject() as RenderBox;
   final Offset offset = renderBox.localToGlobal(Offset.zero);
@@ -411,30 +412,33 @@ void _showDropDown(BuildContext context) {
             top: offset.dy + renderBox.size.height,
             width: dropdownWidth, // Set the width of the dropdown.
             child: Material(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
               elevation: 4.0,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight:
-                      200, // Set the max height for the dropdown content.
+                  maxHeight: 200,
                 ),
                 child: ListView(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  children: <Widget>[
-                    ListTile(
-                      title: Text("Notification 1"),
+                  children: viewModel.user_notes!.map((note) {
+                    return ListTile(
+                      title: Text(
+                          "someone left u this note: " + note['content'],
+                          style: TextStyle(fontWeight: FontWeight.w500)),
+                      trailing: Text(
+                        viewModel.formatTimestamp(note['timestamp']),
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Colors.grey,
+                        ),
+                      ),
                       onTap: () {
                         overlayEntry.remove();
                       },
-                    ),
-                    ListTile(
-                      title: Text("Notification 2"),
-                      onTap: () {
-                        overlayEntry.remove();
-                      },
-                    ),
-                    // ... other list tiles
-                  ],
+                    );
+                  }).toList(),
                 ),
               ),
             ),
