@@ -606,7 +606,7 @@ Widget _bottomNavigationBar(viewModel) {
         bottom: 10, // Adjust the value as needed to position the logo
         child: GestureDetector(
           onTap: () {
-            // viewModel.signOut();
+            viewModel.signOut();
           }, // Add your home action here
           child: Container(
               width: 70, // Adjust the width and height as needed

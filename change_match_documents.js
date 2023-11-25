@@ -8,24 +8,21 @@ admin.initializeApp({
 const db = admin.firestore();
 
 async function updateDocuments() {
-  const matchesRef = db.collection('Matches');
-  const snapshot = await matchesRef.where('has_message', '==', true).get();
+  const usersRef = db.collection('Users');
+  const batch = db.batch();
 
-  if (snapshot.empty) {
-    console.log('No matching documents.');
-    return;
-  }  
-
-  let batch = db.batch();
-
-  snapshot.docs.forEach(doc => {
-    const lastMessage = doc.data().last_message;
-    if (lastMessage && lastMessage.timestamp) {
-      const lastMessageTimestamp = lastMessage.timestamp;
-      batch.set(doc.ref, { last_message_timestamp: lastMessageTimestamp }, { merge: true });
-    }
+  // Fetch all user documents
+  const snapshot = await usersRef.get();
+  
+  snapshot.forEach(doc => {
+    // Add 'super_likes' and 'notes' arrays to each user
+    batch.update(doc.ref, { 
+      super_likes: [],  // Initialize 'super_likes' as an empty array
+      notes: []  // Initialize 'notes' as an empty array
+    });
   });
 
+  // Commit the batch
   await batch.commit();
   console.log('Batch update completed.');
 }

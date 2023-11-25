@@ -123,10 +123,10 @@ class FirestoreService {
     //final response =
     await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
       //testing url
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
+      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
       body: jsonEncode({
         'uid': uid,
         'chat_id': chat_id,
@@ -207,6 +207,7 @@ class FirestoreService {
   }
 
   Future<bool> is_document_there(String uid) async {
+    print("uid of caller is: " + uid);
     DocumentReference user_doc_ref = _firestore.collection('Users').doc(uid);
     DocumentSnapshot user_doc_snapshot = await user_doc_ref.get();
     bool doc_exists;
