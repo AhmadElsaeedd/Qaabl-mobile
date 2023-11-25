@@ -98,7 +98,6 @@ class FirestoreService {
         futures.add(future);
       }
       final matches = await Future.wait(futures);
-      print("number of new matches: ${matches.length}");
       return matches;
     }).handleError((error) {
       print("Error fetching new matches: $error");
@@ -108,8 +107,11 @@ class FirestoreService {
   // ignore: non_constant_identifier_names
   Future<Map<String, dynamic>> get_user_info(String uid) async {
     try {
+      print("The uid is: " + uid);
       final doc = await _firestore.collection('Users').doc(uid).get();
+      print("Doc is: " + doc.toString());
       if (doc.exists) {
+        print("I am here");
         final data = doc.data() as Map<String, dynamic>;
         String name = data['name'] ?? 'No Name';
         int imageIndex = data['image_index'];

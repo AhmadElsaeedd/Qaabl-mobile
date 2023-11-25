@@ -422,23 +422,32 @@ void _showDropDown(BuildContext context, HomeViewModel viewModel) {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  children: viewModel.user_notes!.map((note) {
-                    return ListTile(
-                      title: Text(
-                          "someone left u this note: " + note['content'],
-                          style: TextStyle(fontWeight: FontWeight.w500)),
-                      trailing: Text(
-                        viewModel.formatTimestamp(note['timestamp']),
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      onTap: () {
-                        overlayEntry.remove();
-                      },
-                    );
-                  }).toList(),
+                  children: viewModel.user_notes?.map((note) {
+                        return ListTile(
+                          title: Text(
+                              "someone left u this note: " + note['content'],
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          trailing: Text(
+                            viewModel.formatTimestamp(note['timestamp']),
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          onTap: () {
+                            overlayEntry.remove();
+                          },
+                        );
+                      }).toList() ??
+                      [
+                        ListTile(
+                          title: Text("no notifications yet",
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          onTap: () {
+                            overlayEntry.remove();
+                          },
+                        )
+                      ],
                 ),
               ),
             ),
@@ -724,6 +733,7 @@ class _UserCardState extends State<UserCard> {
                                     child: const Icon(Icons.repeat_rounded,
                                         color: Colors.yellow), // Close icon
                                   ),
+                                  //Make this button bigger
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Dislike");
@@ -733,6 +743,7 @@ class _UserCardState extends State<UserCard> {
                                           .dislike_user(widget.nextUser['id']);
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      minimumSize: Size(40, 50),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             30), // Rounded button
@@ -742,6 +753,7 @@ class _UserCardState extends State<UserCard> {
                                     child: const Icon(Icons.thumb_down,
                                         color: Colors.black), // Close icon
                                   ),
+                                  //Make this button bigger
                                   ElevatedButton(
                                     onPressed: () async {
                                       showFeedback("Like");
@@ -753,6 +765,7 @@ class _UserCardState extends State<UserCard> {
                                           "like");
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      minimumSize: Size(40, 50),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             30), // Rounded button
