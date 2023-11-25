@@ -79,18 +79,38 @@ function remove_user_from_likes(user1_likes, user2_likes, user1_uid, user2_uid) 
   return {user1_likes, user2_likes};
 }
 
+function remove_user_from_super_likes(user1_super_likes, user2_super_likes, user1_uid, user2_uid) {
+  // Remove user2_uid from user1_likes if it exists
+  // find its index first
+  const index1 = user1_super_likes.indexOf(user2_uid);
+  if (index1 !== -1) {
+    // delete it if it exists
+    user1_super_likes.splice(index1, 1);
+  }
 
-async function update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches, user1_uid, user2_uid) {
+  // Remove user1_uid from user2_likes if it exists
+  const index2 = user2_super_likes.indexOf(user1_uid);
+  if (index2 !== -1) {
+    user2_super_likes.splice(index2, 1);
+  }
+
+  return {user1_super_likes, user2_super_likes};
+}
+
+
+async function update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches,user1_super_likes,user2_super_likes, user1_uid, user2_uid) {
   const user1UpdatePromise = db.collection("Users").doc(user1_uid).update({
     matched_users: user1_matched_users,
     matches: user1_matches,
     likes: user1_likes,
+    super_likes: user1_super_likes,
   });
 
   const user2UpdatePromise = db.collection("Users").doc(user2_uid).update({
     matched_users: user2_matched_users,
     matches: user2_matches,
     likes: user2_likes,
+    super_likes: user2_super_likes,
   });
 
   await Promise.all([user1UpdatePromise, user2UpdatePromise]);
@@ -111,6 +131,8 @@ const CreateMatch = functions.region("asia-east2").https.onRequest(async (req, r
     // remove them from each other's likes, if they exist
     const {user1_likes, user2_likes} = remove_user_from_likes(user1_data.likes, user2_data.likes, user1_uid, user2_uid);
 
+    const {user1_super_likes, user2_super_likes} = remove_user_from_super_likes(user1_data.super_likes, user2_data.super_likes, user1_uid, user2_uid);
+
     // create match
     const match_id = await create_match(user1_uid, user2_uid);
 
@@ -118,7 +140,7 @@ const CreateMatch = functions.region("asia-east2").https.onRequest(async (req, r
     const {user1_matches, user2_matches} = update_matches(user1_data.matches, user2_data.matches, match_id);
 
     // update both with new arrays
-    const done = await update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches, user1_uid, user2_uid);
+    const done = await update_users(user1_likes, user2_likes, user1_matched_users, user2_matched_users, user1_matches, user2_matches,user1_super_likes, user2_super_likes, user1_uid, user2_uid);
 
     const payload = {
       notification: {
