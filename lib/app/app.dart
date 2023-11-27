@@ -17,6 +17,7 @@ import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:qaabl_mobile/services/messaging_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
 import 'package:qaabl_mobile/ui/views/onboarding/onboarding_view.dart';
+import 'package:qaabl_mobile/ui/views/avatar/avatar_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -32,6 +33,7 @@ import 'package:qaabl_mobile/ui/views/onboarding/onboarding_view.dart';
     MaterialRoute(page: ChatsView),
     MaterialRoute(page: InChatView),
     MaterialRoute(page: OnboardingView),
+    MaterialRoute(page: AvatarView),
 // @stacked-route
   ],
   dependencies: [

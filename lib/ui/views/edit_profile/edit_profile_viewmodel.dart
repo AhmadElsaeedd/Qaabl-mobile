@@ -42,11 +42,11 @@ class EditProfileViewModel extends BaseViewModel {
     //get the values from the input fields and go update the values in the cloud
     final response = await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
-      //testing url
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
       body: jsonEncode({
         'uid': uid,
         'name': name,
@@ -71,6 +71,10 @@ class EditProfileViewModel extends BaseViewModel {
 
   void go_to_home() {
     _navigationService.replaceWithHomeView();
+  }
+
+  void go_to_avatar() {
+    _navigationService.navigateToAvatarView();
   }
 
   void back_to_profile(response) async {
@@ -106,11 +110,11 @@ class EditProfileViewModel extends BaseViewModel {
     //call the function from the cloud
     final response = await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
-      //testing url
       // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      //testing url
+      Uri.parse(
+          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),

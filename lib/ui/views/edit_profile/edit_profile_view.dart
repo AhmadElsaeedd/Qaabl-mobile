@@ -100,7 +100,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ? const Color(0xFF3439AB)
                           : Colors.transparent,
                       onTap: () {
-                        print('interest');
                         model.toggleInterestSelection(interest);
                         setState(() {});
                       },
@@ -174,7 +173,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ? const Color(0xFF3439AB)
                           : Colors.transparent,
                       onTap: () {
-                        print("aspiration clicked: " + aspiration);
                         model.toggleAspirationSelection(aspiration);
                         setState(() {});
                       },
@@ -263,39 +261,52 @@ class _EditProfileViewState extends State<EditProfileView> {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          ValueListenableBuilder<int>(
-                            valueListenable: selectedImageNotifier,
-                            builder: (context, value, child) => GestureDetector(
-                              onTap: () async {
-                                int? chosenIndex = await showDialog<int>(
-                                  context: context,
-                                  builder: (context) => ImageChooserDialog(),
-                                );
-                                if (chosenIndex != null) {
-                                  selectedImageNotifier.value =
-                                      chosenIndex; // Set the new value
-                                  model.user_data['image_index'] = chosenIndex;
-                                  model.chose_avatar(
-                                      model.user_data['image_index']);
-                                }
-                              },
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'lib/assets/$value.png',
-                                    height: 200,
-                                  ), // Use the value
-                                  const Text(
-                                    'edit your avatar',
-                                    style: TextStyle(
-                                      color: Color(0xFF3439AB),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                          CupertinoButton(
+                            onPressed: () {
+                              //go to the new view
+                              model.go_to_avatar();
+                            },
+                            child: const Text(
+                              'create your avatar',
+                              style: TextStyle(
+                                color: Color(0xFF3439AB),
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
+                          // ValueListenableBuilder<int>(
+                          //   valueListenable: selectedImageNotifier,
+                          //   builder: (context, value, child) => GestureDetector(
+                          //     onTap: () async {
+                          //       int? chosenIndex = await showDialog<int>(
+                          //         context: context,
+                          //         builder: (context) => ImageChooserDialog(),
+                          //       );
+                          //       if (chosenIndex != null) {
+                          //         selectedImageNotifier.value =
+                          //             chosenIndex; // Set the new value
+                          //         model.user_data['image_index'] = chosenIndex;
+                          //         model.chose_avatar(
+                          //             model.user_data['image_index']);
+                          //       }
+                          //     },
+                          //     child: Column(
+                          //       children: [
+                          //         Image.asset(
+                          //           'lib/assets/$value.png',
+                          //           height: 200,
+                          //         ), // Use the value
+                          //         const Text(
+                          //           'edit your avatar',
+                          //           style: TextStyle(
+                          //             color: Color(0xFF3439AB),
+                          //             fontWeight: FontWeight.w500,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           TextField(
                             controller: nameController,
                             decoration:

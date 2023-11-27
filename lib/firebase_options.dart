@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '503928826320',
     projectId: 'qaabl-mobile-dev',
     storageBucket: 'qaabl-mobile-dev.appspot.com',
-    androidClientId: '503928826320-un15kb3kcn4dmrolgeodhurcjgbspmsc.apps.googleusercontent.com',
-    iosClientId: '503928826320-eoba3uml5valie6ur5emu0q3dq8l8mhb.apps.googleusercontent.com',
+    androidClientId:
+        '503928826320-un15kb3kcn4dmrolgeodhurcjgbspmsc.apps.googleusercontent.com',
+    iosClientId:
+        '503928826320-eoba3uml5valie6ur5emu0q3dq8l8mhb.apps.googleusercontent.com',
     iosBundleId: 'com.example.qaablMobile',
   );
 }

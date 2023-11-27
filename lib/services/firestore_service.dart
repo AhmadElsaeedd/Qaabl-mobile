@@ -16,9 +16,9 @@ class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _mixpanelService = locator<MixpanelService>();
 
-  // FirestoreService() {
-  //   _firestore.useFirestoreEmulator('localhost', 8085);
-  // }
+  FirestoreService() {
+    _firestore.useFirestoreEmulator('10.225.67.17', 8085);
+  }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
     return _firestore
@@ -123,10 +123,12 @@ class FirestoreService {
     //final response =
     await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/AddMessage'),
       //testing url
       // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
+      Uri.parse(
+          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
       body: jsonEncode({
         'uid': uid,
         'chat_id': chat_id,
@@ -142,10 +144,13 @@ class FirestoreService {
       String chat_id, String reaction, String content) async {
     await http.post(
       //production url
-      Uri.parse(
-          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/MessageReaction'),
+      // Uri.parse(
+      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/MessageReaction'),
       //testing url
-      // Uri.parse(''),
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/MessageReaction'),
+      Uri.parse(
+          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/MessageReaction'),
       body: jsonEncode({
         'reaction': reaction,
         'chat_id': chat_id,

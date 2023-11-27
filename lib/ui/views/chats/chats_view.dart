@@ -203,7 +203,6 @@ class ChatsView extends StackedView<ChatsViewModel> {
         ),
       ),
     );
-
   }
 
   @override
