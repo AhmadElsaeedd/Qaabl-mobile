@@ -54,6 +54,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>We'll only use the camera once to generate a unique avatar for you when you want!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We don't really need ur mic, but the app will crash if we don't get your consent to use the mic. Lol.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -17,14 +18,33 @@ class AvatarView extends StackedView<AvatarViewModel> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        // padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: Column(
+        child: Stack(
           children: [
-            const Text(
-              "Your Avatar",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w900,
+            // Positioned Text at the top
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: const Text(
+                "Your Avatar",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            // Centered Camera Preview
+            Center(
+              child: SizedBox(
+                height: 350,
+                width: 200,
+                child: viewModel.cameraController == null ||
+                        !viewModel.cameraController!.value.isInitialized
+                    ? const Center(child: CircularProgressIndicator())
+                    : ClipOval(
+                        child: CameraPreview(viewModel.cameraController!),
+                      ),
               ),
             ),
           ],

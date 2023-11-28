@@ -3,8 +3,15 @@ import 'package:stacked/stacked.dart';
 
 class AvatarViewModel extends BaseViewModel {
   CameraController? cameraController;
+  bool _is_camera_initialized = false;
 
   Future<void> initializeCamera() async {
+    if (_is_camera_initialized) {
+      // Camera is already initialized.
+      print("camera is already initialized");
+      return;
+    }
+
     // Obtain a list of the available cameras on the device.
     final cameras = await availableCameras();
 
@@ -19,9 +26,11 @@ class AvatarViewModel extends BaseViewModel {
       ResolutionPreset.medium,
     );
 
-    // Next, you need to initialize the controller. This returns a Future.
+    // Initialize the controller.
     await cameraController!.initialize();
-    notifyListeners();
+    _is_camera_initialized = true;
+    print("Camera initialized");
+    rebuildUi();
   }
 
   @override

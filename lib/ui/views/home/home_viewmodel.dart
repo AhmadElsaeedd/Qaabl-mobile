@@ -285,8 +285,10 @@ class HomeViewModel extends BaseViewModel {
       // Uri.parse(
       //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
       //testing URL
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
+          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
         'user1_uid': uid,
         'user2_uid': liked_user_uid,
@@ -306,7 +308,9 @@ class HomeViewModel extends BaseViewModel {
       // Uri.parse(
       //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
       //testing URL
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
+      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
+      Uri.parse(
+          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'liked_user_uid': liked_user_uid,
