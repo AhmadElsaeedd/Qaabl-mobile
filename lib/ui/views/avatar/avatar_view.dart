@@ -1,11 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:qaabl_mobile/ui/views/avatar/detector_view.dart';
 import 'package:stacked/stacked.dart';
 
 import 'avatar_viewmodel.dart';
 
 class AvatarView extends StackedView<AvatarViewModel> {
-  const AvatarView({Key? key}) : super(key: key);
+  AvatarView({Key? key}) : super(key: key);
+
+  final GlobalKey detectorKey = GlobalKey();
 
   @override
   Widget builder(
@@ -13,7 +16,12 @@ class AvatarView extends StackedView<AvatarViewModel> {
     AvatarViewModel viewModel,
     Widget? child,
   ) {
-    viewModel.initializeCamera();
+    viewModel.onCaptureRequested = () {
+      // Use the correct key type and method call.
+      final DetectorViewState? detectorViewState =
+          detectorKey.currentState as DetectorViewState?;
+      detectorViewState?.captureImage();
+    };
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -36,17 +44,85 @@ class AvatarView extends StackedView<AvatarViewModel> {
             ),
             // Centered Camera Preview
             Center(
-              child: SizedBox(
-                height: 350,
-                width: 200,
-                child: viewModel.cameraController == null ||
-                        !viewModel.cameraController!.value.isInitialized
-                    ? const Center(child: CircularProgressIndicator())
-                    : ClipOval(
-                        child: CameraPreview(viewModel.cameraController!),
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (viewModel.size_is_good == 0) ...[
+                  Text(
+                    "bring ur face on camera!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ] else if (viewModel.size_is_good == 1) ...[
+                  Text(
+                    "yes, perfect!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ] else if (viewModel.size_is_good == 2) ...[
+                  Text(
+                    "come closer pls :)",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ] else if (viewModel.size_is_good == 3) ...[
+                  Text(
+                    "give the phone some space pls :)",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                    height: 500,
+                    width: 350,
+                    child: ClipOval(
+                      child: DetectorView(
+                        key: detectorKey,
+                        title: 'Face Detector',
+                        customPaint: viewModel.customPaint,
+                        text: viewModel.text,
+                        onImage: viewModel.processImage,
+                        initialCameraLensDirection:
+                            viewModel.cameraLensDirection,
+                        onCameraLensDirectionChanged: (value) =>
+                            viewModel.cameraLensDirection = value,
                       ),
-              ),
-            ),
+                    )),
+                SizedBox(
+                  height: 5,
+                ),
+                if (viewModel.smile == 0) ...[
+                  Text(""),
+                ] else if (viewModel.smile == 1) ...[
+                  Text(
+                    "we'd love a smile from u!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ] else if (viewModel.smile == 2) ...[
+                  Text(
+                    "yes, beautiful!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ]
+              ],
+            )),
           ],
         ),
       ),

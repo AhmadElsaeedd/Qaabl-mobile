@@ -200,7 +200,7 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i13.AvatarView: (data) {
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i13.AvatarView(),
+        builder: (context) => _i13.AvatarView(),
         settings: data,
       );
     },
