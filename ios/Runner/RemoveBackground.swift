@@ -11,9 +11,10 @@ import UIKit
 private let apiKey: String = "3a4cc03da3c222cf47eb8f3fefd3da4747e8f3b6"
 
 private enum K {
-    static let hostURL = URL(string: "https://sdk.photoroom.com/v1/segment")!
+    static let hostURL = URL(string: "https://beta-sdk.photoroom.com/v1/render")!
 }
 
+//Rename this function
 public func removeBackground(
     of image: UIImage
 ) async throws -> UIImage {
@@ -41,10 +42,12 @@ public func removeBackground(
     let scale = image.scaled(maxDimensions: CGSize(width: 1000, height: 1000))
     let scaledImage = image.scaled(by: scale)
 
-    guard let media = Media(withImage: scaledImage, forKey: "image_file") else {
+    // Example, assuming you have a templateId value
+    guard let media = Media(withImage: scaledImage, templateId: "0a45d080-1d41-4ac7-a237-9784e671988a") else {
         completionHandler(.failure(.invalidData))
         return
     }
+
 
     let boundary = generateBoundary()
     let body = createDataBody(with: media, boundary: boundary)
@@ -109,26 +112,36 @@ private func createDataBody(with media: Media, boundary: String) -> Data {
     let lineBreak = "\r\n"
     var body = Data()
 
+    // Image file section
     body.appendString("--\(boundary + lineBreak)")
     body.appendString("Content-Disposition: form-data; name=\"\(media.key)\"; filename=\"\(media.fileName)\"\(lineBreak)")
     body.appendString("Content-Type: \(media.mimeType + lineBreak + lineBreak)")
     body.append(media.data)
     body.appendString(lineBreak)
+
+    // Template ID section
+    body.appendString("--\(boundary + lineBreak)")
+    body.appendString("Content-Disposition: form-data; name=\"templateId\"\(lineBreak + lineBreak)")
+    body.appendString("\(media.templateId)\(lineBreak)")
+
     body.appendString("--\(boundary)--\(lineBreak)")
 
     return body
 }
+
 
 private struct Media {
     let key: String
     let fileName: String
     let data: Data
     let mimeType: String
+    let templateId: String // Add this line
 
-    init?(withImage image: UIImage, forKey key: String) {
-        self.key = key
+    init?(withImage image: UIImage, templateId: String) {
+        self.key = "imageFile" // Changed from variable to fixed string
         self.mimeType = "image/jpg"
         self.fileName = "\(arc4random()).jpeg"
+        self.templateId = templateId // Assign the passed templateId
 
         guard let data = image.jpegData(compressionQuality: 0.7) else { return nil }
         self.data = data
