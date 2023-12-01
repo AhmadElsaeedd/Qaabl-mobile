@@ -199,8 +199,11 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i13.AvatarView: (data) {
+      final args = data.getArgs<AvatarViewArguments>(
+        orElse: () => const AvatarViewArguments(),
+      );
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => _i13.AvatarView(),
+        builder: (context) => _i13.AvatarView(key: args.key),
         settings: data,
       );
     },
@@ -319,6 +322,28 @@ class InChatViewArguments {
         username.hashCode ^
         userpic.hashCode ^
         otheruser_id.hashCode;
+  }
+}
+
+class AvatarViewArguments {
+  const AvatarViewArguments({this.key});
+
+  final _i14.Key? key;
+
+  @override
+  String toString() {
+    return '{"key": "$key"}';
+  }
+
+  @override
+  bool operator ==(covariant AvatarViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode;
   }
 }
 
@@ -494,14 +519,16 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToAvatarView([
+  Future<dynamic> navigateToAvatarView({
+    _i14.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.avatarView,
+        arguments: AvatarViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -679,14 +706,16 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithAvatarView([
+  Future<dynamic> replaceWithAvatarView({
+    _i14.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.avatarView,
+        arguments: AvatarViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

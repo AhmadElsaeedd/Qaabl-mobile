@@ -15,6 +15,7 @@ import '../services/auth_service.dart';
 import '../services/firestore_service.dart';
 import '../services/messaging_service.dart';
 import '../services/mixpanel_service.dart';
+import '../services/photo_room_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -34,4 +35,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => FirestoreService());
   locator.registerLazySingleton(() => MessagingService());
   locator.registerLazySingleton(() => MixpanelService());
+  locator.registerLazySingleton(() => PhotoRoomService());
 }

@@ -47,7 +47,17 @@ class AvatarView extends StackedView<AvatarViewModel> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (viewModel.size_is_good == 0) ...[
+                if (viewModel.image_captured == true) ...[
+                  Text(
+                    "working our magic!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+                if (viewModel.size_is_good == 0 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "bring ur face on camera!",
                     style: TextStyle(
@@ -55,7 +65,8 @@ class AvatarView extends StackedView<AvatarViewModel> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ] else if (viewModel.size_is_good == 1) ...[
+                ] else if (viewModel.size_is_good == 1 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "yes, perfect!",
                     style: TextStyle(
@@ -63,7 +74,8 @@ class AvatarView extends StackedView<AvatarViewModel> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ] else if (viewModel.size_is_good == 2) ...[
+                ] else if (viewModel.size_is_good == 2 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "come closer pls :)",
                     style: TextStyle(
@@ -71,7 +83,8 @@ class AvatarView extends StackedView<AvatarViewModel> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ] else if (viewModel.size_is_good == 3) ...[
+                ] else if (viewModel.size_is_good == 3 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "give the phone some space pls :)",
                     style: TextStyle(
@@ -104,7 +117,8 @@ class AvatarView extends StackedView<AvatarViewModel> {
                 ),
                 if (viewModel.smile == 0) ...[
                   Text(""),
-                ] else if (viewModel.smile == 1) ...[
+                ] else if (viewModel.smile == 1 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "we'd love a smile from u!",
                     style: TextStyle(
@@ -112,7 +126,8 @@ class AvatarView extends StackedView<AvatarViewModel> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ] else if (viewModel.smile == 2) ...[
+                ] else if (viewModel.smile == 2 &&
+                    viewModel.image_captured == false) ...[
                   Text(
                     "yes, beautiful!",
                     style: TextStyle(

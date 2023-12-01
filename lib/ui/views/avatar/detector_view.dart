@@ -48,7 +48,7 @@ class DetectorViewState extends State<DetectorView> {
 
   Future<void> captureImage() async {
     final currentState = cameraViewKey.currentState;
-    if (currentState is DetectorViewState) {
+    if (currentState is CameraViewState) {
       currentState.captureImage();
     }
   }

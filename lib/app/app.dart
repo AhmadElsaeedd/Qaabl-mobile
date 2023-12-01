@@ -18,6 +18,7 @@ import 'package:qaabl_mobile/services/messaging_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
 import 'package:qaabl_mobile/ui/views/onboarding/onboarding_view.dart';
 import 'package:qaabl_mobile/ui/views/avatar/avatar_view.dart';
+import 'package:qaabl_mobile/services/photo_room_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -44,6 +45,7 @@ import 'package:qaabl_mobile/ui/views/avatar/avatar_view.dart';
     LazySingleton(classType: FirestoreService),
     LazySingleton(classType: MessagingService),
     LazySingleton(classType: MixpanelService),
+    LazySingleton(classType: PhotoRoomService),
 // @stacked-service
   ],
   bottomsheets: [

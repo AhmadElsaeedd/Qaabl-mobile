@@ -6,6 +6,7 @@ import 'package:qaabl_mobile/services/auth_service.dart';
 import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:qaabl_mobile/services/messaging_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
+import 'package:qaabl_mobile/services/photo_room_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -18,6 +19,8 @@ import 'test_helpers.mocks.dart';
   MockSpec<FirestoreService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<MessagingService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<MixpanelService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<AvatarService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<PhotoRoomService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -28,6 +31,8 @@ void registerServices() {
   getAndRegisterFirestoreService();
   getAndRegisterMessagingService();
   getAndRegisterMixpanelService();
+  getAndRegisterAvatarService();
+  getAndRegisterPhotoRoomService();
 // @stacked-mock-register
 }
 
@@ -106,6 +111,13 @@ MockMixpanelService getAndRegisterMixpanelService() {
   _removeRegistrationIfExists<MixpanelService>();
   final service = MockMixpanelService();
   locator.registerSingleton<MixpanelService>(service);
+  return service;
+}
+
+MockPhotoRoomService getAndRegisterPhotoRoomService() {
+  _removeRegistrationIfExists<PhotoRoomService>();
+  final service = MockPhotoRoomService();
+  locator.registerSingleton<PhotoRoomService>(service);
   return service;
 }
 // @stacked-mock-create

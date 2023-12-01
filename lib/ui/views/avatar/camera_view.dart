@@ -1,9 +1,12 @@
 import 'dart:io';
-
+import 'dart:math';
+import 'package:injectable/injectable.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:qaabl_mobile/app/app.locator.dart';
+import 'package:qaabl_mobile/services/photo_room_service.dart';
 
 class CameraView extends StatefulWidget {
   CameraView(
@@ -24,10 +27,11 @@ class CameraView extends StatefulWidget {
   final CameraLensDirection initialCameraLensDirection;
 
   @override
-  State<CameraView> createState() => _CameraViewState();
+  State<CameraView> createState() => CameraViewState();
 }
 
-class _CameraViewState extends State<CameraView> {
+class CameraViewState extends State<CameraView> {
+  File? _capturedImage;
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
@@ -38,6 +42,7 @@ class _CameraViewState extends State<CameraView> {
   double _maxAvailableExposureOffset = 0.0;
   double _currentExposureOffset = 0.0;
   bool _changingCameraLens = false;
+  int? captured_or_processed;
 
   @override
   void initState() {
@@ -51,8 +56,30 @@ class _CameraViewState extends State<CameraView> {
       // Assuming you want to take a picture and do something with it
       try {
         final XFile imageFile = await _controller!.takePicture();
-        print("HERE");
+
+        //ToDo: stop the camera from running
+        _stopLiveFeed();
+
+        setState(() {
+          captured_or_processed = 1;
+          _capturedImage = File(imageFile.path);
+        });
         // Process the image file as needed
+
+        final String processedImagePath =
+            await PhotoRoomService.processImage(imageFile.path);
+        print("processed image path: " + processedImagePath.toString());
+        setState(() {
+          captured_or_processed = 2;
+          _capturedImage = File(processedImagePath);
+        });
+
+        // Get the path of the captured image
+        String imagePath = imageFile.path;
+        print("Image path is: " + imagePath);
+
+        // Optionally, you can convert the XFile to a Dart File if you need to
+        File image = File(imagePath);
       } catch (e) {
         // Handle exception
       }
@@ -74,6 +101,30 @@ class _CameraViewState extends State<CameraView> {
     }
   }
 
+  Widget _buildCapturedImage() {
+    if (captured_or_processed == 1) {
+      bool isFrontCamera =
+          _cameras[_cameraIndex].lensDirection == CameraLensDirection.front;
+      Matrix4 matrix = Matrix4.identity();
+      if (isFrontCamera) {
+        // Flip horizontally
+        matrix = Matrix4.rotationY(pi);
+      }
+
+      return Transform(
+        alignment: Alignment.center,
+        transform: matrix,
+        child: Image.file(_capturedImage!),
+      );
+    } else if (captured_or_processed == 2) {
+      return Transform.rotate(
+        angle: pi / 2,
+        child: Image.file(_capturedImage!),
+      );
+    }
+    return Container();
+  }
+
   @override
   void dispose() {
     _stopLiveFeed();
@@ -82,20 +133,24 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _liveFeedBody());
+    return Scaffold(
+      body: _liveFeedBody(),
+    );
   }
 
   Widget _liveFeedBody() {
-    if (_cameras.isEmpty) {
-      print("camera is empty");
-      return Container();
+    if (_capturedImage != null) {
+      return Center(
+        child: ClipOval(
+          child: _buildCapturedImage(),
+        ),
+      );
     }
-    if (_controller == null) {
-      print("controller is null");
-      return Container();
-    }
-    if (_controller?.value.isInitialized == false) {
-      print("condition 3");
+
+    // If no image has been captured yet, continue showing the camera preview
+    if (_cameras.isEmpty ||
+        _controller == null ||
+        _controller?.value.isInitialized == false) {
       return Container();
     }
     return Container(
@@ -104,180 +159,14 @@ class _CameraViewState extends State<CameraView> {
         fit: StackFit.expand,
         children: <Widget>[
           Center(
-            child:
-                // _changingCameraLens
-                //     ? Center(
-                //         child: const Text('Changing camera lens'),
-                //       )
-                //     :
-                CameraPreview(
-              _controller!,
-              child: widget.customPaint,
+            child: ClipOval(
+              child: CameraPreview(_controller!),
             ),
           ),
-          // _backButton(),
-          // _switchLiveCameraToggle(),
-          // _detectionViewModeToggle(),
-          // _zoomControl(),
-          // _exposureControl(),
         ],
       ),
     );
   }
-
-  Widget _backButton() => Positioned(
-        top: 40,
-        left: 8,
-        child: SizedBox(
-          height: 50.0,
-          width: 50.0,
-          child: FloatingActionButton(
-            heroTag: Object(),
-            onPressed: () => Navigator.of(context).pop(),
-            backgroundColor: Colors.black54,
-            child: Icon(
-              Icons.arrow_back_ios_outlined,
-              size: 20,
-            ),
-          ),
-        ),
-      );
-
-  Widget _detectionViewModeToggle() => Positioned(
-        bottom: 8,
-        left: 8,
-        child: SizedBox(
-          height: 50.0,
-          width: 50.0,
-          child: FloatingActionButton(
-            heroTag: Object(),
-            onPressed: widget.onDetectorViewModeChanged,
-            backgroundColor: Colors.black54,
-            child: Icon(
-              Icons.photo_library_outlined,
-              size: 25,
-            ),
-          ),
-        ),
-      );
-
-  Widget _switchLiveCameraToggle() => Positioned(
-        bottom: 8,
-        right: 8,
-        child: SizedBox(
-          height: 50.0,
-          width: 50.0,
-          child: FloatingActionButton(
-            heroTag: Object(),
-            onPressed: _switchLiveCamera,
-            backgroundColor: Colors.black54,
-            child: Icon(
-              Platform.isIOS
-                  ? Icons.flip_camera_ios_outlined
-                  : Icons.flip_camera_android_outlined,
-              size: 25,
-            ),
-          ),
-        ),
-      );
-
-  Widget _zoomControl() => Positioned(
-        bottom: 16,
-        left: 0,
-        right: 0,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 250,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Slider(
-                    value: _currentZoomLevel,
-                    min: _minAvailableZoom,
-                    max: _maxAvailableZoom,
-                    activeColor: Colors.white,
-                    inactiveColor: Colors.white30,
-                    onChanged: (value) async {
-                      setState(() {
-                        _currentZoomLevel = value;
-                      });
-                      await _controller?.setZoomLevel(value);
-                    },
-                  ),
-                ),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        '${_currentZoomLevel.toStringAsFixed(1)}x',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
-  Widget _exposureControl() => Positioned(
-        top: 40,
-        right: 8,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: 250,
-          ),
-          child: Column(children: [
-            Container(
-              width: 55,
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    '${_currentExposureOffset.toStringAsFixed(1)}x',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: RotatedBox(
-                quarterTurns: 3,
-                child: SizedBox(
-                  height: 30,
-                  child: Slider(
-                    value: _currentExposureOffset,
-                    min: _minAvailableExposureOffset,
-                    max: _maxAvailableExposureOffset,
-                    activeColor: Colors.white,
-                    inactiveColor: Colors.white30,
-                    onChanged: (value) async {
-                      setState(() {
-                        _currentExposureOffset = value;
-                      });
-                      await _controller?.setExposureOffset(value);
-                    },
-                  ),
-                ),
-              ),
-            )
-          ]),
-        ),
-      );
 
   Future _startLiveFeed() async {
     final camera = _cameras[_cameraIndex];
