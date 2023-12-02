@@ -1,5 +1,6 @@
 // import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 // import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 // import 'package:flutter/scheduler.dart';
@@ -83,7 +84,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                 children: [
                   Column(
                     children: [
-                      _helloText(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _helloText(),
+                          notification_icon(context, viewModel)
+                        ],
+                      ),
                       if (viewModel.nextUser != null) ...[
                         Container(
                           child: Center(
@@ -219,11 +226,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: notification_icon(context, viewModel),
-                  ),
+                  // Positioned(
+                  //   top: 0,
+                  //   right: 0,
+                  //   child: notification_icon(context, viewModel),
+                  // ),
                 ],
               ),
             ),
@@ -328,24 +335,30 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 }
 
 Widget _helloText() {
-  return const Padding(
+  return Padding(
       padding: EdgeInsets.only(top: 10.0),
       child: Column(
         children: [
+          // Text(
+          //   'Hello, in Qaabl!',
+          //   style: GoogleFonts.lexend(
+          //     fontSize: 25,
+          //     fontWeight: FontWeight.w900,
+          //   ),
+          // ),
           Text(
-            'Hello, in Qaabl!',
-            style: TextStyle(
+            'Qaabl',
+            style: GoogleFonts.lexend(
               fontSize: 25,
               fontWeight: FontWeight.w900,
             ),
           ),
-          Text(
-            "explore cool people, at ur fingertips",
-            style: TextStyle(
-              fontSize: 14, // Adjust the size as needed
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          // Text("explore cool people, at ur fingertips",
+          //     style: GoogleFonts.lexend(
+          //       fontSize: 14, // Adjust the size as needed
+          //       fontWeight: FontWeight.w500,
+          //     )
+          //     ),
         ],
       ));
 }
