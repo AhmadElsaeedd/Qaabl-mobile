@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:injectable/injectable.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
-import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/services/photo_room_service.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class CameraView extends StatefulWidget {
   CameraView(
@@ -35,13 +34,6 @@ class CameraViewState extends State<CameraView> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
   int _cameraIndex = -1;
-  double _currentZoomLevel = 1.0;
-  double _minAvailableZoom = 1.0;
-  double _maxAvailableZoom = 1.0;
-  double _minAvailableExposureOffset = 0.0;
-  double _maxAvailableExposureOffset = 0.0;
-  double _currentExposureOffset = 0.0;
-  bool _changingCameraLens = false;
   int? captured_or_processed;
 
   @override
@@ -60,26 +52,22 @@ class CameraViewState extends State<CameraView> {
         //ToDo: stop the camera from running
         _stopLiveFeed();
 
+        String imagePath = imageFile.path;
+        print("Image path is: " + imagePath);
+
         setState(() {
           captured_or_processed = 1;
-          _capturedImage = File(imageFile.path);
+          _capturedImage = File(imagePath);
         });
         // Process the image file as needed
 
         final String processedImagePath =
             await PhotoRoomService.processImage(imageFile.path);
-        print("processed image path: " + processedImagePath.toString());
+        print("Processed image path is: " + processedImagePath.toString());
         setState(() {
           captured_or_processed = 2;
           _capturedImage = File(processedImagePath);
         });
-
-        // Get the path of the captured image
-        String imagePath = imageFile.path;
-        print("Image path is: " + imagePath);
-
-        // Optionally, you can convert the XFile to a Dart File if you need to
-        File image = File(imagePath);
       } catch (e) {
         // Handle exception
       }
@@ -101,6 +89,13 @@ class CameraViewState extends State<CameraView> {
     }
   }
 
+  Future<void> _saveImageToDevice() async {
+    if (_capturedImage != null) {
+      final result = await ImageGallerySaver.saveFile(_capturedImage!.path);
+      // You can handle the result to show a confirmation message
+    }
+  }
+
   Widget _buildCapturedImage() {
     if (captured_or_processed == 1) {
       bool isFrontCamera =
@@ -117,9 +112,33 @@ class CameraViewState extends State<CameraView> {
         child: Image.file(_capturedImage!),
       );
     } else if (captured_or_processed == 2) {
-      return Transform.rotate(
-        angle: pi / 2,
-        child: Image.file(_capturedImage!),
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          CircleAvatar(
+            radius: 100,
+            backgroundColor: const Color(0xFF3439AB),
+            child: ClipOval(
+              child: Transform.rotate(
+                angle: pi / 2,
+                child: Image.file(
+                  _capturedImage!,
+                  width: 200, // 2 * radius
+                  height: 200, // 2 * radius
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: IconButton(
+              icon: Icon(Icons.save_alt),
+              onPressed: _saveImageToDevice,
+            ),
+          ),
+        ],
       );
     }
     return Container();
@@ -141,9 +160,10 @@ class CameraViewState extends State<CameraView> {
   Widget _liveFeedBody() {
     if (_capturedImage != null) {
       return Center(
-        child: ClipOval(
-          child: _buildCapturedImage(),
-        ),
+        // child: ClipOval(
+        //   child: _buildCapturedImage(),
+        // ),
+        child: _buildCapturedImage(),
       );
     }
 
@@ -159,9 +179,10 @@ class CameraViewState extends State<CameraView> {
         fit: StackFit.expand,
         children: <Widget>[
           Center(
-            child: ClipOval(
-              child: CameraPreview(_controller!),
-            ),
+            // child: ClipOval(
+            //   child: CameraPreview(_controller!),
+            // ),
+            child: CameraPreview(_controller!),
           ),
         ],
       ),
@@ -183,20 +204,6 @@ class CameraViewState extends State<CameraView> {
       if (!mounted) {
         return;
       }
-      _controller?.getMinZoomLevel().then((value) {
-        _currentZoomLevel = value;
-        _minAvailableZoom = value;
-      });
-      _controller?.getMaxZoomLevel().then((value) {
-        _maxAvailableZoom = value;
-      });
-      _currentExposureOffset = 0.0;
-      _controller?.getMinExposureOffset().then((value) {
-        _minAvailableExposureOffset = value;
-      });
-      _controller?.getMaxExposureOffset().then((value) {
-        _maxAvailableExposureOffset = value;
-      });
       _controller?.startImageStream(_processCameraImage).then((value) {
         if (widget.onCameraFeedReady != null) {
           widget.onCameraFeedReady!();
@@ -213,15 +220,6 @@ class CameraViewState extends State<CameraView> {
     await _controller?.stopImageStream();
     await _controller?.dispose();
     _controller = null;
-  }
-
-  Future _switchLiveCamera() async {
-    setState(() => _changingCameraLens = true);
-    _cameraIndex = (_cameraIndex + 1) % _cameras.length;
-
-    await _stopLiveFeed();
-    await _startLiveFeed();
-    setState(() => _changingCameraLens = false);
   }
 
   void _processCameraImage(CameraImage image) {

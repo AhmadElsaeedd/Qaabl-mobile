@@ -26,31 +26,35 @@ import Flutter
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  private func handleProcessImage(call: FlutterMethodCall, result: @escaping FlutterResult) {
-    guard let args = call.arguments as? [String: Any],
-          let imagePath = args["imagePath"] as? String,
-          let image = UIImage(contentsOfFile: imagePath) else {
-        result(FlutterError(code: "INVALID_ARGUMENTS", message: "Image path not provided", details: nil))
-        return
-    }
+    private func handleProcessImage(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let args = call.arguments as? [String: Any],
+              let imagePath = args["imagePath"] as? String,
+              let image = UIImage(contentsOfFile: imagePath) else {
+            result(FlutterError(code: "INVALID_ARGUMENTS", message: "Image path not provided", details: nil))
+            return
+        }
 
-    Task {
-        do {
-            let backgroundRemoved = try await removeBackground(of: image)
-            if let data = backgroundRemoved.pngData() {
-                let tempDir = NSTemporaryDirectory()
-                let imageFileURL = URL(fileURLWithPath: tempDir).appendingPathComponent("processed_image.png")
-                
-                try data.write(to: imageFileURL)
-                
-                // Return the file path to Flutter
-                result(imageFileURL.path)
+        Task {
+            do {
+                let backgroundRemoved = try await removeBackground(of: image)
+                if let data = backgroundRemoved.pngData() {
+                    let tempDir = NSTemporaryDirectory()
+                    
+                    // Generate a unique file name for each processed image
+                    let uniqueFileName = "processed_image_\(UUID().uuidString).png"
+                    let imageFileURL = URL(fileURLWithPath: tempDir).appendingPathComponent(uniqueFileName)
+                    
+                    try data.write(to: imageFileURL)
+                    
+                    // Return the unique file path to Flutter
+                    result(imageFileURL.path)
+                }
+            } catch {
+                // Handle errors
+                result(FlutterError(code: "PROCESSING_ERROR", message: "Failed to process image", details: error.localizedDescription))
             }
-        } catch {
-            // Handle errors
-            result(FlutterError(code: "PROCESSING_ERROR", message: "Failed to process image", details: error.localizedDescription))
         }
     }
-  }
+
 
 }

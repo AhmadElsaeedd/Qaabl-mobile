@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-import 'face_detector_painter.dart';
-import 'camera_view.dart';
 
 class AvatarViewModel extends BaseViewModel {
-  // CameraController? cameraController;
   final FaceDetector faceDetector =
       FaceDetector(options: FaceDetectorOptions(enableClassification: true));
   bool canProcess = true;
@@ -22,7 +17,7 @@ class AvatarViewModel extends BaseViewModel {
   int size_is_good = 0;
   int smile = 0;
   Timer? _countdownTimer;
-  int _countdownSeconds = 1;
+  int countdownSeconds = 2;
   bool image_captured = false;
 
   void Function()? onCaptureRequested;
@@ -78,15 +73,15 @@ class AvatarViewModel extends BaseViewModel {
     if (size_is_good == 1 && smile == 2) {
       if (_countdownTimer == null || !_countdownTimer!.isActive) {
         // Start the countdown
-        _countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-          if (_countdownSeconds > 0) {
+        _countdownTimer = Timer.periodic(Duration(seconds: 2), (timer) {
+          if (countdownSeconds > 0) {
             // Update the countdown
-            _countdownSeconds--;
+            countdownSeconds--;
             rebuildUi(); // Notify the UI about the countdown change
           } else {
             // Countdown finished, take the picture
             _countdownTimer?.cancel();
-            _countdownSeconds = 1; // Reset the countdown
+            countdownSeconds = 1; // Reset the countdown
             onCaptureRequested?.call();
             image_captured = true;
           }
@@ -100,7 +95,7 @@ class AvatarViewModel extends BaseViewModel {
 
   void _resetCountdown() {
     _countdownTimer?.cancel();
-    _countdownSeconds = 1;
+    countdownSeconds = 2;
   }
 
   @override
@@ -108,8 +103,6 @@ class AvatarViewModel extends BaseViewModel {
     canProcess = false;
     faceDetector.close();
     _countdownTimer?.cancel();
-    // Dispose of the controller when the view model is disposed.
-    // cameraController?.dispose();
     super.dispose();
   }
 }

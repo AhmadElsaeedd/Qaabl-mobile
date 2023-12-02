@@ -43,7 +43,7 @@ public func removeBackground(
     let scaledImage = image.scaled(by: scale)
 
     // Example, assuming you have a templateId value
-    guard let media = Media(withImage: scaledImage, templateId: "0a45d080-1d41-4ac7-a237-9784e671988a") else {
+    guard let media = Media(withImage: scaledImage, templateId: "ace18c53-6b24-4497-a2fa-308aa75974d1") else {
         completionHandler(.failure(.invalidData))
         return
     }
