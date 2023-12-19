@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 
@@ -25,8 +26,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
               padding: EdgeInsets.only(top: 25, bottom: 20),
               child: Text(
                 "Settings",
-                style: TextStyle(
-                  fontFamily: 'Switzer',
+                style: GoogleFonts.lexend(
                   fontSize: 25,
                   fontWeight: FontWeight.w900,
                 ),
@@ -36,8 +36,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
               child: ListView(
                 children: <Widget>[
                   ListTile(
-                    title: Text('edit password',
-                        style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('edit password', style: GoogleFonts.lexend()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       // ToDo: Implement action for Edit Password
@@ -51,8 +50,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             actions: [
                               TextButton(
                                 child: Text("Send",
-                                    style: TextStyle(
-                                        fontFamily: "Switzer",
+                                    style: GoogleFonts.lexend(
                                         color: Color(0xFF3439AB))),
                                 onPressed: () {
                                   viewModel.edit_password_email();
@@ -68,8 +66,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(), // Adds a separator
                   ListTile(
-                    title: Text('privacy policy',
-                        style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('privacy policy', style: GoogleFonts.lexend()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -80,7 +77,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             content: SingleChildScrollView(
                               child: Text(
                                 "1. Introduction: Our Privacy Policy governs your use of Qaabl and explains how we collect, safeguard, and disclose information that results from your use of our product. 2. Information We Collect 2.1. Information you provide us directly: Email, Name, Interests. 2.2. Information we collect automatically through the use of Mixpanel: Our Service uses Mixpanel, an analytics service provided by Mixpanel Inc., to collect information that your device sends whenever you use our Service. This may include information such as: Device Information: Type of device, operating system, unique device identifiers, device settings, and geographical location data. Log Data: Includes the date and time you used our Service, the duration of usage, and error logs. Usage Data: Information about how you use our Service, which can include the frequency and scope of your use, the pages that you visit, and the resources that you access. Cookies: Mixpanel uses cookies to track the activity on our Service and holds certain information. 3. Use of Your Personal Information: Our product uses your personal information to enhance your experience and to help in communicating with other users. 4. Sharing Your Personal Information: We do not share your personal infromation. 5. Keeping Your Information Secure: We use Firebase which cannot be accessed by anyone except if they get access to our private key. 6. Data Retention: Your data is retained as long as you have an account on Qaabl. 7 Contact Information: If you have any questions or concerns regarding this Privacy Policy, please contact us at: team@qaabl.app",
-                                style: TextStyle(fontFamily: 'Switzer'),
+                                style: GoogleFonts.lexend(),
                               ),
                             ),
                             actions: [
@@ -99,8 +96,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('about us',
-                        style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('about us', style: GoogleFonts.lexend()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -111,7 +107,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             content: SingleChildScrollView(
                               child: Text(
                                 "we are 3 people who like working on cool stuff: Ahmad, Salem, and Guglielmo. we do this for fun (but are serious sometimes) and we work on qaabl to make it the best for you... alright, enjoy :*",
-                                style: TextStyle(fontFamily: 'Switzer'),
+                                style: GoogleFonts.lexend(),
                               ),
                             ),
                             actions: [
@@ -130,8 +126,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('feedback',
-                        style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('feedback', style: GoogleFonts.lexend()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
@@ -144,8 +139,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('share qaabl',
-                        style: TextStyle(fontFamily: 'Switzer')),
+                    title: Text('share qaabl', style: GoogleFonts.lexend()),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       Share.share(
@@ -165,13 +159,14 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             content: SingleChildScrollView(
                               child: Text(
                                 "sure, wanna logout?",
-                                style: TextStyle(),
+                                style: GoogleFonts.lexend(),
                               ),
                             ),
                             actions: [
                               TextButton(
                                 child: Text("Cancel",
-                                    style: TextStyle(color: Color(0xFF3439AB))),
+                                    style: GoogleFonts.lexend(
+                                        color: Color(0xFF3439AB))),
                                 onPressed: () {
                                   Navigator.of(context)
                                       .pop(); // Close the alert dialog
@@ -193,7 +188,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   Divider(),
                   ListTile(
                     title: Text('delete account',
-                        style: TextStyle(color: Colors.redAccent)),
+                        style: GoogleFonts.lexend(color: Colors.redAccent)),
                     trailing: Icon(Icons.arrow_forward_ios,
                         size: 14.0, color: Colors.redAccent),
                     onTap: () {
@@ -208,8 +203,7 @@ class SettingsView extends StackedView<SettingsViewModel> {
                             actions: [
                               TextButton(
                                 child: Text("Cancel",
-                                    style: TextStyle(
-                                        fontFamily: "Switzer",
+                                    style: GoogleFonts.lexend(
                                         color: Color(0xFF3439AB))),
                                 onPressed: () {
                                   Navigator.of(context)
@@ -218,7 +212,8 @@ class SettingsView extends StackedView<SettingsViewModel> {
                               ),
                               TextButton(
                                 child: Text("Delete",
-                                    style: TextStyle(color: Colors.redAccent)),
+                                    style: GoogleFonts.lexend(
+                                        color: Colors.redAccent)),
                                 onPressed: () {
                                   //Call the function that deletes from the viewmodel
                                   viewModel.delete_account(viewModel.uid);
@@ -264,7 +259,7 @@ class FeedbackFormDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
           "we'd love to know what u think we could add, edit, or remove",
-          style: TextStyle(fontSize: 14)),
+          style: GoogleFonts.lexend(fontSize: 14)),
       content: TextField(
         controller: feedbackController,
         maxLines: 4,

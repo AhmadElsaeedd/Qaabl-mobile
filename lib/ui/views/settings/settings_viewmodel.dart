@@ -68,7 +68,7 @@ class SettingsViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/DeleteAccount'),
       body: jsonEncode({
         'user_uid': uid,
       }),

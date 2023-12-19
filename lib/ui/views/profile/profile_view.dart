@@ -37,13 +37,15 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         SizedBox.shrink()
                       ] else ...[
                         Text(
-                          'u r missing: ${viewModel.missing.join(', ')}',
+                          'u r missing: ${viewModel.missing.join(', ')} from your profile',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 14, // Adjust the size as needed
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
+                      SizedBox(height: 10),
                       // Progress Bar and Percentage
                       Stack(
                         children: [
@@ -70,7 +72,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                       ),
                       const SizedBox(height: 10),
                       const Text(
-                        "btw the more u add, the better :)",
+                        "btw the more u add to ur profile, the better :)",
                         style: TextStyle(
                           fontSize: 14, // Adjust the size as needed
                           fontWeight: FontWeight.w500,

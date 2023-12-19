@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
 import 'chats_viewmodel.dart';
@@ -22,21 +23,21 @@ class ChatsView extends StackedView<ChatsViewModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+            Padding(
                 padding: EdgeInsets.only(top: 80),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'New Chats',
-                      style: TextStyle(
+                      style: GoogleFonts.lexend(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'chat to reveal the names of ur matches :)',
-                      style: TextStyle(
+                      'chat to find out who they are!',
+                      style: GoogleFonts.lexend(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -98,7 +99,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
                                                 .scaleDown, // Adjust the text to fit inside the available space
                                             child: Text(
                                               match.other_user_name,
-                                              style: const TextStyle(
+                                              style: GoogleFonts.lexend(
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -116,25 +117,25 @@ class ChatsView extends StackedView<ChatsViewModel> {
             ],
 
             // Messages Label
-            const Padding(
+            Padding(
                 padding: EdgeInsets.only(top: 25),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Messages',
-                      style: TextStyle(
+                      style: GoogleFonts.lexend(
                         fontSize: 26, // Adjust the size as needed
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'ur steps closer to the coolest ppl :p',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    // Text(
+                    //   'ur steps closer to the coolest ppl :p',
+                    //   style: GoogleFonts.lexend(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w500,
+                    //   ),
+                    // ),
                   ],
                 )),
             if (isLoading) _buildShimmerEffect(isHorizontal: false) else ...[],
@@ -170,15 +171,15 @@ class ChatsView extends StackedView<ChatsViewModel> {
                             imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                             child: Text(
                               match.other_user_name,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: GoogleFonts.lexend(
+                                  fontWeight: FontWeight.bold),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           subtitle: Text(
                             (is_sent_by_user! ? 'you: ' : '') +
                                 (match.last_message?.content ?? ''),
-                            style: TextStyle(
+                            style: GoogleFonts.lexend(
                               fontWeight: is_sent_by_user
                                   ? FontWeight.normal
                                   : FontWeight.bold,

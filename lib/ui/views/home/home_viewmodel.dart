@@ -70,7 +70,7 @@ class HomeViewModel extends BaseViewModel {
         //testing url
         // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         Uri.parse(
-            'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
+            'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
           'uid': uid,
           'users_queue_uids': user_Ids_in_queue.toList(),
@@ -204,7 +204,7 @@ class HomeViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'disliked_user_uid': disliked_user_uid,
@@ -232,7 +232,7 @@ class HomeViewModel extends BaseViewModel {
       //testing URL
       // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
       body: jsonEncode({
         'note': text,
         'liked_user_uid': liked_user_uid,
@@ -251,7 +251,7 @@ class HomeViewModel extends BaseViewModel {
       //testing url
       // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -288,7 +288,7 @@ class HomeViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
         'user1_uid': uid,
         'user2_uid': liked_user_uid,
@@ -310,7 +310,7 @@ class HomeViewModel extends BaseViewModel {
       //testing URL
       // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({
         'user_uid': uid,
         'liked_user_uid': liked_user_uid,

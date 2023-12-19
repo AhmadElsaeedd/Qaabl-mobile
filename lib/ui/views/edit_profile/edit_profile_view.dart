@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 
@@ -52,18 +53,18 @@ class _EditProfileViewState extends State<EditProfileView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Column(
+          title: Column(
             children: [
               Text(
                 'Choose your interests',
-                style: TextStyle(
+                style: GoogleFonts.lexend(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               Text(
                 "show us what ur all about!",
-                style: TextStyle(
+                style: GoogleFonts.lexend(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -71,7 +72,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 5),
               Text(
                 "we recommend 3 interests, but u can add up to 7",
-                style: TextStyle(
+                style: GoogleFonts.lexend(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
                 ),
@@ -88,7 +89,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     return ListTile(
                       title: Text(
                         interest,
-                        style: TextStyle(
+                        style: GoogleFonts.lexend(
                           fontSize: 16,
                           color: isSelected
                               ? Colors.white
@@ -133,18 +134,18 @@ class _EditProfileViewState extends State<EditProfileView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Column(
+          title: Column(
             children: [
               Text(
                 'Choose your aspiration',
-                style: TextStyle(
+                style: GoogleFonts.lexend(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               Text(
                 "show us what ur all about!",
-                style: TextStyle(
+                style: GoogleFonts.lexend(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -161,7 +162,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     return ListTile(
                       title: Text(
                         aspiration,
-                        style: TextStyle(
+                        style: GoogleFonts.lexend(
                           fontSize: 16,
                           color: isSelected
                               ? Colors.white
@@ -254,59 +255,59 @@ class _EditProfileViewState extends State<EditProfileView> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          const Text(
+                          Text(
                             "Your Profile",
-                            style: TextStyle(
+                            style: GoogleFonts.lexend(
                               fontSize: 25,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          CupertinoButton(
-                            onPressed: () {
-                              //go to the new view
-                              model.go_to_avatar();
-                            },
-                            child: const Text(
-                              'create your avatar',
-                              style: TextStyle(
-                                color: Color(0xFF3439AB),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          // ValueListenableBuilder<int>(
-                          //   valueListenable: selectedImageNotifier,
-                          //   builder: (context, value, child) => GestureDetector(
-                          //     onTap: () async {
-                          //       int? chosenIndex = await showDialog<int>(
-                          //         context: context,
-                          //         builder: (context) => ImageChooserDialog(),
-                          //       );
-                          //       if (chosenIndex != null) {
-                          //         selectedImageNotifier.value =
-                          //             chosenIndex; // Set the new value
-                          //         model.user_data['image_index'] = chosenIndex;
-                          //         model.chose_avatar(
-                          //             model.user_data['image_index']);
-                          //       }
-                          //     },
-                          //     child: Column(
-                          //       children: [
-                          //         Image.asset(
-                          //           'lib/assets/$value.png',
-                          //           height: 200,
-                          //         ), // Use the value
-                          //         const Text(
-                          //           'edit your avatar',
-                          //           style: TextStyle(
-                          //             color: Color(0xFF3439AB),
-                          //             fontWeight: FontWeight.w500,
-                          //           ),
-                          //         ),
-                          //       ],
+                          // CupertinoButton(
+                          //   onPressed: () {
+                          //     //go to the new view
+                          //     model.go_to_avatar();
+                          //   },
+                          //   child: const Text(
+                          //     'create your avatar',
+                          //     style: GoogleFonts.lexend(
+                          //       color: Color(0xFF3439AB),
+                          //       fontWeight: FontWeight.w500,
                           //     ),
                           //   ),
                           // ),
+                          ValueListenableBuilder<int>(
+                            valueListenable: selectedImageNotifier,
+                            builder: (context, value, child) => GestureDetector(
+                              onTap: () async {
+                                int? chosenIndex = await showDialog<int>(
+                                  context: context,
+                                  builder: (context) => ImageChooserDialog(),
+                                );
+                                if (chosenIndex != null) {
+                                  selectedImageNotifier.value =
+                                      chosenIndex; // Set the new value
+                                  model.user_data['image_index'] = chosenIndex;
+                                  model.chose_avatar(
+                                      model.user_data['image_index']);
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'lib/assets/$value.png',
+                                    height: 200,
+                                  ), // Use the value
+                                  Text(
+                                    'edit your avatar',
+                                    style: GoogleFonts.lexend(
+                                      color: Color(0xFF3439AB),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           TextField(
                             controller: nameController,
                             decoration:
@@ -316,22 +317,22 @@ class _EditProfileViewState extends State<EditProfileView> {
                             },
                           ),
                           const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Your Aspiration",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 5)),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "what do u aspire to be?",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -345,7 +346,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                       userData['aspiration'].isNotEmpty
                                   ? "I aspire to be a: ${userData['aspiration']}"
                                   : "No aspiration chosen",
-                              style: const TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black54,
@@ -356,31 +357,31 @@ class _EditProfileViewState extends State<EditProfileView> {
                             onPressed: () {
                               _showAspirationDialog(model);
                             },
-                            child: const Text(
+                            child: Text(
                               'choose your aspiration ⚔️',
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 color: Color(0xFF3439AB),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 10)),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "Your Interests",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 5)),
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               "tell us what really interests u!",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -403,9 +404,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                             onPressed: () {
                               _showInterestsDialog(model);
                             },
-                            child: const Text(
+                            child: Text(
                               'edit your interests',
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 color: Color(0xFF3439AB),
                                 fontWeight: FontWeight.w500,
                               ),
@@ -440,8 +441,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     false; // Reset isSaving to false when the await is done
                               });
                             },
-                            child: const Text('Save and back',
-                                style: TextStyle(color: Colors.white)),
+                            child: Text('Save and back',
+                                style: GoogleFonts.lexend(color: Colors.white)),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                           ),
@@ -476,12 +477,12 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           );
         } else {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Loading ...', style: TextStyle(fontSize: 16)),
+                  Text('Loading ...', style: GoogleFonts.lexend(fontSize: 16)),
                   horizontalSpaceSmall,
                   SizedBox(
                     width: 16,

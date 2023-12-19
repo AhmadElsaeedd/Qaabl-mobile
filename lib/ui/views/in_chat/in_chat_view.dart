@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 // import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 import 'in_chat_viewmodel.dart';
@@ -99,7 +100,7 @@ class _InChatViewState extends State<InChatView> {
                                       ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                                   child: Text(
                                     widget.user_name,
-                                    style: const TextStyle(
+                                    style: GoogleFonts.lexend(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
                                     overflow: TextOverflow.ellipsis,
@@ -154,7 +155,7 @@ class _InChatViewState extends State<InChatView> {
                                     actions: [
                                       TextButton(
                                         child: Text("Cancel",
-                                            style: TextStyle(
+                                            style: GoogleFonts.lexend(
                                                 color: Color(0xFF3439AB))),
                                         onPressed: () {
                                           Navigator.of(context)
@@ -163,7 +164,7 @@ class _InChatViewState extends State<InChatView> {
                                       ),
                                       TextButton(
                                         child: Text("Delete",
-                                            style: TextStyle(
+                                            style: GoogleFonts.lexend(
                                                 color: Colors.redAccent)),
                                         onPressed: () async {
                                           //Call the function that deletes the chat
@@ -185,15 +186,18 @@ class _InChatViewState extends State<InChatView> {
                         },
                         itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'Profile',
-                            child: Text('View Profile'),
+                            child: Text(
+                              'View Profile',
+                              style: GoogleFonts.lexend(),
+                            ),
                           ),
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'Delete',
                             child: Text(
                               'Delete Chat',
-                              style: TextStyle(color: Colors.red),
+                              style: GoogleFonts.lexend(color: Colors.red),
                             ),
                           ),
                         ],
@@ -208,9 +212,9 @@ class _InChatViewState extends State<InChatView> {
             children: [
               Container(
                 padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
-                child: const Text(
+                child: Text(
                     "messages are encrypted, only u & ur friend can see them :)",
-                    style: TextStyle(
+                    style: GoogleFonts.lexend(
                         color: Color.fromARGB(255, 106, 106, 106),
                         fontSize: 12)),
               ),
@@ -251,7 +255,7 @@ class _InChatViewState extends State<InChatView> {
                       //     padding: const EdgeInsets.symmetric(vertical: 8.0),
                       //     child: Text(
                       //       dateTag!,
-                      //       style: const TextStyle(
+                      //       style: const GoogleFonts.lexend(
                       //           // Style the date tag as needed
                       //           ),
                       //     ),
@@ -293,7 +297,7 @@ class _InChatViewState extends State<InChatView> {
                                     children: [
                                       Text(
                                         message.content,
-                                        style: TextStyle(
+                                        style: GoogleFonts.lexend(
                                           fontSize: 16,
                                           color: isCurrentUser
                                               ? Colors.white
@@ -304,7 +308,7 @@ class _InChatViewState extends State<InChatView> {
                                       Text(
                                         DateFormat('MM/dd/yyyy hh:mm a')
                                             .format(message.timestamp),
-                                        style: TextStyle(
+                                        style: GoogleFonts.lexend(
                                           fontSize: 10.0,
                                           color: isCurrentUser
                                               ? Colors.white70
@@ -322,7 +326,7 @@ class _InChatViewState extends State<InChatView> {
                                             const EdgeInsets.only(top: 15.0),
                                         child: Text(
                                           message.reaction,
-                                          style: TextStyle(
+                                          style: GoogleFonts.lexend(
                                               fontSize: 15), // Adjust as needed
                                         ),
                                       ),
@@ -374,7 +378,7 @@ class _InChatViewState extends State<InChatView> {
                           }
                         }
                       },
-                      child: Text('Send', style: TextStyle()),
+                      child: Text('Send', style: GoogleFonts.lexend()),
                       color: Color(
                           0xFF3439AB), // This is still valid for CupertinoButton
                       padding: EdgeInsets.symmetric(
@@ -424,7 +428,7 @@ class _InChatViewState extends State<InChatView> {
             ),
             child: Wrap(
               children: [
-                _buildEmojiOption(viewModel, '😀', message),
+                // _buildEmojiOption(viewModel, '😀', message),
                 _buildEmojiOption(viewModel, '❤️', message),
                 _buildEmojiOption(viewModel, '😂', message),
                 _buildEmojiOption(viewModel, '👍', message),
@@ -455,7 +459,7 @@ class _InChatViewState extends State<InChatView> {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           emoji,
-          style: TextStyle(fontSize: 24.0),
+          style: GoogleFonts.lexend(fontSize: 24.0),
         ),
       ),
     );
@@ -487,15 +491,15 @@ class UserProfileView extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             'I aspire to be a: $aspiration',
-            style: const TextStyle(
+            style: GoogleFonts.lexend(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 5),
-          const Text(
+          Text(
             'And my interests are:',
-            style: TextStyle(
+            style: GoogleFonts.lexend(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),

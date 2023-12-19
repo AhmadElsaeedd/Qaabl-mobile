@@ -17,7 +17,7 @@ class FirestoreService {
   final _mixpanelService = locator<MixpanelService>();
 
   FirestoreService() {
-    _firestore.useFirestoreEmulator('10.225.67.17', 8085);
+    _firestore.useFirestoreEmulator('192.168.1.101', 8085);
   }
 
   Stream<List<ChatMatch>> get_old_matches(String uid) {
@@ -128,7 +128,7 @@ class FirestoreService {
       //testing url
       // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/AddMessage'),
       body: jsonEncode({
         'uid': uid,
         'chat_id': chat_id,
@@ -150,7 +150,7 @@ class FirestoreService {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/MessageReaction'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/MessageReaction'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/MessageReaction'),
       body: jsonEncode({
         'reaction': reaction,
         'chat_id': chat_id,

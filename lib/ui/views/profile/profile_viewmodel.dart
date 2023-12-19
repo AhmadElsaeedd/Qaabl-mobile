@@ -80,7 +80,7 @@ class ProfileViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -112,7 +112,7 @@ class ProfileViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
       body: jsonEncode({
         'uid': uid,
       }),

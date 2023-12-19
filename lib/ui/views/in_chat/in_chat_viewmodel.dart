@@ -174,7 +174,7 @@ class InChatViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -200,7 +200,7 @@ class InChatViewModel extends BaseViewModel {
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
       Uri.parse(
-          'http://10.225.67.17:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
+          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/DeleteMatch'),
       body: jsonEncode({
         'match_id': match_id,
         'user1_id': uid,

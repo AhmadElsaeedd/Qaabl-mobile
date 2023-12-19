@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'dart:io' show Platform;
 import 'login_viewmodel.dart';
@@ -48,8 +49,8 @@ class LoginView extends StackedView<LoginViewModel> {
                             children: [
                               Text(
                                 "only cool people, at your fingertips",
-                                style: TextStyle(
-                                  fontSize: 14, // Adjust the size as needed
+                                style: GoogleFonts.lexend(
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -136,7 +137,7 @@ class LoginView extends StackedView<LoginViewModel> {
                                             passwordController.text),
                                     child: Text(
                                       'Login',
-                                      style: TextStyle(fontSize: 20),
+                                      style: GoogleFonts.lexend(fontSize: 20),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 20, vertical: 10),
@@ -148,8 +149,7 @@ class LoginView extends StackedView<LoginViewModel> {
                                             passwordController.text),
                                     child: Text(
                                       'Login',
-                                      style: TextStyle(
-                                          fontFamily: 'Switzer', fontSize: 20),
+                                      style: GoogleFonts.lexend(fontSize: 20),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Color(0xFF3439AB),
@@ -171,7 +171,7 @@ class LoginView extends StackedView<LoginViewModel> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text("or"),
+                            child: Text("or", style: GoogleFonts.lexend()),
                           ),
                           Expanded(
                             child: Divider(
@@ -238,12 +238,15 @@ class LoginView extends StackedView<LoginViewModel> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('New here?'),
+                            Text(
+                              'New here?',
+                              style: GoogleFonts.lexend(),
+                            ),
                             TextButton(
                               onPressed: viewModel.navigateToRegister,
                               child: Text(
                                 'Register Now',
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                     decoration: TextDecoration.underline),
                               ),
                             ),

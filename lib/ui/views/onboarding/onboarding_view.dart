@@ -1,62 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'onboarding_viewmodel.dart';
-
-// class OnboardingView extends StackedView<OnboardingViewModel> {
-//   const OnboardingView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget builder(
-//     BuildContext context,
-//     OnboardingViewModel viewModel,
-//     Widget? child,
-//   ) {
-//     int current_step = 1;
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: SafeArea(
-//         child: Center(
-//           child: Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Image.asset(
-//                   'lib/assets/logo.png',
-//                   height: 150,
-//                 ),
-//                 const SizedBox(height: 10),
-//                 const Text(
-//                   "welcome to Qaabl.",
-//                   style: TextStyle(
-//                     fontSize: 24,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//                 if (current_step == 1) ...[
-//                   //ToDo: show that it's in the first step of 3
-//                 ] else if (current_step == 2) ...[
-//                   //ToDo: show that it's in the second step of 3
-//                 ] else if (current_step == 3) ...[
-//                   //ToDo: show that it's in the third step of 3
-//                 ],
-//                 //ToDo: next step to the bottom right of the screen
-//                 //ToDo: skip tutorial button to the bottom left of the screen
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   @override
-//   OnboardingViewModel viewModelBuilder(
-//     BuildContext context,
-//   ) =>
-//       OnboardingViewModel();
-// }
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({Key? key}) : super(key: key);
@@ -105,9 +51,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                         height: 150,
                       ),
                       const SizedBox(height: 10),
-                      const Text(
+                      Text(
                         "welcome to Qaabl.",
-                        style: TextStyle(
+                        style: GoogleFonts.lexend(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -116,7 +62,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ..._buildOnboardingSteps(),
                       const SizedBox(height: 20),
                       // Step indicator
-                      Text('Step $current_step of 3'),
+                      Text('step $current_step of 3',
+                          style: GoogleFonts.lexend()),
                       // Navigation and action buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,14 +73,18 @@ class _OnboardingViewState extends State<OnboardingView> {
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.grey,
                             ),
-                            child: const Text('Skip Tutorial'),
+                            child: Text('Skip Tutorial',
+                                style: GoogleFonts.lexend()),
                           ),
                           TextButton(
                             onPressed: _nextStep,
                             style: TextButton.styleFrom(
                               foregroundColor: Color(0xFF3439AB),
                             ),
-                            child: const Text('Next'),
+                            child: Text(
+                              'Next',
+                              style: GoogleFonts.lexend(),
+                            ),
                           ),
                         ],
                       ),
@@ -146,73 +97,17 @@ class _OnboardingViewState extends State<OnboardingView> {
         });
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: Colors.white,
-  //     body: SafeArea(
-  //       child: Center(
-  //         child: Container(
-  //           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               Image.asset(
-  //                 'lib/assets/logo.png',
-  //                 height: 150,
-  //               ),
-  //               const SizedBox(height: 10),
-  //               const Text(
-  //                 "welcome to Qaabl.",
-  //                 style: TextStyle(
-  //                   fontSize: 24,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               // Onboarding steps
-  //               ..._buildOnboardingSteps(),
-  //               const SizedBox(height: 20),
-  //               // Step indicator
-  //               Text('Step $current_step of 3'),
-  //               // Navigation and action buttons
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   TextButton(
-  //                     onPressed: _skipTutorial,
-  //                     style: TextButton.styleFrom(
-  //                       foregroundColor: Colors.grey,
-  //                     ),
-  //                     child: const Text('Skip Tutorial'),
-  //                   ),
-  //                   TextButton(
-  //                     onPressed: _nextStep,
-  //                     style: TextButton.styleFrom(
-  //                       foregroundColor: Color(0xFF3439AB),
-  //                     ),
-  //                     child: const Text('Next'),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   List<Widget> _buildOnboardingSteps() {
     switch (current_step) {
       case 1:
         return [
-          const Padding(
+          Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
               child: Column(
                 children: [
                   Text(
                     "enter ur interests",
-                    style: TextStyle(
+                    style: GoogleFonts.lexend(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -226,13 +121,13 @@ class _OnboardingViewState extends State<OnboardingView> {
         ];
       case 2:
         return [
-          const Padding(
+          Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
               child: Column(
                 children: [
                   Text(
                     "discover people",
-                    style: TextStyle(
+                    style: GoogleFonts.lexend(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -246,13 +141,13 @@ class _OnboardingViewState extends State<OnboardingView> {
         ];
       case 3:
         return [
-          const Padding(
+          Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
               child: Column(
                 children: [
                   Text(
                     "chat & make friends :)",
-                    style: TextStyle(
+                    style: GoogleFonts.lexend(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

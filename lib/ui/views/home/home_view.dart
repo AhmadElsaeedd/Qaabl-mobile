@@ -110,25 +110,25 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           margin: const EdgeInsets.only(top: 200),
                           child: Column(
                             children: [
-                              const Text(
+                              Text(
                                 'fill your profile!',
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
+                              Text(
                                 "why?",
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 18, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
+                              Text(
                                 "rn ur not visible, less chances of meeting ppl :(",
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 14, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -139,11 +139,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                                 onPressed: viewModel.go_to_profile,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 10),
-                                child: const Text(
+                                child: Text(
                                   "Go to profile",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Switzer"),
+                                  style: GoogleFonts.lexend(
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],
@@ -153,18 +153,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           viewModel.no_more_users == false) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
                                 'Finding people!',
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
                               Text(
                                 "give us a sec :)",
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 14, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -179,15 +179,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                             children: [
                               Text(
                                 'No more users',
-                                style: TextStyle(
-                                  fontFamily: 'Switzer',
+                                style: GoogleFonts.lexend(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
                               Text(
                                 "appreciate u using qaabl btw",
-                                style: TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 14, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -197,7 +196,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                               ),
                               CupertinoButton(
                                 color: Color(0xFF3439AB),
-                                child: Text('Share Qaabl'),
+                                child: Text(
+                                  'Share Qaabl',
+                                  style: GoogleFonts.lexend(),
+                                ),
                                 onPressed: () {
                                   // Implement sharing functionality
                                   Share.share(
@@ -209,8 +211,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                               ),
                               Text(
                                 "help us spread the word and share it with ur friends!",
-                                style: TextStyle(
-                                  fontSize: 10, // Adjust the size as needed
+                                style: GoogleFonts.lexend(
+                                  fontSize: 12, // Adjust the size as needed
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -309,9 +311,10 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'tell them why u super liked them',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style:
+                GoogleFonts.lexend(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           content: TextField(
             controller: noteController,
@@ -440,10 +443,11 @@ void _showDropDown(BuildContext context, HomeViewModel viewModel) {
                         return ListTile(
                           title: Text(
                               "someone left u this note: " + note['content'],
-                              style: TextStyle(fontWeight: FontWeight.w500)),
+                              style: GoogleFonts.lexend(
+                                  fontWeight: FontWeight.w500)),
                           trailing: Text(
                             viewModel.formatTimestamp(note['timestamp']),
-                            style: TextStyle(
+                            style: GoogleFonts.lexend(
                               fontSize: 10,
                               color: Colors.grey,
                             ),
@@ -456,7 +460,8 @@ void _showDropDown(BuildContext context, HomeViewModel viewModel) {
                       [
                         ListTile(
                           title: Text("no notifications yet",
-                              style: TextStyle(fontWeight: FontWeight.w500)),
+                              style: GoogleFonts.lexend(
+                                  fontWeight: FontWeight.w500)),
                           onTap: () {
                             overlayEntry.remove();
                           },
@@ -537,9 +542,9 @@ class UserProfileView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF3439AB),
-        title: const Text(
+        title: Text(
           'More about me...',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.lexend(color: Colors.white),
         ),
         leading: IconButton(
           icon: const Icon(
@@ -555,15 +560,15 @@ class UserProfileView extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             'I aspire to be a: $aspiration',
-            style: const TextStyle(
+            style: GoogleFonts.lexend(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 5),
-          const Text(
+          Text(
             'And my interests are:',
-            style: TextStyle(
+            style: GoogleFonts.lexend(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
@@ -689,16 +694,16 @@ class _UserCardState extends State<UserCard> {
                         child: Column(
                           children: [
                             const Padding(padding: EdgeInsets.only(top: 25)),
-                            const Text(
+                            Text(
                               "One of my interests is:",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               "${widget.nextUser['interests'][0]['name']}",
-                              style: const TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -708,16 +713,16 @@ class _UserCardState extends State<UserCard> {
                               height: 170,
                             ),
                             const Padding(padding: EdgeInsets.only(top: 5)),
-                            const Text(
+                            Text(
                               "And I aspire to be a:",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               "${widget.nextUser['aspiration']}",
-                              style: const TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -855,9 +860,10 @@ class _UserCardState extends State<UserCard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'tell them why u super liked them',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style:
+                GoogleFonts.lexend(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           content: TextField(
             controller: noteController,
@@ -913,7 +919,7 @@ Widget check_profile_button(nextUser, viewModel, context) {
       children: [
         Text(
           "I have ${nextUser['interests'].length} interests, check me out",
-          style: const TextStyle(
+          style: GoogleFonts.lexend(
             fontSize: 14, // Adjust the size as needed
           ),
         ),
@@ -944,8 +950,8 @@ Widget check_profile_button(nextUser, viewModel, context) {
               borderRadius: BorderRadius.circular(30), // Rounded button
             ),
           ),
-          child:
-              const Text("View Profile", style: TextStyle(color: Colors.white)),
+          child: Text("View Profile",
+              style: GoogleFonts.lexend(color: Colors.white)),
         ),
       ],
     );

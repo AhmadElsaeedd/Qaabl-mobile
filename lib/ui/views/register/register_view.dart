@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:io' show Platform;
 import 'package:stacked/stacked.dart';
 
@@ -43,14 +44,14 @@ class RegisterView extends StackedView<RegisterViewModel> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    // SizedBox(height: 10),
                     Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 0.0),
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Column(
                           children: [
                             Text(
                               "only cool people, at your fingertips",
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                 fontSize: 14, // Adjust the size as needed
                                 fontWeight: FontWeight.bold,
                               ),
@@ -138,7 +139,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                                           passwordController.text),
                                   child: Text(
                                     'Create Account',
-                                    style: TextStyle(fontSize: 20),
+                                    style: GoogleFonts.lexend(fontSize: 20),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
@@ -150,7 +151,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                                           passwordController.text),
                                   child: Text(
                                     'Create Account',
-                                    style: TextStyle(fontSize: 20),
+                                    style: GoogleFonts.lexend(fontSize: 20),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFF3439AB),
@@ -172,7 +173,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text("or"),
+                          child: Text("or", style: GoogleFonts.lexend()),
                         ),
                         Expanded(
                           child: Divider(
@@ -239,12 +240,13 @@ class RegisterView extends StackedView<RegisterViewModel> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Already have an account?'),
+                          Text('Already have an account?',
+                              style: GoogleFonts.lexend()),
                           TextButton(
                             onPressed: viewModel.navigateToLogin,
                             child: Text(
                               'Login Now',
-                              style: TextStyle(
+                              style: GoogleFonts.lexend(
                                   decoration: TextDecoration.underline),
                             ),
                           ),
