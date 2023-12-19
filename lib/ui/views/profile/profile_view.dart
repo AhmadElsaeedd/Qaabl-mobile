@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 
@@ -39,7 +40,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         Text(
                           'u r missing: ${viewModel.missing.join(', ')} from your profile',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.lexend(
                             fontSize: 14, // Adjust the size as needed
                             fontWeight: FontWeight.w500,
                           ),
@@ -61,7 +62,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                               alignment: Alignment.center,
                               child: Text(
                                 '${viewModel.percentage}%',
-                                style: const TextStyle(
+                                style: GoogleFonts.lexend(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -71,9 +72,9 @@ class ProfileView extends StackedView<ProfileViewModel> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      const Text(
+                      Text(
                         "btw the more u add to ur profile, the better :)",
-                        style: TextStyle(
+                        style: GoogleFonts.lexend(
                           fontSize: 14, // Adjust the size as needed
                           fontWeight: FontWeight.w500,
                         ),
@@ -92,8 +93,9 @@ class ProfileView extends StackedView<ProfileViewModel> {
                               onPressed: () {
                                 viewModel.go_to_settings();
                               },
-                              child: const Text('Settings',
-                                  style: TextStyle(color: Colors.black)),
+                              child: Text('Settings',
+                                  style:
+                                      GoogleFonts.lexend(color: Colors.black)),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
@@ -104,8 +106,9 @@ class ProfileView extends StackedView<ProfileViewModel> {
                               onPressed: () {
                                 viewModel.go_to_edit_profile();
                               },
-                              child: const Text('Edit Profile',
-                                  style: TextStyle(color: Colors.white)),
+                              child: Text('Edit Profile',
+                                  style:
+                                      GoogleFonts.lexend(color: Colors.white)),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
                             ),
@@ -115,11 +118,12 @@ class ProfileView extends StackedView<ProfileViewModel> {
                     ],
                   )
                 else
-                  const Center(
+                  Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Loading ...', style: TextStyle(fontSize: 16)),
+                        Text('Loading ...',
+                            style: GoogleFonts.lexend(fontSize: 16)),
                         horizontalSpaceSmall,
                         SizedBox(
                           width: 16,
