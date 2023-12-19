@@ -62,32 +62,58 @@ class _OnboardingViewState extends State<OnboardingView> {
                       ..._buildOnboardingSteps(),
                       const SizedBox(height: 20),
                       // Step indicator
-                      Text('step $current_step of 3',
+                      Text('step $current_step of 4',
                           style: GoogleFonts.lexend()),
                       // Navigation and action buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: viewModel.go_to_home,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.grey,
+                      if (current_step == 1) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: viewModel.signOut,
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.grey,
+                              ),
+                              child: Text('Do not accept',
+                                  style: GoogleFonts.lexend()),
                             ),
-                            child: Text('Skip Tutorial',
-                                style: GoogleFonts.lexend()),
-                          ),
-                          TextButton(
-                            onPressed: _nextStep,
-                            style: TextButton.styleFrom(
-                              foregroundColor: Color(0xFF3439AB),
+                            TextButton(
+                              onPressed: _nextStep,
+                              style: TextButton.styleFrom(
+                                foregroundColor: Color(0xFF3439AB),
+                              ),
+                              child: Text(
+                                'Accept',
+                                style: GoogleFonts.lexend(),
+                              ),
                             ),
-                            child: Text(
-                              'Next',
-                              style: GoogleFonts.lexend(),
+                          ],
+                        ),
+                      ] else ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: viewModel.go_to_home,
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.grey,
+                              ),
+                              child: Text('Skip Tutorial',
+                                  style: GoogleFonts.lexend()),
                             ),
-                          ),
-                        ],
-                      ),
+                            TextButton(
+                              onPressed: _nextStep,
+                              style: TextButton.styleFrom(
+                                foregroundColor: Color(0xFF3439AB),
+                              ),
+                              child: Text(
+                                'Next',
+                                style: GoogleFonts.lexend(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ]
                     ],
                   ),
                 ),
@@ -100,6 +126,36 @@ class _OnboardingViewState extends State<OnboardingView> {
   List<Widget> _buildOnboardingSteps() {
     switch (current_step) {
       case 1:
+        return [
+          Padding(
+              padding: EdgeInsets.only(top: 30.0, bottom: 15),
+              child: Column(
+                children: [
+                  Text(
+                    "our End User License Agreement",
+                    style: GoogleFonts.lexend(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )),
+          //ToDo:Add the text to a maximum size of 400 and scrollable
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight:
+                    400), // Sets the maximum height for the EULA text box
+            child: SingleChildScrollView(
+              child: Text(
+                viewModel.EULA_content,
+                style: GoogleFonts.lexend(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ];
+      case 2:
         return [
           Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
@@ -119,7 +175,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             height: 400,
           ),
         ];
-      case 2:
+      case 3:
         return [
           Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
@@ -139,7 +195,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             height: 400,
           ),
         ];
-      case 3:
+      case 4:
         return [
           Padding(
               padding: EdgeInsets.only(top: 30.0, bottom: 15),
