@@ -148,7 +148,7 @@ class _InChatViewState extends State<InChatView> {
                                       ),
                                       TextButton(
                                         child: Text("submit"),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           // Implement your feedback submission logic here
                                           // For example, you could call a function that sends the feedback to a server or database
                                           String feedback =
@@ -157,8 +157,13 @@ class _InChatViewState extends State<InChatView> {
                                             viewModel.submitReport(
                                                 feedback); // Uncomment and implement this function
                                             feedbackController.clear();
-                                            Navigator.of(context).pop();
                                           }
+                                          await viewModel.delete_chat(
+                                              widget.match_id,
+                                              widget.other_user_id);
+                                          //Go back to the chats view
+                                          await viewModel.go_to_chats();
+                                          Navigator.of(context).pop();
                                         },
                                       ),
                                     ],
