@@ -32,6 +32,8 @@ class _InChatViewState extends State<InChatView> {
 
   Map<String, GlobalKey> messageKeys = {};
 
+  final TextEditingController feedbackController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<InChatViewModel>.reactive(
@@ -118,6 +120,52 @@ class _InChatViewState extends State<InChatView> {
                         ),
                         onSelected: (value) {
                           switch (value) {
+                            case 'Report':
+                              //ToDo: track reporting event
+                              //ToDo: show a dialog that allows a user to report another user
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                        "Please report this user if you believe they've violated the application's rules. The chat will be deleted and the team will take action immediately.",
+                                        style:
+                                            GoogleFonts.lexend(fontSize: 14)),
+                                    content: TextField(
+                                      controller: feedbackController,
+                                      maxLines: 4,
+                                      decoration: InputDecoration(
+                                        labelText: 'what happened?',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text("cancel"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text("submit"),
+                                        onPressed: () {
+                                          // Implement your feedback submission logic here
+                                          // For example, you could call a function that sends the feedback to a server or database
+                                          String feedback =
+                                              feedbackController.text;
+                                          if (feedback.isNotEmpty) {
+                                            viewModel.submitReport(
+                                                feedback); // Uncomment and implement this function
+                                            feedbackController.clear();
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              break;
                             case 'Profile':
                               viewModel
                                   .trackProfileViewEvent(widget.other_user_id);
@@ -191,6 +239,13 @@ class _InChatViewState extends State<InChatView> {
                             child: Text(
                               'View Profile',
                               style: GoogleFonts.lexend(),
+                            ),
+                          ),
+                          PopupMenuItem<String>(
+                            value: 'Report',
+                            child: Text(
+                              'Report User',
+                              style: GoogleFonts.lexend(color: Colors.red),
                             ),
                           ),
                           PopupMenuItem<String>(

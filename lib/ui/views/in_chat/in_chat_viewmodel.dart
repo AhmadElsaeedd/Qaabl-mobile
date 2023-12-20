@@ -223,4 +223,11 @@ class InChatViewModel extends BaseViewModel {
   void trackInChatPageVisit() {
     _mixpanelService.mixpanel.track('Visited in-chat page');
   }
+
+  void submitReport(String feedback) {
+    print('feedback works');
+    _mixpanelService.mixpanel.track('Submitted report', properties: {
+      'Report': feedback,
+    });
+  }
 }

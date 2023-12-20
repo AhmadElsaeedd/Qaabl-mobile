@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 
@@ -14,15 +15,14 @@ class StartupView extends StackedView<StartupViewModel> {
     StartupViewModel viewModel,
     Widget? child,
   ) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'Qaabl',
-              style: TextStyle(
-                  fontFamily: 'Switzer',
+              style: GoogleFonts.lexend(
                   fontSize: 40,
                   fontWeight: FontWeight.w900,
                   color: Colors.indigo),
@@ -30,7 +30,7 @@ class StartupView extends StackedView<StartupViewModel> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Loading ...', style: TextStyle(fontSize: 16)),
+                Text('Loading ...', style: GoogleFonts.lexend(fontSize: 16)),
                 horizontalSpaceSmall,
                 SizedBox(
                   width: 16,
