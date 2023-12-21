@@ -7,6 +7,7 @@ import 'package:qaabl_mobile/services/firestore_service.dart';
 import 'package:qaabl_mobile/services/messaging_service.dart';
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
 import 'package:qaabl_mobile/services/photo_room_service.dart';
+import 'package:qaabl_mobile/services/profanity_filter_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -21,6 +22,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<MixpanelService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<AvatarService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<PhotoRoomService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<ProfanityFilterService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -33,6 +35,7 @@ void registerServices() {
   getAndRegisterMixpanelService();
   getAndRegisterAvatarService();
   getAndRegisterPhotoRoomService();
+  getAndRegisterProfanityFilterService();
 // @stacked-mock-register
 }
 
@@ -118,6 +121,13 @@ MockPhotoRoomService getAndRegisterPhotoRoomService() {
   _removeRegistrationIfExists<PhotoRoomService>();
   final service = MockPhotoRoomService();
   locator.registerSingleton<PhotoRoomService>(service);
+  return service;
+}
+
+MockProfanityFilterService getAndRegisterProfanityFilterService() {
+  _removeRegistrationIfExists<ProfanityFilterService>();
+  final service = MockProfanityFilterService();
+  locator.registerSingleton<ProfanityFilterService>(service);
   return service;
 }
 // @stacked-mock-create

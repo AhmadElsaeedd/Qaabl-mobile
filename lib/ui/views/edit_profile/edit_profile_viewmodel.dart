@@ -8,6 +8,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:qaabl_mobile/services/mixpanel_service.dart';
+import 'package:qaabl_mobile/services/profanity_filter_service.dart';
 // import 'dart:collection';
 
 class EditProfileViewModel extends BaseViewModel {
@@ -15,11 +16,14 @@ class EditProfileViewModel extends BaseViewModel {
   final _authenticationService = locator<AuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final _mixpanelService = locator<MixpanelService>();
+  final _profanityService = locator<ProfanityFilterService>();
 
   String? current_page;
 
   // current user id, defined class level to be reusable in all methods
   String? uid;
+
+  bool contains_profanity = false;
 
   //initialized empty because it will be initialized later in the code
   Map<String, dynamic> user_data = {};
@@ -38,30 +42,46 @@ class EditProfileViewModel extends BaseViewModel {
   //function that gets the inputted values, updates the user document, and navigates back to profile page
   Future<void> save_and_back(String name, List<Map<String, String>> interests,
       String aspiration, int image_index) async {
-    print("Name is: " + name.toString());
+    //store all the texts in the submission
+    StringBuffer allTexts = StringBuffer(name);
+
+    for (var interest in interests) {
+      allTexts.write(" ");
+      allTexts.write(interest["description"] ?? "");
+    }
+
+    // Check the combined text for profanity
+    if (await _profanityService.is_profane(allTexts.toString())) {
+      //profanity found
+      contains_profanity = true;
+      print("contains profanity");
+    }
+
     //get the values from the input fields and go update the values in the cloud
-    final response = await http.post(
-      //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
-      //testing url
+    if (!contains_profanity) {
+      final response = await http.post(
+        //production url
+        // Uri.parse(
+        //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
+        //testing url
 
-      // Uri.parse(
-      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
-      Uri.parse(
-          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
-      body: jsonEncode({
-        'uid': uid,
-        'name': name,
-        'interests': interests,
-        'aspiration': aspiration,
-        'image_index': image_index,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
+        // Uri.parse(
+        //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+        Uri.parse(
+            'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+        body: jsonEncode({
+          'uid': uid,
+          'name': name,
+          'interests': interests,
+          'aspiration': aspiration,
+          'image_index': image_index,
+        }),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    back_to_profile(response);
-    _mixpanelService.mixpanel.track("Edited profile");
+      back_to_profile(response);
+      _mixpanelService.mixpanel.track("Edited profile");
+    }
   }
 
   void go_to_profile() {

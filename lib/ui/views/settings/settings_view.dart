@@ -148,14 +148,17 @@ class SettingsView extends StackedView<SettingsViewModel> {
                   ),
                   Divider(),
                   ListTile(
-                    title: Text('logout'),
+                    title: Text(
+                      'logout',
+                      style: GoogleFonts.lexend(),
+                    ),
                     trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
                     onTap: () {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return CupertinoAlertDialog(
-                            title: Text("Logout"),
+                            title: Text("Logout", style: GoogleFonts.lexend()),
                             content: SingleChildScrollView(
                               child: Text(
                                 "sure, wanna logout?",
