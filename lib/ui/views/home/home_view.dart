@@ -92,19 +92,20 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                         ],
                       ),
                       if (viewModel.nextUser != null) ...[
+                        SizedBox(height: 50),
                         Container(
                           child: Center(
                             child: _userDetails(viewModel.nextUser, viewModel,
                                 context, _slideAnimation),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 0),
-                          child: Center(
-                            child: check_profile_button(
-                                viewModel.nextUser, viewModel, context),
-                          ),
-                        ),
+                        // Container(
+                        //   margin: const EdgeInsets.only(top: 0),
+                        //   child: Center(
+                        //     child: check_profile_button(
+                        //         viewModel.nextUser, viewModel, context),
+                        //   ),
+                        // ),
                       ] else if (viewModel.user_continues == false) ...[
                         Container(
                           margin: const EdgeInsets.only(top: 200),
@@ -668,7 +669,7 @@ class UserCard extends StatefulWidget {
 }
 
 class _UserCardState extends State<UserCard> {
-  String? feedback; // this variable will store the feedback "Like" or "Dislike"
+  String? feedback;
   Color? feedbackColor;
   IconData? feedbackIcon;
 
@@ -692,44 +693,55 @@ class _UserCardState extends State<UserCard> {
                         child: Column(
                           children: [
                             const Padding(padding: EdgeInsets.only(top: 25)),
-                            Text(
-                              "One of my interests is:",
-                              style: GoogleFonts.lexend(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              "${widget.nextUser['interests'][0]['name']}",
-                              style: GoogleFonts.lexend(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
                             Image.asset(
                               'lib/assets/${widget.nextUser['image_index']}.png',
-                              height: 170,
+                              height: 140,
                             ),
+                            SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Aspiring",
+                                    style: GoogleFonts.lexend(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${widget.nextUser['aspiration']}",
+                                    style: GoogleFonts.lexend(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Interests",
+                                    style: GoogleFonts.lexend(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${widget.nextUser['interests'][0]['name']} and +${widget.nextUser['interests'].length - 1} more",
+                                    style: GoogleFonts.lexend(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            check_profile_button(
+                                widget.nextUser, widget.viewModel, context),
                             const Padding(padding: EdgeInsets.only(top: 5)),
-                            Text(
-                              "And I aspire to be a:",
-                              style: GoogleFonts.lexend(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              "${widget.nextUser['aspiration']}",
-                              style: GoogleFonts.lexend(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 15.0),
                               child: Row(
-                                // Align Like and Dislike buttons horizontally
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -741,14 +753,15 @@ class _UserCardState extends State<UserCard> {
                                       widget.viewModel.replay_user();
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      minimumSize: Size(40, 50),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             30), // Rounded button
                                       ),
                                       backgroundColor: Colors.white,
                                     ),
-                                    child: const Icon(Icons.repeat_rounded,
-                                        color: Colors.yellow), // Close icon
+                                    child: const Icon(Icons.replay,
+                                        color: Colors.green), // Close icon
                                   ),
                                   //Make this button bigger
                                   ElevatedButton(
@@ -767,8 +780,8 @@ class _UserCardState extends State<UserCard> {
                                       ),
                                       backgroundColor: Colors.white,
                                     ),
-                                    child: const Icon(Icons.thumb_down,
-                                        color: Colors.black), // Close icon
+                                    child: const Icon(Icons.close,
+                                        color: Colors.red), // Close icon
                                   ),
                                   //Make this button bigger
                                   ElevatedButton(
@@ -789,34 +802,50 @@ class _UserCardState extends State<UserCard> {
                                       ),
                                       backgroundColor: const Color(0xFF3439AB),
                                     ),
-                                    child: const Icon(Icons.thumb_up,
+                                    child: const Icon(Icons.waving_hand,
                                         color: Colors.white), // Check icon
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      showFeedback("Superlike");
-                                      await Future.delayed(
-                                          const Duration(milliseconds: 400));
-                                      //show the dialog here
-                                      showNoteDialog(
-                                          context,
-                                          widget.nextUser['id'],
-                                          widget.viewModel);
-                                      widget.viewModel.like_user(
-                                          widget.nextUser['id'],
-                                          widget.nextUser['potential_match'],
-                                          "super_like");
-                                      //ToDo: implement leaving them a note here
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            30), // Rounded button
+                                  Ink(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.blue,
+                                          Colors.purple
+                                        ], // Define your gradient colors here
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
                                       ),
-                                      backgroundColor: Colors.white,
                                     ),
-                                    child: const Icon(Icons.star,
-                                        color: Colors.blue), // Close icon
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        showFeedback("Superlike");
+                                        await Future.delayed(
+                                            const Duration(milliseconds: 400));
+                                        //show the dialog here
+                                        showNoteDialog(
+                                            context,
+                                            widget.nextUser['id'],
+                                            widget.viewModel);
+                                        widget.viewModel.like_user(
+                                            widget.nextUser['id'],
+                                            widget.nextUser['potential_match'],
+                                            "super_like");
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: Size(40, 50),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        backgroundColor: Colors
+                                            .transparent, // Making the button background transparent
+                                        shadowColor: Colors
+                                            .transparent, // Optionally, removing the button shadow if desired
+                                      ),
+                                      child: const Icon(Icons.favorite,
+                                          color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -915,12 +944,12 @@ Widget check_profile_button(nextUser, viewModel, context) {
   if (nextUser != null && nextUser['interests'].isNotEmpty) {
     return Column(
       children: [
-        Text(
-          "I have ${nextUser['interests'].length} interests, check me out",
-          style: GoogleFonts.lexend(
-            fontSize: 14, // Adjust the size as needed
-          ),
-        ),
+        // Text(
+        //   "I have ${nextUser['interests'].length} interests, check me out",
+        //   style: GoogleFonts.lexend(
+        //     fontSize: 14, // Adjust the size as needed
+        //   ),
+        // ),
         ElevatedButton(
           onPressed: () {
             viewModel.trackProfileViewEvent(nextUser['id']);
@@ -943,13 +972,13 @@ Widget check_profile_button(nextUser, viewModel, context) {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF3439AB), // Background color
+            backgroundColor: Colors.white, // Background color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30), // Rounded button
             ),
           ),
           child: Text("View Profile",
-              style: GoogleFonts.lexend(color: Colors.white)),
+              style: GoogleFonts.lexend(color: Color(0xFF3439AB))),
         ),
       ],
     );
