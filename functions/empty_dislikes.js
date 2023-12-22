@@ -14,7 +14,7 @@ const corsOptions = {
 };
 
 
-const EmptyDislikes = functions.region("asia-east2").pubsub.schedule('every 120 hours').onRun(async (context) => {
+const EmptyDislikes = functions.region("asia-east2").pubsub.schedule('0 12 */5 * *').timeZone('Asia/Dubai').onRun(async (context) => {
     // Fetch all user documents
     const usersSnapshot = await db.collection('Users').get();
 

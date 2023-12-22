@@ -62,14 +62,14 @@ class EditProfileViewModel extends BaseViewModel {
     if (!contains_profanity) {
       final response = await http.post(
         //production url
-        // Uri.parse(
-        //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
+        Uri.parse(
+            'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/UpdateProfileData'),
         //testing url
 
         // Uri.parse(
         //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
-        Uri.parse(
-            'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
+        // Uri.parse(
+        //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/UpdateProfileData'),
         body: jsonEncode({
           'uid': uid,
           'name': name,
@@ -142,13 +142,13 @@ class EditProfileViewModel extends BaseViewModel {
     //call the function from the cloud
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfileData'),
       //testing url
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
-      Uri.parse(
-          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
+      // Uri.parse(
+      //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfileData'),
       body: jsonEncode({
         'uid': uid,
       }),

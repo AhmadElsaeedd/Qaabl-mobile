@@ -74,13 +74,13 @@ class ProfileViewModel extends BaseViewModel {
     //call function that gets how full the profile is
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetProfilePercentage'),
       //testing url
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
-      Uri.parse(
-          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
+      // Uri.parse(
+      //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetProfilePercentage'),
       body: jsonEncode({
         'uid': uid,
       }),
@@ -106,13 +106,13 @@ class ProfileViewModel extends BaseViewModel {
   Future<int> get_profile_pic_index() async {
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetImageIndex'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetImageIndex'),
       //testing url
       // Uri.parse(
       //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
-      Uri.parse(
-          'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
+      // Uri.parse(
+      //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetImageIndex'),
       body: jsonEncode({
         'uid': uid,
       }),

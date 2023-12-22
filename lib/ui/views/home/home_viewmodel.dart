@@ -65,10 +65,10 @@ class HomeViewModel extends BaseViewModel {
     try {
       final response = await http.post(
         //production url
-        // Uri.parse(
-        //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
+        Uri.parse(
+            'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetUsers'),
         //testing url
-        Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
+        // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         // Uri.parse(
         //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetUsers'),
         body: jsonEncode({
@@ -198,11 +198,11 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
-      //testing URL
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/DislikeUser'),
+      //testing URL
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
       // Uri.parse(
       //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/DislikeUser'),
       body: jsonEncode({
@@ -227,10 +227,10 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LeaveNote'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LeaveNote'),
       //testing URL
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
+      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
       // Uri.parse(
       //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/LeaveNote'),
       body: jsonEncode({
@@ -246,10 +246,10 @@ class HomeViewModel extends BaseViewModel {
   Future<void> get_notes() async {
     final response = await http.post(
       //production url
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetNotes'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/GetNotes'),
       //testing url
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
+      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
       // Uri.parse(
       //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/GetNotes'),
       body: jsonEncode({
@@ -282,11 +282,11 @@ class HomeViewModel extends BaseViewModel {
     //function that creates a match between the 2 users, server-side
     final response = await http.post(
       //production URL
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
-      //testing URL
       Uri.parse(
-          'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/CreateMatch'),
+      //testing URL
+      // Uri.parse(
+      //     'http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       // Uri.parse(
       //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/CreateMatch'),
       body: jsonEncode({
@@ -305,10 +305,10 @@ class HomeViewModel extends BaseViewModel {
     final response = await http.post(
       //add the url of the function here
       //production URL
-      // Uri.parse(
-      //     'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
+      Uri.parse(
+          'https://asia-east2-qaabl-mobile-dev.cloudfunctions.net/LikeUser'),
       //testing URL
-      Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
+      // Uri.parse('http://127.0.0.1:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       // Uri.parse(
       //     'http://192.168.1.101:5003/qaabl-mobile-dev/asia-east2/LikeUser'),
       body: jsonEncode({
