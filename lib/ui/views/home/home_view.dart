@@ -342,26 +342,24 @@ Widget _helloText() {
       padding: EdgeInsets.only(top: 10.0),
       child: Column(
         children: [
-          // Text(
-          //   'Hello, in Qaabl!',
-          //   style: GoogleFonts.lexend(
-          //     fontSize: 25,
-          //     fontWeight: FontWeight.w900,
-          //   ),
-          // ),
-          Text(
-            'Qaabl',
-            style: GoogleFonts.lexend(
-              fontSize: 25,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          // Text("explore cool people, at ur fingertips",
-          //     style: GoogleFonts.lexend(
-          //       fontSize: 14, // Adjust the size as needed
-          //       fontWeight: FontWeight.w500,
-          //     )
-          //     ),
+          Row(
+            children: [
+              Text(
+                'Qaabl',
+                style: GoogleFonts.lexend(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.ios_share), // Use the appropriate share icon
+                onPressed: () {
+                  Share.share(
+                      'im on qaabl, join me! https://testflight.apple.com/join/syEy5gAZ');
+                },
+              ),
+            ],
+          )
         ],
       ));
 }
