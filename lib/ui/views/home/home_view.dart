@@ -1,6 +1,7 @@
 // import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 import 'package:share_plus/share_plus.dart';
 // import 'package:qaabl_mobile/ui/common/ui_helpers.dart';
 // import 'package:flutter/scheduler.dart';
@@ -156,19 +157,35 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           margin: const EdgeInsets.only(top: 200),
                           child: Column(
                             children: [
-                              Text(
-                                'Finding people!',
-                                style: GoogleFonts.lexend(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              Text(
-                                "give us a sec :)",
-                                style: GoogleFonts.lexend(
-                                  fontSize: 14, // Adjust the size as needed
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              // Text(
+                              //   'Finding people!',
+                              //   style: GoogleFonts.lexend(
+                              //     fontSize: 25,
+                              //     fontWeight: FontWeight.w900,
+                              //   ),
+                              // ),
+                              // Text(
+                              //   "give us a sec :)",
+                              //   style: GoogleFonts.lexend(
+                              //     fontSize: 14, // Adjust the size as needed
+                              //     fontWeight: FontWeight.w500,
+                              //   ),
+                              // ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Loading ...',
+                                      style: GoogleFonts.lexend(fontSize: 16)),
+                                  horizontalSpaceSmall,
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                      strokeWidth: 6,
+                                    ),
+                                  )
+                                ],
                               ),
                             ],
                           ),
@@ -695,7 +712,7 @@ class _UserCardState extends State<UserCard> {
                             const Padding(padding: EdgeInsets.only(top: 25)),
                             Image.asset(
                               'lib/assets/${widget.nextUser['image_index']}.png',
-                              height: 140,
+                              height: 170,
                             ),
                             SizedBox(height: 10),
                             Align(
@@ -978,7 +995,10 @@ Widget check_profile_button(nextUser, viewModel, context) {
             ),
           ),
           child: Text("View Profile",
-              style: GoogleFonts.lexend(color: Color(0xFF3439AB))),
+              style: GoogleFonts.lexend(
+                color: Color(0xFF3439AB),
+                fontWeight: FontWeight.w600,
+              )),
         ),
       ],
     );

@@ -35,6 +35,7 @@ const MessageReaction = require("./message_reaction");
 const CreateMatchWMe = require("./create_match_w_me");
 const LeaveNote = require("./leave_note");
 const GetNotes = require("./get_notes");
+const EmptyDislikes = require("./empty_dislikes");
 
 exports.CreateUserRecord = CreateUserRecord;
 exports.GetUsers = GetUsers;
@@ -55,4 +56,5 @@ exports.MessageReaction = MessageReaction;
 exports.CreateMatchWMe = CreateMatchWMe;
 exports.LeaveNote = LeaveNote;
 exports.GetNotes = GetNotes;
+exports.EmptyDislikes = EmptyDislikes;
 
