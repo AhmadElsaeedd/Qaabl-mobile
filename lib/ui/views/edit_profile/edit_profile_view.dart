@@ -262,27 +262,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          //ToDo:make this above the existing page content
-                          if (model.contains_profanity) ...[
-                            CupertinoAlertDialog(
-                              title: Text("Inappropriate content detected"),
-                              content: SingleChildScrollView(
-                                child: Text(
-                                  "we found that ur submission may contain inappropriate text, which doesn't align with the app's rules. please revise ur submission. if u think this is a mistake please leave feedback in the settings page or email team@qaabl.app",
-                                  style: GoogleFonts.lexend(),
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: Text("Close"),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                  },
-                                ),
-                              ],
-                            )
-                          ],
                           // CupertinoButton(
                           //   onPressed: () {
                           //     //go to the new view

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:qaabl_mobile/app/app.locator.dart';
 import 'package:qaabl_mobile/app/app.router.dart';
@@ -81,6 +82,14 @@ class EditProfileViewModel extends BaseViewModel {
 
       back_to_profile(response);
       _mixpanelService.mixpanel.track("Edited profile");
+    } else {
+      //ToDo: show dialog
+      _dialogService.showDialog(
+        title: "Inappropriate content detected",
+        description:
+            "we found that ur submission may contain inappropriate text, which doesn't align with the app's rules. please revise ur submission. if u think this is a mistake please leave feedback in the settings page or email team@qaabl.app",
+      );
+      contains_profanity = false;
     }
   }
 
